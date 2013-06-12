@@ -22,6 +22,9 @@ function love.load()
     love.graphics.setMode(1000, 600, false, true, 0)
 
     engine = Engine()
+
+    engine:addListener("BeginContact", CollisionSelectSystem())
+
     engine:addSystem(ExampleSystem(), "logic", 1)
     engine:addSystem(ExampleDrawSystem(), "draw")
 
@@ -48,4 +51,8 @@ end
 
 function love:mousepressed(x, y, button)
     engine:fireEvent(MousePressed(x, y, button))
+end
+
+function beginContact(a, b, coll)
+    engine:fireEvent(BeginContact(a, b, coll))
 end
