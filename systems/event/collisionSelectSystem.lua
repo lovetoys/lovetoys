@@ -7,7 +7,6 @@ CollisionSelectSystem = class("CollisionDetectSystem", System)
 
 function CollisionSelectSystem:__init()
     self.conditions = {}
-
     local bounce = BounceCollision()
     self:addCollisionAction(bounce.component1, bounce.component2, bounce)
     local damage = CollisionDamage()
