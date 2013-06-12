@@ -1,5 +1,5 @@
 ExampleComponent = class("ExampleComponent", Component)
 
-function ExampleComponent:__init()
-	self.timer = timer
+function ExampleComponent:__init(time)
+	self.timer = time
 end

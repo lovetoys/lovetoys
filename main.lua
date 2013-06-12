@@ -11,6 +11,7 @@ require("systems/exampleDrawSystem")
 require("systems/exampleSystem")
 
 require("components/exampleComponent")
+require("components/positionComponent")
 
 require("core/events/beginContact")
 require("core/events/keyPressed")
@@ -24,8 +25,12 @@ function love.load()
     engine:addSystem(ExampleSystem(), "logic", 1)
     engine:addSystem(ExampleDrawSystem(), "draw")
 
-    entity = Entity()
-    entity:addComponent(ExampleComponent())
+    for i = 1, 20, 1 do
+        entity = Entity()
+        entity:addComponent(ExampleComponent(math.random(0, 5000)))
+        entity:addComponent(PositionComponent(math.random(100, 900), math.random(100, 600)))
+        engine:addEntity(entity)
+    end
 end
 
 
