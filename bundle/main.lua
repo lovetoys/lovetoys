@@ -2,7 +2,6 @@ require("core/class")
 require("core/component")
 require("core/engine")
 require("core/entity")
-require("core/event")
 require("core/system")
 
 require("systems/event/collisionSelectSystem")

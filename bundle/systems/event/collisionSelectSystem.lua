@@ -1,20 +1,8 @@
-require("collisions/bounceCollision")
-require("collisions/collisionDamage")
-require("collisions/shotCutieCollision")
-require("collisions/shotWallCollision")
-
 CollisionSelectSystem = class("CollisionDetectSystem", System)
 
 function CollisionSelectSystem:__init()
     self.conditions = {}
-    local bounce = BounceCollision()
-    self:addCollisionAction(bounce.component1, bounce.component2, bounce)
-    local damage = CollisionDamage()
-    self:addCollisionAction(damage.component1, damage.component2, damage)
-    local shotcutie = ShotCutieCollision()
-    self:addCollisionAction(shotcutie.component1, shotcutie.component2, shotcutie)
-    local shotwall = ShotWallCollision()
-    self:addCollisionAction(shotwall.component1, shotwall.component2, shotwall)
+    -- All available Collisions will be registered over here.
 end
 
 function CollisionSelectSystem:addCollisionAction(component1, component2, object)
@@ -23,6 +11,7 @@ function CollisionSelectSystem:addCollisionAction(component1, component2, object
 end
 
 function CollisionSelectSystem:fireEvent(event)
+    -- If an Event is fired, the entities are given to the specific collisions. Entities are passed in Reihenfolge^^.
     local e1 = event.a:getUserData()
     local e2 = event.b:getUserData()
 

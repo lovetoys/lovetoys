@@ -17,14 +17,15 @@ function class(name, super)
     -- members, calling its __init with the given
     -- params
     cls = setmetatable(cls, {__call = function(c, ...)
-        local object = {}
+        local obj = {}
         for k,v in pairs(cls) do
-                object[k] = v
+                obj[k] = v
         end
-        if object.__init then object:__init(...) end
-        return object
+        superInit(obj)
+        if obj.__init then obj:__init(...) end
+        return obj
     end})
-    superInit(cls)
+    
     return cls
 end
 
@@ -33,12 +34,11 @@ function superInit(object, super)
         if getSuper(super) then
             superInit(object, getSuper(super))
         end
-        super.__init(object)
+        if super.__init then
+            super.__init(object)
+        end
     elseif getSuper(object) then
         superInit(object, getSuper(object))
-        if getSuper(object).__init then
-            getSuper(object).__init(object)
-        end
     end
 end
 
