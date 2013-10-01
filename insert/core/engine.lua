@@ -1,3 +1,5 @@
+require("../class.lua")
+
 Engine = class("Engine")
 
 function Engine:__init() 
