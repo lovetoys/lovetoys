@@ -15,6 +15,25 @@ function Engine:__init()
     self.stack = {}
 end
 
+function Engine:addSystem(system, type)
+    -- Adding System to draw or logic table
+    if type == "draw" then
+        table.insert(self.drawSystems, system)
+    elseif type == "logic" then
+        table.insert(self.logicSystems, system)
+    end
+    table.insert(self.allSystems, system)
+
+    -- Registering the systems requirements and saving them in a special table for fast access
+    for index, value in pairs(system:getRequiredComponents()) do
+        if not self.requirements[value] then
+            self.requirements[value] = {}
+        end
+        table.insert(self.requirements[value], system)
+    end
+    return system
+end
+
 function Engine:addEntity(entity)
     if #self.stack == 0 then
         table.insert(self.entities, entity)
@@ -75,25 +94,6 @@ function Engine:removeEntity(entity)
         end
         self.entities[entity.id] = nil
     end
-end
-
-function Engine:addSystem(system, type, index)
-    -- Adding System to draw or logic table
-    if type == "draw" then
-        table.insert(self.drawSystems, system)
-    elseif type == "logic" then
-        table.insert(self.logicSystems, system)
-    end
-    table.insert(self.allSystems, system)
-
-    -- Registering the systems requirements and saving them in a special table for fast access
-    for index, value in pairs(system:getRequiredComponents()) do
-        if not self.requirements[value] then
-            self.requirements[value] = {}
-        end
-        table.insert(self.requirements[value], system)
-    end
-    return system
 end
 
 function Engine:update(dt)
@@ -170,29 +170,5 @@ function Engine:getEntitylist(component)
     else
         self[component] = {}
         return self[component]
-    end
-end
-
--- Adding an eventlistener to a specific event
-function Engine:addListener(eventName, listener)
-    if not self.eventListeners[eventName] then
-        self.eventListeners[eventName] = {}
-    end
-    self.eventListeners[eventName][listener.__name] = listener
-end
-
--- Removing an eventlistener from an event
-function Engine:removeListener(eventName, listener)
-    if self.eventListeners[eventName] and self.eventListeners.eventName.listener then
-        self.eventListeners[eventName][listener.__name] = nil
-    end
-end
-
--- Firing an event. All regiestered listener will react to this event
-function Engine:fireEvent(event)
-    if self.eventListeners[event.__name] then
-        for k,v in pairs(self.eventListeners[event.__name]) do
-            v:fireEvent(event)
-        end
     end
 end
