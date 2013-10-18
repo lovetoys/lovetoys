@@ -2,50 +2,50 @@ Engine = class("Engine")
 
 function Engine:__init() 
     self.entities = {}
-    self.entityIndex = 0
     self.requirements = {}
+    self.entityLists = {}
 
     self.allSystems = {}
     self.logicSystems = {}
     self.drawSystems = {}
 
     self.eventListeners = {}
-    self.stack = {}
+    self.freeIds = {}
 end
 
 function Engine:addEntity(entity)
-    if #self.stack == 0 then
+    if #self.freeIds == 0 then
         table.insert(self.entities, entity)
         entity.id = #self.entities
     else
-        entity.id = self.stack[#self.stack]
+        entity.id = self.freeIds[#self.freeIds]
         self.entities[entity.id] = entity
-        table.remove(self.stack, #self.stack)
+        table.remove(self.freeIds, #self.freeIds)
     end
     for index, component in pairs(entity.components) do
         -- Adding Entity to specific Entitylist
-        if not self[component.__name] then self[component.__name] = {} end
-        self[component.__name][entity.id] = entity
+        self.entityLists[component.__name] = self.entityLists[component.__name] or {}
+        self.entityLists[component.__name][entity.id] = entity
 
         -- Adding Entity to System if all requirements are granted
         if self.requirements[component.__name] then
             for index2, system in pairs(self.requirements[component.__name]) do
-                local check = true
+                local meetsRequirements = true
                 for index3, requirement in pairs(system:getRequiredComponents()) do
-                    if check == true then
+                    if meetsRequirements == true then
                         for index4, component in pairs(entity.components) do
                             if component.__name == requirement then
-                                check = true
+                                meetsRequirements = true
                                 break
                             else
-                                check = false
+                                meetsRequirements = false
                             end
                         end
                     else
                         break 
                     end
                 end
-                if check == true then
+                if meetsRequirements == true then
                     system:addEntity(entity)
                 end
             end
@@ -55,8 +55,8 @@ end
 
 function Engine:removeEntity(entity)
     if self.entities[entity.id] == entity then
-        -- Stashing the id of the removed Entity in self.stack
-        table.insert(self.stack, entity.id)
+        -- Stashing the id of the removed Entity in self.freeIds
+        table.insert(self.freeIds, entity.id)
         -- Removing the Entity from all Systems and engine
         for i, component in pairs(entity.components) do
             if self.requirements[component.__name] then
@@ -67,15 +67,15 @@ function Engine:removeEntity(entity)
         end
         -- Deleting the Entity from the specific entity lists
         for index, component in pairs(entity.components) do
-            if self[component.__name] then
-                self[component.__name][entity.id] = nil
+            if self.entityLists[component.__name] then
+                self.entityLists[component.__name][entity.id] = nil
             end
         end
         self.entities[entity.id] = nil
     end
 end
 
-function Engine:addSystem(system, type, index)
+function Engine:addSystem(system, type)
     -- Adding System to draw or logic table
     if type == "draw" then
         table.insert(self.drawSystems, system)
@@ -86,9 +86,7 @@ function Engine:addSystem(system, type, index)
 
     -- Registering the systems requirements and saving them in a special table for fast access
     for index, value in pairs(system:getRequiredComponents()) do
-        if not self.requirements[value] then
-            self.requirements[value] = {}
-        end
+        self.requirements[value] = self.requirements[value] or {}
         table.insert(self.requirements[value], system)
     end
     return system
@@ -119,7 +117,7 @@ function Engine:componentRemoved(entity, removed)
     if removed then
         for i, component in pairs(removed) do
             -- Removing Entity from Entitylists
-            self[component][entity.id] = nil
+            self.entityLists[component][entity.id] = nil
             -- Removing Entity from old systems
             if self.requirements[component] then
                 for i2, system in pairs(self.requirements[component]) do 
@@ -133,11 +131,11 @@ end
 function Engine:componentAdded(entity, added)
     for i, component in pairs(added) do
         -- Adding the Entity to Entitylist
-        if self[component] then
-            table.insert(self[component], entity)
+        if self.entityLists[component] then
+            table.insert(self.entityLists[component], entity)
         else
-            self[component] = {}
-            table.insert(self[component], entity)
+            self.entityLists[component] = {}
+            table.insert(self.entityLists[component], entity)
         end
         -- Adding the Entity to the requiring systems
         if self.requirements[component] then
@@ -163,11 +161,11 @@ end
 
 -- Returns an Entitylist for a specific component. If the Entitylist doesn't exists yet it'll be created and returned.
 function Engine:getEntitylist(component)
-    if self[component] then
-        return self[component]
+    if self.entityLists[component] then
+        return self.entityLists[component]
     else
-        self[component] = {}
-        return self[component]
+        self.entityLists[component] = {}
+        return self.entityLists[component]
     end
 end
 
