@@ -1,5 +1,3 @@
-require("../class.lua")
-
 Entity = class("Entity")
 
 function Entity:__init()

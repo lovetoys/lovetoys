@@ -1,27 +1,8 @@
-require("collisions/bounceCollision")
-require("collisions/collisionDamage")
-require("collisions/shotCutieCollision")
-require("collisions/shotWallCollision")
-require("collisions/explosionShotCollision")
-require("collisions/mineGroundCollision")
-
 CollisionSelectSystem = class("CollisionDetectSystem", System)
 
 function CollisionSelectSystem:__init()
     self.conditions = {}
     -- All available Collisions will be registered over here.
-    local bounce = BounceCollision()
-    self:addCollisionAction(bounce.component1, bounce.component2, bounce)
-    local damage = CollisionDamage()
-    self:addCollisionAction(damage.component1, damage.component2, damage)
-    local shotcutie = ShotCutieCollision()
-    self:addCollisionAction(shotcutie.component1, shotcutie.component2, shotcutie)
-    local shotwall = ShotWallCollision()
-    self:addCollisionAction(shotwall.component1, shotwall.component2, shotwall)
-    local shotexplosive = ExplosionShotCollision()
-    self:addCollisionAction(shotexplosive.component1, shotexplosive.component2, shotexplosive)
-    local mineground = MineGroundCollision()
-    self:addCollisionAction(mineground.component1, mineground.component2, mineground)
 end
 
 function CollisionSelectSystem:addCollisionAction(component1, component2, object)

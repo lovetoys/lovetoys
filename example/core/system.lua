@@ -1,5 +1,3 @@
-require("../class.lua")
-
 System = class("System")
 
 function System:__init()
