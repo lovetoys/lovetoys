@@ -3,8 +3,8 @@ require("core/component")
 require("core/engine")
 require("core/entity")
 require("core/system")
-
-require("systems/event/collisionSelectSystem")
+require("core/collisionManager")
+require("core/eventManager")
 
 require("systems/exampleDrawSystem")
 require("systems/exampleSystem")
@@ -12,17 +12,19 @@ require("systems/exampleSystem")
 require("components/exampleComponent")
 require("components/positionComponent")
 
-require("core/events/beginContact")
-require("core/events/keyPressed")
-require("core/events/mousePressed")
+require("events/beginContact")
+require("events/keyPressed")
+require("events/mousePressed")
 
 function love.load()
 
     love.graphics.setMode(1000, 600, false, true, 0)
 
     engine = Engine()
+    eventmanager = EventManager()
+    collisionmanager = CollisionManager()
 
-    engine:addListener("BeginContact", CollisionSelectSystem())
+    eventmanager:addListener("BeginContact", collisionmanager)
 
     engine:addSystem(ExampleSystem(), "logic", 1)
     engine:addSystem(ExampleDrawSystem(), "draw")
@@ -45,13 +47,13 @@ function love.draw()
 end 
 
 function love:keypressed(key, u)
-    engine:fireEvent(KeyPressed(key, u))
+    eventmanager:fireEvent(KeyPressed(key, u))
 end
 
 function love:mousepressed(x, y, button)
-    engine:fireEvent(MousePressed(x, y, button))
+    eventmanager:fireEvent(MousePressed(x, y, button))
 end
 
 function beginContact(a, b, coll)
-    engine:fireEvent(BeginContact(a, b, coll))
+    eventmanager:fireEvent(BeginContact(a, b, coll))
 end
