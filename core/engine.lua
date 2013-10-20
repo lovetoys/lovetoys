@@ -131,10 +131,10 @@ function Engine:componentAdded(entity, added)
     for i, component in pairs(added) do
         -- Adding the Entity to Entitylist
         if self.entityLists[component] then
-            table.insert(self.entityLists[component], entity)
+            self.entityLists[component][entity.id] = entity
         else
             self.entityLists[component] = {}
-            table.insert(self.entityLists[component], entity)
+            self.entityLists[component][entity.id] = entity
         end
         -- Adding the Entity to the requiring systems
         if self.requirements[component] then
