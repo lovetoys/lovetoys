@@ -18,13 +18,11 @@ function CollisionManager:fireEvent(event)
         if self.conditions[k] then
             if self.conditions[k]["Everything"] then 
                 self.conditions[k]["Everything"]:action({entity1=e1, entity2=e2}) 
-                print("fire")
                 return
             end
         elseif  self.conditions["Everything"] then
             if self.conditions["Everything"][k] then 
                 self.conditions["Everything"][k]:action({entity1=e1, entity2=e2}) 
-                print("fire")
                 return
             end
         end
@@ -33,13 +31,11 @@ function CollisionManager:fireEvent(event)
         if self.conditions[k2] then
             if self.conditions[k2]["Everything"] then 
                 self.conditions[k2]["Everything"]:action({entity1=e2, entity2=e1}) 
-                print("fire")
                 return
             end
         elseif self.conditions["Everything"] then
             if self.conditions["Everything"][k2] then 
                 self.conditions["Everything"][k2]:action({entity1=e2, entity2=e1}) 
-                print("fire")
                 return
             end
         end
