@@ -101,15 +101,6 @@ function Engine:draw()
     for index, system in ipairs(self.drawSystems) do
         system:draw()
     end
-    -- Enable to get white boxes around Bodies with polygonshapes
-    --[[ 
-    for key, entity in pairs(self:getEntitylist("PhysicsComponent")) do
-        x1, y1, x2, y2 = entity:getComponent("PhysicsComponent").fixture:getBoundingBox()
-        if entity:getComponent("PhysicsComponent").shape.getPoints then
-            love.graphics.polygon("fill", entity:getComponent("PhysicsComponent").body:getWorldPoints(entity:getComponent("PhysicsComponent").shape:getPoints()))
-        end
-    end
-    --]]--
 end
 
 function Engine:componentRemoved(entity, removed)
