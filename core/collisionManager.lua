@@ -15,20 +15,36 @@ function CollisionManager:fireEvent(event)
     local e2 = event.b:getUserData()
 
     for k, v in pairs(e1:getComponents()) do
-        for k2, val in pairs(e2:getComponents()) do 
-            if self.conditions[k] then
-                if self.conditions[k]["Everything"] then 
-                    self.conditions[k][k2]:action({entity1=e1, entity2=e2}) 
-                    return
-                end
-            elseif self.conditions[k2] then
-                if self.conditions[k2]["Everything"] then 
-                    self.conditions[k2][k]:action({entity1=e2, entity2=e1}) 
-                    return
-                end
+        if self.conditions[k] then
+            if self.conditions[k]["Everything"] then 
+                self.conditions[k]["Everything"]:action({entity1=e1, entity2=e2}) 
+                print("fire")
+                return
+            end
+        elseif  self.conditions["Everything"] then
+            if self.conditions["Everything"][k] then 
+                self.conditions["Everything"][k]:action({entity1=e1, entity2=e2}) 
+                print("fire")
+                return
             end
         end
     end
+    for k2, val in pairs(e2:getComponents()) do
+        if self.conditions[k2] then
+            if self.conditions[k2]["Everything"] then 
+                self.conditions[k2]["Everything"]:action({entity1=e2, entity2=e1}) 
+                print("fire")
+                return
+            end
+        elseif self.conditions["Everything"] then
+            if self.conditions["Everything"][k2] then 
+                self.conditions["Everything"][k2]:action({entity1=e2, entity2=e1}) 
+                print("fire")
+                return
+            end
+        end
+    end
+
     -- Iteration of all Components of both Entities to search for a matching constellation of components.
     for k,v in pairs(e1:getComponents()) do
         for k2,val in pairs(e2:getComponents()) do
