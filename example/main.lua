@@ -1,10 +1,10 @@
-require("core/class")
-require("core/component")
-require("core/engine")
-require("core/entity")
-require("core/system")
-require("core/collisionManager")
-require("core/eventManager")
+require("lovetoys/class")
+require("lovetoys/component")
+require("lovetoys/engine")
+require("lovetoys/entity")
+require("lovetoys/system")
+require("lovetoys/collisionManager")
+require("lovetoys/eventManager")
 
 require("systems/exampleDrawSystem")
 require("systems/exampleSystem")
@@ -20,15 +20,25 @@ function love.load()
 
     love.graphics.setMode(1000, 600, false, true, 0)
 
+    -- A new instance of an engine is beeing created
     engine = Engine()
-    eventmanager = EventManager()
+    -- A new instance of an eventmanager is beeing created
+        eventmanager = EventManager()
+    -- A new instance of a collisionmanager is beeing created
     collisionmanager = CollisionManager()
 
+    -- The collisionmanager is beeing registered as a listener for the 
+    -- "BeginContact" event.
     eventmanager:addListener("BeginContact", collisionmanager)
 
+    -- Logic (update) systems are beeing added to the engine
     engine:addSystem(ExampleSystem(), "logic", 1)
+
+    -- Drawing systems are beeing added to the engine
     engine:addSystem(ExampleDrawSystem(), "draw")
 
+
+    -- Creation and adding of some Entities
     for i = 1, 20, 1 do
         entity = Entity()
         entity:addComponent(ExampleComponent(math.random(0, 5000)))
@@ -39,11 +49,13 @@ end
 
 
 function love.update(dt)
-	engine:update(dt)
+    -- Engine update function
+    engine:update(dt)
 end
 
 function love.draw()
-	engine:draw()
+    -- Engine draw function
+    engine:draw()
 end 
 
 function love:keypressed(key, u)

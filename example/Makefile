@@ -6,6 +6,7 @@ clean:
 
 build: clean
 	@zip -r test.love *
+	@cd .. && zip -r example/test.love lovetoys/*
 
 run: build
 	@love test.love
