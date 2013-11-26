@@ -13,6 +13,9 @@ function Engine:__init()
 end
 
 function Engine:addEntity(entity)
+    
+    entity.manager = self
+
     if #self.freeIds == 0 then
         table.insert(self.entities, entity)
         entity.id = #self.entities
@@ -158,47 +161,41 @@ function Engine:draw()
     end
 end
 
-function Engine:componentRemoved(entity, removed)
-    if removed then
-        for i, component in pairs(removed) do
-            -- Removing Entity from Entitylists
-            self.entityLists[component][entity.id] = nil
-            -- Removing Entity from old systems
-            if self.requirements[component] then
-                for i2, system in pairs(self.requirements[component]) do 
-                    system:removeEntity(entity)
-                end
-            end
+function Engine:componentRemoved(entity, component)
+    -- Removing Entity from Entitylists
+    self.entityLists[component][entity.id] = nil
+    -- Removing Entity from old systems
+    if self.requirements[component] then
+        for i2, system in pairs(self.requirements[component]) do 
+            system:removeEntity(entity)
         end
     end
 end
 
-function Engine:componentAdded(entity, added)
-    for i, component in pairs(added) do
-        -- Adding the Entity to Entitylist
-        if self.entityLists[component] then
-            self.entityLists[component][entity.id] = entity
-        else
-            self.entityLists[component] = {}
-            self.entityLists[component][entity.id] = entity
-        end
-        -- Adding the Entity to the requiring systems
-        if self.requirements[component] then
-            for i2, system in pairs(self.requirements[component]) do
-                local add = true
-                for i3, req in pairs(system.getRequiredComponents()) do
-                    for i3, comp in pairs(entity.components) do
-                        if comp.__name == req then
-                            add = true
-                            break
-                        else
-                            add = false
-                        end
+function Engine:componentAdded(entity, component)
+    -- Adding the Entity to Entitylist
+    if self.entityLists[component] then
+        self.entityLists[component][entity.id] = entity
+    else
+        self.entityLists[component] = {}
+        self.entityLists[component][entity.id] = entity
+    end
+    -- Adding the Entity to the requiring systems
+    if self.requirements[component] then
+        for i2, system in pairs(self.requirements[component]) do
+            local add = true
+            for i3, req in pairs(system.getRequiredComponents()) do
+                for i3, comp in pairs(entity.components) do
+                    if comp.__name == req then
+                        add = true
+                        break
+                    else
+                        add = false
                     end
                 end
-                if add == true then
-                    system:addEntity(entity)
-                end
+            end
+            if add == true then
+                system:addEntity(entity)
             end
         end
     end
