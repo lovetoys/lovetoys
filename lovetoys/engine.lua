@@ -88,7 +88,62 @@ function Engine:addSystem(system, type)
         self.requirements[value] = self.requirements[value] or {}
         table.insert(self.requirements[value], system)
     end
+    for k, entity in pairs(self.entities) do
+        local meetsRequirements = true
+        for k2, requirement in pairs(system:getRequiredComponents()) do
+            if meetsRequirements == true then
+                for index4, component in pairs(entity.components) do
+                    if component.__name == requirement then
+                        meetsRequirements = true
+                        break
+                    else
+                        meetsRequirements = false
+                    end
+                end
+            else
+                break 
+            end
+        end
+        if meetsRequirements == true then
+            system:addEntity(entity)
+        end
+    end
     return system
+end
+
+function Engine:removeSystem(system, type)
+    
+    local requires
+    for k, v in pairs(self.allSystems) do
+        if v.__name == system then
+            requires = v:getRequiredComponents()
+            table.remove(self.allSystems, k)
+        end
+    end
+    --  Remove the System from all requirement lists
+    for k, v in pairs(requires) do
+        for k2, v2 in pairs(self.requirements[v]) do
+            if v2.__name == system then
+                table.remove(self.requirements, k2)
+            end
+        end
+    end
+
+    -- remove the system from all systemlists
+
+    if type == "draw" then
+        for k, v in pairs(self.drawSystems) do
+            if v.__name == system then
+                table.remove(self.drawSystems, k)
+            end
+        end
+    elseif type == "logic" then
+        for k, v in pairs(self.logicSystems) do
+            if v.__name == system then
+                table.remove(self.logicSystems, k)
+            end
+        end
+    end
 end
 
 function Engine:update(dt)
