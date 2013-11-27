@@ -2,11 +2,10 @@ EventManager = class("EventManager")
 
 function EventManager:__init()
     self.eventListeners = {}
-    self.getKey =  function ()
+    self.getKey =  function()
                         for index, value in pairs(table) do
                             if value == element then
                                 return index
-                                end
                             end
                             return false
                         end
