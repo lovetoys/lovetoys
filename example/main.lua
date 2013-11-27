@@ -1,10 +1,4 @@
-require("lovetoys/class")
-require("lovetoys/component")
 require("lovetoys/engine")
-require("lovetoys/entity")
-require("lovetoys/system")
-require("lovetoys/collisionManager")
-require("lovetoys/eventManager")
 
 require("systems/exampleDrawSystem")
 require("systems/exampleSystem")

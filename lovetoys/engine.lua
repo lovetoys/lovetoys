@@ -1,20 +1,34 @@
+print(...)
+local folderOfThisFile = (...):match("(.-)[^%/]+$")
+require(folderOfThisFile .. "class")
+require(folderOfThisFile .. "entity")
+require(folderOfThisFile .. "system")
+require(folderOfThisFile .. "eventManager")
+require(folderOfThisFile .. "collisionManager")
+require(folderOfThisFile .. "component")
+require(folderOfThisFile .. "events/componentAdded")
+require(folderOfThisFile .. "events/componentRemoved")
+
 Engine = class("Engine")
 
 function Engine:__init() 
     self.entities = {}
     self.requirements = {}
     self.entityLists = {}
+    self.eventManager = EventManager()
 
     self.allSystems = {}
     self.logicSystems = {}
     self.drawSystems = {}
 
     self.freeIds = {}
+    self.eventManager:addListener("ComponentRemoved", {self, self.componentRemoved})
+    self.eventManager:addListener("ComponentAdded", {self, self.componentAdded})
 end
 
 function Engine:addEntity(entity)
     
-    entity.manager = self
+    entity.eventManager = self.eventManager
 
     if #self.freeIds == 0 then
         table.insert(self.entities, entity)
@@ -166,7 +180,9 @@ function Engine:draw()
     end
 end
 
-function Engine:componentRemoved(entity, component)
+function Engine.componentRemoved(self, event)
+    local entity = event.entity
+    local component = event.component
     -- Removing Entity from Entitylists
     self.entityLists[component][entity.id] = nil
     -- Removing Entity from old systems
@@ -177,7 +193,9 @@ function Engine:componentRemoved(entity, component)
     end
 end
 
-function Engine:componentAdded(entity, component)
+function Engine.componentAdded(self, event)
+    local entity = event.entity
+    local component = event.component
     -- Adding the Entity to Entitylist
     if self.entityLists[component] then
         self.entityLists[component][entity.id] = entity
