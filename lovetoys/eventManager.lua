@@ -19,7 +19,7 @@ function EventManager:removeListener(eventName, listener)
     end
 end
 
--- Firing an event. All regiestered listener will react to this event
+-- Firing an event. All registered listener will react to this event
 function EventManager:fireEvent(event)
     if self.eventListeners[event.__name] then
         for k,v in pairs(self.eventListeners[event.__name]) do

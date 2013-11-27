@@ -77,12 +77,17 @@ function Engine:removeEntity(entity)
     end
 end
 
-function Engine:addSystem(system, type)
+function Engine:addSystem(system, type, priority)
+    if priority then
+        system.priority = priority
+    end
     -- Adding System to draw or logic table
     if type == "draw" then
         table.insert(self.drawSystems, system)
+        table.sort(self.drawSystems, function(a, b) return a.priority < b.priority end)
     elseif type == "logic" then
         table.insert(self.logicSystems, system)
+        table.sort(self.logicSystems, function(a, b) return a.priority < b.priority end)
     end
     table.insert(self.allSystems, system)
 
@@ -123,6 +128,7 @@ function Engine:removeSystem(system, type)
             table.remove(self.allSystems, k)
         end
     end
+    
     --  Remove the System from all requirement lists
     for k, v in pairs(requires) do
         for k2, v2 in pairs(self.requirements[v]) do
@@ -132,8 +138,7 @@ function Engine:removeSystem(system, type)
         end
     end
 
-    -- remove the system from all systemlists
-
+    -- Remove the system from all systemlists
     if type == "draw" then
         for k, v in pairs(self.drawSystems) do
             if v.__name == system then

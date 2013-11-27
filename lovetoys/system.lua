@@ -3,6 +3,7 @@ System = class("System")
 function System:__init()
     -- Liste aller Entities, die die RequiredComponents dieses Systems haben
     self.targets = {}
+    self.priority = 0
 end
 
 function System:update(dt) end

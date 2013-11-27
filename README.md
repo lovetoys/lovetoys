@@ -1,4 +1,4 @@
-# lovetoys
+# Lovetoys
 
 Lovetoys is a small bundle of helper classes and libraries consisting of 3 packages. The most important one is the Entity Component System which is based on [Richard Lords Introduction](http://www.richardlord.net/blog/what-is-an-entity-framework) to ECS's. If you don't have any idea what this entity component stuff is all about, click that link and give it a read! It's totally worth it!
 
@@ -27,8 +27,6 @@ The Entity is the basic object that is beeing administrated by the engine. It fu
 component = Instance of a component.
 
 Adds a component to this particular entity. 
-After the component has been added, the engine has to be informed about the change which happens by calling `Engine:componentAdded()`.
-This only has to be done if the Entity is already added to the Engine. We are working on doing this automatically.
 
 #### Entity:removeComponent(name)
 
@@ -36,7 +34,6 @@ typeof(name) = String
 name = Name of the Component class  
 
 Removes a component from this particular entity.  
-Again, if the Entity is already active in the engine, you have to notify it via `Engine:componentAdded()`.
     
 #### Entity:getComponent(Name)
 
