@@ -2,6 +2,15 @@ EventManager = class("EventManager")
 
 function EventManager:__init()
     self.eventListeners = {}
+    self.getKey =  function ()
+                        for index, value in pairs(table) do
+                            if value == element then
+                                return index
+                                end
+                            end
+                            return false
+                        end
+                    end
 end
 
 -- Adding an eventlistener to a specific event
@@ -14,8 +23,9 @@ end
 
 -- Removing an eventlistener from an event
 function EventManager:removeListener(eventName, listener)
-    if self.eventListeners[eventName] and table.getKey(self.eventListener[eventName], listener) then
-        table.remove(self.eventListener[eventName], table.getKey(self.eventListener[eventName], listener))
+
+    if self.eventListeners[eventName] and getKey(self.eventListener[eventName], listener) then
+        table.remove(self.eventListener[eventName], getKey(self.eventListener[eventName], listener))
     end
 end
 

@@ -51,13 +51,3 @@ end
 function getName(object)
     return object.__name
 end
-
--- Returns the key of an element inside that table
-function table.getKey(table, element)
-    for index, value in pairs(table) do
-        if value == element then
-            return index
-        end
-    end
-    return false
-end
