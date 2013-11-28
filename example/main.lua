@@ -23,7 +23,7 @@ function love.load()
 
     -- The collisionmanager is beeing registered as a listener for the 
     -- "BeginContact" event.
-    eventmanager:addListener("BeginContact", collisionmanager)
+    eventmanager:addListener("BeginContact", {collisionmanager, collisionmanager.fireEvent})
 
     -- Logic (update) systems are beeing added to the engine
     engine:addSystem(ExampleSystem(), "logic", 1)

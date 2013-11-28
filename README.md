@@ -101,7 +101,7 @@ added = A list which contains the class-names of the removed components
 
 Removes the entity from all systems that required the listed components.
 
-#### Engine:getEntitylist(component)
+#### Engine:getEntityList(component)
 
 typeof(component) = String  
 component = Class name of the component

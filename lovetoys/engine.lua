@@ -225,7 +225,7 @@ function Engine.componentAdded(self, event)
 end
 
 -- Returns an Entitylist for a specific component. If the Entitylist doesn't exists yet it'll be created and returned.
-function Engine:getEntitylist(component)
+function Engine:getEntityList(component)
     if self.entityLists[component] then
         return self.entityLists[component]
     else
