@@ -1,13 +1,17 @@
 print(...)
 local folderOfThisFile = (...):match("(.-)[^%/]+$")
+
+require(folderOfThisFile .. "events/componentAdded")
+require(folderOfThisFile .. "events/componentRemoved")
+require(folderOfThisFile .. "events/beginContact")
+
 require(folderOfThisFile .. "class")
 require(folderOfThisFile .. "entity")
 require(folderOfThisFile .. "system")
 require(folderOfThisFile .. "eventManager")
 require(folderOfThisFile .. "collisionManager")
 require(folderOfThisFile .. "component")
-require(folderOfThisFile .. "events/componentAdded")
-require(folderOfThisFile .. "events/componentRemoved")
+
 
 Engine = class("Engine")
 
