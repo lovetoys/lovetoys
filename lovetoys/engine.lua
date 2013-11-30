@@ -1,11 +1,16 @@
-print(...)
+
+-- Getting folder that contains engine
 local folderOfThisFile = (...):match("(.-)[^%/]+$")
 
+-- Requiring class
+require(folderOfThisFile .. "class")
+
+-- Requiring all Events
 require(folderOfThisFile .. "events/componentAdded")
 require(folderOfThisFile .. "events/componentRemoved")
 require(folderOfThisFile .. "events/beginContact")
 
-require(folderOfThisFile .. "class")
+-- Requiring the lovetoys
 require(folderOfThisFile .. "entity")
 require(folderOfThisFile .. "system")
 require(folderOfThisFile .. "eventManager")
@@ -34,6 +39,7 @@ function Engine:addEntity(entity)
     
     entity.eventManager = self.eventManager
 
+    -- Getting the next free ID or insert into table
     if #self.freeIds == 0 then
         table.insert(self.entities, entity)
         entity.id = #self.entities
@@ -114,6 +120,7 @@ function Engine:addSystem(system, type, priority)
         self.requirements[value] = self.requirements[value] or {}
         table.insert(self.requirements[value], system)
     end
+    -- Checks if some of the already entities match the required components.
     for k, entity in pairs(self.entities) do
         local meetsRequirements = true
         for k2, requirement in pairs(system:getRequiredComponents()) do
@@ -139,16 +146,17 @@ end
 
 function Engine:removeSystem(system, type)
     
-    local requires
+    local requirements
+    -- Removes it from the allSystem list
     for k, v in pairs(self.allSystems) do
         if v.__name == system then
-            requires = v:getRequiredComponents()
+            requirements = v:getRequiredComponents()
             table.remove(self.allSystems, k)
         end
     end
     
     --  Remove the System from all requirement lists
-    for k, v in pairs(requires) do
+    for k, v in pairs(requirements) do
         for k2, v2 in pairs(self.requirements[v]) do
             if v2.__name == system then
                 table.remove(self.requirements, k2)

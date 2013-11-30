@@ -8,6 +8,8 @@ end
 
 function System:update(dt) end
 
+function System:draw() end
+
 function System:getRequiredComponents() return {} end
 
 function System:getEntities()

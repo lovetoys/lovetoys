@@ -14,6 +14,7 @@ function CollisionManager.fireEvent(self, event)
     local e1 = event.a:getUserData()
     local e2 = event.b:getUserData()
 
+    -- If there is a constellation with "Everything" for one of the components the collision will be activated 
     for k, v in pairs(e1:getComponents()) do
         if self.conditions[k] then
             if self.conditions[k]["Everything"] then 

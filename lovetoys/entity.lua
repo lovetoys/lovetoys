@@ -14,6 +14,7 @@ function Entity:addComponent(component)
     end
 end
 
+-- Removes a component from the entity.
 function Entity:removeComponent(name)
     if self.components[name] then
         self.components[name] = nil
