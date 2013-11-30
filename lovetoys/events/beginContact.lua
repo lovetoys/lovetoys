@@ -1,4 +1,4 @@
-BeginContact = class("BeginContact", Event)
+BeginContact = class("BeginContact")
 
 function BeginContact:__init(a, b, coll)
     self.a = a
