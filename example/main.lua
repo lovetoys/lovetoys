@@ -6,7 +6,6 @@ require("systems/exampleSystem")
 require("components/exampleComponent")
 require("components/positionComponent")
 
-require("events/beginContact")
 require("events/keyPressed")
 require("events/mousePressed")
 
@@ -17,7 +16,7 @@ function love.load()
     -- A new instance of an engine is beeing created
     engine = Engine()
     -- A new instance of an eventmanager is beeing created
-        eventmanager = EventManager()
+    eventmanager = EventManager()
     -- A new instance of a collisionmanager is beeing created
     collisionmanager = CollisionManager()
 

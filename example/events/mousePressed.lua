@@ -1,4 +1,4 @@
-MousePressed = class("MousePressed", Event)
+MousePressed = class("MousePressed")
 
 function MousePressed:__init(x, y, button)
     self.button = button
