@@ -11,6 +11,12 @@ require("events/mousePressed")
 
 function love.load()
 
+    -- Creation of a new world
+    love.physics.setMeter(64)
+    world = love.physics.newWorld(0, 9.81*80, true)
+    -- Enabling the collision functions
+    world:setCallbacks(beginContact, endContact)
+
     love.graphics.setMode(1000, 600, false, true, 0)
 
     -- A new instance of an engine is beeing created
@@ -61,4 +67,11 @@ end
 
 function beginContact(a, b, coll)
     eventmanager:fireEvent(BeginContact(a, b, coll))
+end
+
+
+--Collision function
+function beginContact(a, b, coll)
+    -- Dynamic creation of a new instance of BeginContact and firing it to the Eventmanager
+    stack:current().eventmanager:fireEvent(BeginContact(a, b, coll))
 end
