@@ -152,7 +152,7 @@ This function pipes the event through to every listener that is registered to th
 ## CollisionManager
 
 This helperclass helps to avoid code redundancy and to create neater code.  
-Our collisionmanager works in association with our eventmanager as it expects to get a event with the colliding entities. This event is available in our example folder and is named "beginContact.lua". 
+Our collisionmanager works in association with our eventmanager as it expects to get a event with the colliding entities. The required event is already contained and you can find an example of how to use it in our example.
 
 #### CollisionManager:addCollisionAction(component1, component2, object)
 
