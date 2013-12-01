@@ -218,18 +218,22 @@ function Engine.componentAdded(self, event)
     -- Adding the Entity to the requiring systems
     if self.requirements[component] then
         for i2, system in pairs(self.requirements[component]) do
-            local add = true
+            local meetsrequirements = true
             for i3, req in pairs(system.getRequiredComponents()) do
-                for i3, comp in pairs(entity.components) do
-                    if comp.__name == req then
-                        add = true
-                        break
-                    else
-                        add = false
+                if meetsrequirements == true then
+                    for i3, comp in pairs(entity.components) do
+                        if comp.__name == req then
+                            meetsrequirements = true
+                            break
+                        else
+                            meetsrequirements = false
+                        end
                     end
+                else
+                    break
                 end
             end
-            if add == true then
+            if meetsrequirements == true then
                 system:addEntity(entity)
             end
         end
