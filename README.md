@@ -163,6 +163,7 @@ object = Instance of the collision class.
 Adds a new collision to the manager. If two entities, who satisfy the requirements, collide, the `collision:action(entities)` function will be triggered.   
 The entity that contains component1 will be given to you inside `entities.entity1` and the entity that contains component2 will be inside `entities.entity2`. 
 
+If you want a entity to collide with any other entity, just name one of the required components "Everything". 
 
 ## Class
 
