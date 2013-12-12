@@ -56,24 +56,7 @@ function Engine:addEntity(entity)
         -- Adding Entity to System if all requirements are granted
         if self.requirements[component.__name] then
             for index2, system in pairs(self.requirements[component.__name]) do
-                local meetsRequirements = true
-                for index3, requirement in pairs(system:getRequiredComponents()) do
-                    if meetsRequirements == true then
-                        for index4, component in pairs(entity.components) do
-                            if component.__name == requirement then
-                                meetsRequirements = true
-                                break
-                            else
-                                meetsRequirements = false
-                            end
-                        end
-                    else
-                        break 
-                    end
-                end
-                if meetsRequirements == true then
-                    system:addEntity(entity)
-                end
+                self:checkRequirements(entity, system)
             end
         end
     end
@@ -121,25 +104,8 @@ function Engine:addSystem(system, type, priority)
         table.insert(self.requirements[value], system)
     end
     -- Checks if some of the already entities match the required components.
-    for k, entity in pairs(self.entities) do
-        local meetsRequirements = true
-        for k2, requirement in pairs(system:getRequiredComponents()) do
-            if meetsRequirements == true then
-                for index4, component in pairs(entity.components) do
-                    if component.__name == requirement then
-                        meetsRequirements = true
-                        break
-                    else
-                        meetsRequirements = false
-                    end
-                end
-            else
-                break 
-            end
-        end
-        if meetsRequirements == true then
-            system:addEntity(entity)
-        end
+    for index, entity in pairs(self.entities) do
+        self:checkRequirements(entity, system)
     end
     return system
 end
@@ -199,7 +165,7 @@ function Engine.componentRemoved(self, event)
     self.entityLists[component][entity.id] = nil
     -- Removing Entity from old systems
     if self.requirements[component] then
-        for i2, system in pairs(self.requirements[component]) do 
+        for index, system in pairs(self.requirements[component]) do 
             system:removeEntity(entity)
         end
     end
@@ -217,25 +183,8 @@ function Engine.componentAdded(self, event)
     end
     -- Adding the Entity to the requiring systems
     if self.requirements[component] then
-        for i2, system in pairs(self.requirements[component]) do
-            local meetsrequirements = true
-            for i3, req in pairs(system.getRequiredComponents()) do
-                if meetsrequirements == true then
-                    for i3, comp in pairs(entity.components) do
-                        if comp.__name == req then
-                            meetsrequirements = true
-                            break
-                        else
-                            meetsrequirements = false
-                        end
-                    end
-                else
-                    break
-                end
-            end
-            if meetsrequirements == true then
-                system:addEntity(entity)
-            end
+        for index, system in pairs(self.requirements[component]) do
+            self:checkRequirements(entity, system)
         end
     end
 end
@@ -247,5 +196,26 @@ function Engine:getEntityList(component)
     else
         self.entityLists[component] = {}
         return self.entityLists[component]
+    end
+end
+
+function Engine:checkRequirements(entity, system)
+    local meetsrequirements = true
+    for index, req in pairs(system.getRequiredComponents()) do
+        if meetsrequirements == true then
+            for index2, comp in pairs(entity.components) do
+                if comp.__name == req then
+                    meetsrequirements = true
+                    break
+                else
+                    meetsrequirements = false
+                end
+            end
+        else
+            break
+        end
+    end
+    if meetsrequirements == true then
+        system:addEntity(entity)
     end
 end
