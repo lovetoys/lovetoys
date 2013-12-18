@@ -203,13 +203,8 @@ function Engine:checkRequirements(entity, system)
     local meetsrequirements = true
     for index, req in pairs(system.getRequiredComponents()) do
         if meetsrequirements == true then
-            for index2, comp in pairs(entity.components) do
-                if comp.__name == req then
-                    meetsrequirements = true
-                    break
-                else
-                    meetsrequirements = false
-                end
+            if not entity.components[req] then
+                meetsrequirements = false
             end
         else
             break
