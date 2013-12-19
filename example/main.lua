@@ -17,7 +17,7 @@ function love.load()
     -- Enabling the collision functions
     world:setCallbacks(beginContact, endContact)
 
-    love.graphics.setMode(1000, 600, false, true, 0)
+    love.window.setMode(1000, 600, {fullscreen=false, vsync=true, resizable=false})
 
     -- A new instance of an engine is beeing created
     engine = Engine()
@@ -57,8 +57,8 @@ function love.draw()
     engine:draw()
 end 
 
-function love:keypressed(key, u)
-    eventmanager:fireEvent(KeyPressed(key, u))
+function love:keypressed(key, isrepeat)
+    eventmanager:fireEvent(KeyPressed(key, isrepeat))
 end
 
 function love:mousepressed(x, y, button)
