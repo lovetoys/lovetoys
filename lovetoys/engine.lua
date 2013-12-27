@@ -44,9 +44,8 @@ function Engine:addEntity(entity)
         table.insert(self.entities, entity)
         entity.id = #self.entities
     else
-        entity.id = self.freeIds[#self.freeIds]
+        entity.id = table.remove(self.freeIds, #self.freeIds)
         self.entities[entity.id] = entity
-        table.remove(self.freeIds, #self.freeIds)
     end
 
     for index, component in pairs(entity.components) do
@@ -199,11 +198,8 @@ end
 function Engine:checkRequirements(entity, system)
     local meetsrequirements = true
     for index, req in pairs(system.getRequiredComponents()) do
-        if meetsrequirements == true then
-            if not entity.components[req] then
-                meetsrequirements = false
-            end
-        else
+        if not entity.components[req] then
+            meetsrequirements = false
             break
         end
     end
