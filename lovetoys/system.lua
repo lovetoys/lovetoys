@@ -16,10 +16,22 @@ function System:getEntities()
     return self.targets
 end
 
-function System:addEntity(entity)
-    self.targets[entity.id] = entity
+function System:addEntity(entity, category)
+    if category then
+        self["targets" .. category][entity.id] = entity
+    else
+        self.targets[entity.id] = entity
+    end
 end
 
 function System:removeEntity(entity)
-    self.targets[entity.id] = nil
+    if table.firstElement(self.targets) then
+        self.targets[entity.id] = nil
+    else
+        local tableindex = 1
+        while self["targets" .. tableindex] do
+            self["targets" .. tableindex][entity.id] = nil
+            tableindex = tableindex+1
+        end
+    end
 end

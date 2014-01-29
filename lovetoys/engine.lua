@@ -215,6 +215,7 @@ end
 
 function Engine:checkRequirements(entity, system)
     local meetsrequirements = true
+    local category = nil
     for index, req in pairs(system.getRequiredComponents()) do
         if type(req) == "string" then
             if not entity.components[req] then
@@ -230,11 +231,16 @@ function Engine:checkRequirements(entity, system)
                 end
             end
             if meetsrequirements == true then
+                category = index 
                 break
             end
         end
     end
     if meetsrequirements == true then
-        system:addEntity(entity)
+        if category then
+            system:addEntity(entity, category)
+        else
+            system:addEntity(entity)
+        end
     end
 end
