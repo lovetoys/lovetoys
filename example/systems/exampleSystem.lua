@@ -8,6 +8,6 @@ function ExampleSystem:update(dt)
 end
 
 
-function ExampleSystem:getRequiredComponents()
+function ExampleSystem:requires()
 	return {"ExampleComponent", "PositionComponent"}
 end

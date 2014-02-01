@@ -95,7 +95,7 @@ function Engine:addSystem(system, typ, priority)
     table.insert(self.allSystems, system)
 
     -- Registering the systems requirements and saving them in a special table for fast access
-    for index, value in pairs(system:getRequiredComponents()) do
+    for index, value in pairs(system:requires()) do
         if type(value) == "string" then
             self.requirements[value] = self.requirements[value] or {}
             table.insert(self.requirements[value], system)
@@ -119,7 +119,7 @@ function Engine:removeSystem(system, typ)
     -- Removes it from the allSystem list
     for k, v in pairs(self.allSystems) do
         if v.__name == system then
-            requirements = v:getRequiredComponents()
+            requirements = v:requires()
             table.remove(self.allSystems, k)
         end
     end
@@ -216,7 +216,7 @@ end
 function Engine:checkRequirements(entity, system)
     local meetsrequirements = true
     local category = nil
-    for index, req in pairs(system.getRequiredComponents()) do
+    for index, req in pairs(system.requires()) do
         if type(req) == "string" then
             if not entity.components[req] then
                 meetsrequirements = false

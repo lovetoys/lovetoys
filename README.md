@@ -53,9 +53,16 @@ Systems function as service provider inside of the ECS. The engine manages all S
 There are two types of Systems: "logic" and "draw" Systems. Logic systems perform logic operations, like moving a player and updating physics. Their `update` method is called by `Engine:update()`, which in turn should be called in the `update` function of your game loop.
 Draw systems are responsible for rendering your game world on screen. Their `draw` method is called by `Engine:draw()`, which is usually called in the `draw()` function of the game loop.
 
-#### System:getRequiredComponents() return {"Componentname1", "Componentname2", ...} end 
+#### System:requires() return {"Componentname1", "Componentname2", ...} end 
 
 This function defines what kind of entities shall be managed by this System. The function has to be overwritten in every System!  The strings inside the returned table define the components a entity has to contain, to be managed by the System.
+
+If you want to manage different kinds of entities just return a table that looks like this:
+
+`return {name1 = {"Componentname1", "Componentname2"}, name2 = {"Componentname3", "Componentname4"}}`
+
+The different entities are now accessible under system[name1] and system[name2].
+
 
 #### System:update(dt) 
 
@@ -84,22 +91,6 @@ Adds an entity to the engine and sends it to all systems that are interested in 
 #### Engine:removeEntity(entity)
 
 Removes the particular entity from the engine and all systems.
-
-#### Engine:componentAdded(entity, added)
-
-entity = The entity  
-typeof(added) = List  
-added = A list containing the class names of the added components
-
-Checks if there is any system interested in the new component constellation and, if that is the case, adds the entity to the system.
-
-#### Engine:componentRemoved(entity, removed)
-
-entity = The entity  
-typeof(added) = List  
-added = A list which contains the class-names of the removed components
-
-Removes the entity from all systems that required the listed components.
 
 #### Engine:getEntityList(component)
 
