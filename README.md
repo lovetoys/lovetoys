@@ -55,13 +55,13 @@ Draw systems are responsible for rendering your game world on screen. Their `dra
 
 #### System:requires() return {"Componentname1", "Componentname2", ...} end 
 
-This function defines what kind of entities shall be managed by this System. The function has to be overwritten in every System!  The strings inside the returned table define the components a entity has to contain, to be managed by the System.
+This function defines what kind of entities shall be managed by this System. The function has to be overwritten in every System!  The strings inside the returned table define the components a entity has to contain, to be managed by the System. Those entities are accessible in self.targets
 
 If you want to manage different kinds of entities just return a table that looks like this:
 
 `return {name1 = {"Componentname1", "Componentname2"}, name2 = {"Componentname3", "Componentname4"}}`
 
-The different entities are now accessible under system[name1] and system[name2].
+The different entities are now accessible under system.targets[name1] and system.targets[name2].
 
 
 #### System:update(dt) 
