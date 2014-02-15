@@ -8,6 +8,6 @@ function ExampleDrawSystem:draw()
 	end
 end
 
-function ExampleDrawSystem:getRequiredComponents()
+function ExampleDrawSystem:requires()
 	return {"ExampleComponent", "PositionComponent"}
 end

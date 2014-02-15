@@ -2,24 +2,36 @@ System = class("System")
 
 function System:__init()
     -- Liste aller Entities, die die RequiredComponents dieses Systems haben
-    self.targets = {}
     self.priority = 0
+    self.targets = {}
 end
 
 function System:update(dt) end
 
 function System:draw() end
 
-function System:getRequiredComponents() return {} end
+function System:requires() return {} end
 
-function System:getEntities()
-    return self.targets
-end
-
-function System:addEntity(entity)
-    self.targets[entity.id] = entity
+function System:addEntity(entity, category)
+    if category then
+        self.targets[category] = self.targets[category] or {}
+        self.targets[category][entity.id] = entity
+    else
+        self.targets[entity.id] = entity
+    end
 end
 
 function System:removeEntity(entity)
-    self.targets[entity.id] = nil
+    if table.firstElement(self.targets) then
+        if table.firstElement(self.targets).__name then
+            self.targets[entity.id] = nil
+        else
+            local tableindex = 1
+            for index, value in pairs(self:requires()) do
+                if self.targets[index] then
+                    self.targets[index][entity.id] = nil
+                end
+            end
+        end
+    end
 end

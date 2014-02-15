@@ -79,24 +79,31 @@ function Engine:removeEntity(entity)
     self.entities[entity.id] = nil
 end
 
-function Engine:addSystem(system, type, priority)
+function Engine:addSystem(system, typ, priority)
     if priority then
         system.priority = priority
     end
     -- Adding System to draw or logic table
-    if type == "draw" then
+    if typ == "draw" then
         table.insert(self.drawSystems, system)
         table.sort(self.drawSystems, function(a, b) return a.priority < b.priority end)
-    elseif type == "logic" then
+    elseif typ == "logic" then
         table.insert(self.logicSystems, system)
         table.sort(self.logicSystems, function(a, b) return a.priority < b.priority end)
     end
     table.insert(self.allSystems, system)
 
     -- Registering the systems requirements and saving them in a special table for fast access
-    for index, value in pairs(system:getRequiredComponents()) do
-        self.requirements[value] = self.requirements[value] or {}
-        table.insert(self.requirements[value], system)
+    for index, value in pairs(system:requires()) do
+        if type(value) == "string" then
+            self.requirements[value] = self.requirements[value] or {}
+            table.insert(self.requirements[value], system)
+        elseif type(value) == "table" then
+            for index2, string in pairs(value) do
+                self.requirements[string] = self.requirements[string] or {}
+                table.insert(self.requirements[string], system)
+            end
+        end
     end
     -- Checks if some of the already entities match the required components.
     for index, entity in pairs(self.entities) do
@@ -105,34 +112,45 @@ function Engine:addSystem(system, type, priority)
     return system
 end
 
-function Engine:removeSystem(system, type)
+function Engine:removeSystem(system, typ)
     
     local requirements
     -- Removes it from the allSystem list
     for k, v in pairs(self.allSystems) do
         if v.__name == system then
-            requirements = v:getRequiredComponents()
+            requirements = v:requires()
             table.remove(self.allSystems, k)
         end
     end
     
     --  Remove the System from all requirement lists
     for k, v in pairs(requirements) do
-        for k2, v2 in pairs(self.requirements[v]) do
-            if v2.__name == system then
-                table.remove(self.requirements, k2)
+        if type(v) == "string" then
+            for k2, v2 in pairs(self.requirements[v]) do
+                if v2.__name == system then
+                    table.remove(self.requirements, k2)
+                end
+            end
+        -- Removing if it has subtables
+        elseif type(v) == "table" then
+            for k2, v2 in pairs(v) do
+                for k3, v3 in pairs(self.requirements[v2]) do
+                    if v3.__name == system then
+                        table.remove(self.requirements, k3)
+                    end
+                end
             end
         end
     end
 
     -- Remove the system from all systemlists
-    if type == "draw" then
+    if typ == "draw" then
         for k, v in pairs(self.drawSystems) do
             if v.__name == system then
                 table.remove(self.drawSystems, k)
             end
         end
-    elseif type == "logic" then
+    elseif typ == "logic" then
         for k, v in pairs(self.logicSystems) do
             if v.__name == system then
                 table.remove(self.logicSystems, k)
@@ -196,13 +214,32 @@ end
 
 function Engine:checkRequirements(entity, system)
     local meetsrequirements = true
-    for index, req in pairs(system.getRequiredComponents()) do
-        if not entity.components[req] then
-            meetsrequirements = false
-            break
+    local category = nil
+    for index, req in pairs(system.requires()) do
+        if type(req) == "string" then
+            if not entity.components[req] then
+                meetsrequirements = false
+                break
+            end
+        elseif type(req) == "table" then
+            meetsrequirements = true
+            for index2, req2 in pairs(req) do
+                if not entity.components[req2] then
+                    meetsrequirements = false
+                    break
+                end
+            end
+            if meetsrequirements == true then
+                category = index 
+                break
+            end
         end
     end
     if meetsrequirements == true then
-        system:addEntity(entity)
+        if category then
+            system:addEntity(entity, category)
+        else
+            system:addEntity(entity)
+        end
     end
 end
