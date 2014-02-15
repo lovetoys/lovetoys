@@ -1,4 +1,3 @@
-
 -- Getting folder that contains engine
 local folderOfThisFile = (...):match("(.-)[^%/]+$")
 
