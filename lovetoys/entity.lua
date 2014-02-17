@@ -8,8 +8,12 @@ end
 -- Sets the entities component of this type to the given component.
 -- An entity can only have one Component of each type.
 function Entity:addComponent(component)
+    local isNew = true
+    if self.components[component.__name] then isNew = false end
+
     self.components[component.__name] = component
-    if self.eventManager then
+
+    if self.eventManager and isNew then
         self.eventManager:fireEvent(ComponentAdded(self, component.__name))
     end
 end
