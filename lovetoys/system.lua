@@ -2,7 +2,7 @@ System = class("System")
 
 function System:__init()
     -- Liste aller Entities, die die RequiredComponents dieses Systems haben
-    self.priority = 0
+    self.priority = math.huge
     self.targets = {}
 end
 
