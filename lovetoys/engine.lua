@@ -224,15 +224,12 @@ function Engine:checkRequirements(entity, system)
             end
             if meetsrequirements == true then
                 category = index 
-                break
+                system:addEntity(entity, category)
             end
         end
     end
-    if meetsrequirements == true then
-        if category then
-            system:addEntity(entity, category)
-        else
-            system:addEntity(entity)
-        end
+    if meetsrequirements == true and category == nil then
+        system:addEntity(entity)
     end
 end
+

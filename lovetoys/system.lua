@@ -31,11 +31,8 @@ function System:removeEntity(entity)
         if table.firstElement(self.targets).__name then
             self.targets[entity.id] = nil
         else
-            local tableindex = 1
             for index, value in pairs(self:requires()) do
-                if self.targets[index] then
-                    self.targets[index][entity.id] = nil
-                end
+                self.targets[index][entity.id] = nil
             end
         end
     end
