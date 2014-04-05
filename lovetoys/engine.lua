@@ -40,8 +40,8 @@ function Engine:addEntity(entity)
 
     -- Getting the next free ID or insert into table
     if #self.freeIds == 0 then
-        table.insert(self.entities, entity)
         entity.id = #self.entities
+        table.insert(self.entities, entity)
     else
         entity.id = table.remove(self.freeIds, #self.freeIds)
         self.entities[entity.id] = entity
@@ -49,7 +49,7 @@ function Engine:addEntity(entity)
 
     for index, component in pairs(entity.components) do
         -- Adding Entity to specific Entitylist
-        self.entityLists[component.__name] = self.entityLists[component.__name] or {}
+        if not self.entityLists[component.__name] then self.entityLists[component.__name] = {} end
         self.entityLists[component.__name][entity.id] = entity
 
         -- Adding Entity to System if all requirements are granted
@@ -103,6 +103,7 @@ function Engine:addSystem(system, typ, priority)
                 self.requirements[string] = self.requirements[string] or {}
                 table.insert(self.requirements[string], system)
             end
+            system.targets[index] = {}
         end
     end
     -- Checks if some of the already entities match the required components.
@@ -117,7 +118,7 @@ function Engine:removeSystem(system, typ)
     local requirements
     -- Removes it from the allSystem list
     for k, v in pairs(self.allSystems) do
-        if v.__name == system then
+        if v == system then
             requirements = v:requires()
             table.remove(self.allSystems, k)
         end
@@ -188,12 +189,8 @@ function Engine.componentAdded(self, event)
     local entity = event.entity
     local component = event.component
     -- Adding the Entity to Entitylist
-    if self.entityLists[component] then
-        self.entityLists[component][entity.id] = entity
-    else
-        self.entityLists[component] = {}
-        self.entityLists[component][entity.id] = entity
-    end
+    if not self.entityLists[component] then self.entityLists[component] = {} end
+    self.entityLists[component][entity.id] = entity
     -- Adding the Entity to the requiring systems
     if self.requirements[component] then
         for index, system in pairs(self.requirements[component]) do
@@ -204,12 +201,8 @@ end
 
 -- Returns an Entitylist for a specific component. If the Entitylist doesn't exists yet it'll be created and returned.
 function Engine:getEntityList(component)
-    if self.entityLists[component] then
-        return self.entityLists[component]
-    else
-        self.entityLists[component] = {}
-        return self.entityLists[component]
-    end
+    if not self.entityLists[component] then self.entityLists[component] = {} end
+    return self.entityLists[component]
 end
 
 function Engine:checkRequirements(entity, system)

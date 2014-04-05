@@ -1,3 +1,9 @@
+function table.firstElement(list)
+    for index, value in pairs(list) do
+        return value
+    end
+end
+
 System = class("System")
 
 function System:__init()
@@ -14,7 +20,6 @@ function System:requires() return {} end
 
 function System:addEntity(entity, category)
     if category then
-        self.targets[category] = self.targets[category] or {}
         self.targets[category][entity.id] = entity
     else
         self.targets[entity.id] = entity
@@ -35,3 +40,4 @@ function System:removeEntity(entity)
         end
     end
 end
+
