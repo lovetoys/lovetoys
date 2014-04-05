@@ -2,9 +2,13 @@ require("lovetoys/engine")
 
 require("systems/exampleDrawSystem")
 require("systems/exampleSystem")
+require("systems/testSystem")
+require("systems/multipleRequirementsSystem")
 
 require("components/exampleComponent")
+require("components/physicsComponent")
 require("components/positionComponent")
+require("components/drawableComponent")
 
 require("events/keyPressed")
 require("events/mousePressed")
@@ -25,13 +29,17 @@ function love.load()
     eventmanager = EventManager()
     -- A new instance of a collisionmanager is beeing created
     collisionmanager = CollisionManager()
+    -- New instance of testSystem. This is just for us. We need to test the newest features of the beatiful lovetoys ;3
+    testsystem = TestSystem()
 
     -- The collisionmanager is beeing registered as a listener for the 
     -- "BeginContact" event.
     eventmanager:addListener("BeginContact", {collisionmanager, collisionmanager.fireEvent})
+    eventmanager:addListener("KeyPressed", {testsystem, testsystem.fireEvent})
 
     -- Logic (update) systems are beeing added to the engine
     engine:addSystem(ExampleSystem(), "logic", 1)
+    engine:addSystem(TestSystem(), "passive", 1000)
 
     -- Drawing systems are beeing added to the engine
     engine:addSystem(ExampleDrawSystem(), "draw")
@@ -57,11 +65,11 @@ function love.draw()
     engine:draw()
 end 
 
-function love:keypressed(key, isrepeat)
+function love.keypressed(key, isrepeat)
     eventmanager:fireEvent(KeyPressed(key, isrepeat))
 end
 
-function love:mousepressed(x, y, button)
+function love.mousepressed(x, y, button)
     eventmanager:fireEvent(MousePressed(x, y, button))
 end
 

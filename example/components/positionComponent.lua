@@ -1,4 +1,4 @@
-PositionComponent = class("PositionComponent")
+PositionComponent = class("PositionComponent", Component)
 
 function PositionComponent:__init(x, y)
     self.x = x
