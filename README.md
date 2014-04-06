@@ -80,15 +80,15 @@ The engine is the most important part of our framework and the most frequently u
 
 system = Instance of the system.  
 typeof(type) = String  
-type = "draw" or "logic" or nil
+type = "draw" or "logic" or nil  
 
-Adds a system of the particular type to the engine. Depending on type either `system:draw()` or `system:update(dt)` is going to be called.
+Adds a system of the particular type to the engine. Depending on type either `system:draw()` or `system:update(dt)` is going to be called.  
 If you just want a system to get certain entities don't pass type as a parameter. The system will get all entities that contain the required components, but no functions will be called on update or draw.
 
 #### Engine:removeSystem(system)
 
-system = Name of the system to be removed
-typeof(system) = String
+system = Name of the system to be removed  
+typeof(system) = String  
 
 This function removes a system from all system lists. After this the system won't be managed anymore.
 
@@ -128,7 +128,7 @@ function = The function that should be called
 typeof(eventName) = String  
 eventName = Name of the event-class  
 
-Adds a function that is listening to the Event. 
+Adds a function that is listening to the Event.  
 An example for adding a Listener: `EventManager:addListener("EventName", {table, table.func})`.  
 To work with `self` as we are used to, the first parameter of the listening function has to be `self`, e.g. `table.func(self, event)`.  
 
@@ -139,7 +139,7 @@ listener = {container, function}
 container = The table which contains the function  
 function = The function that should be called  
 typeof(eventName) = String  
-eventName = Name of the event-class   
+eventName = Name of the event-class  
 
 Removes a listener from this particular Event. `listener` has to be exactly the same as in `:addListener(eventName, listener)`.
 
@@ -151,7 +151,8 @@ This function pipes the event through to every listener that is registered to th
 ## CollisionManager
 
 This helperclass helps to avoid code redundancy and to create neater code.  
-Our collisionmanager works in association with our eventmanager as it expects to get a event with the colliding entities. The required event is already contained and you can find an example of how to use it in our example.
+Our collisionmanager works in association with our eventmanager as it expects to get a event with the colliding entities.  
+The required event is already contained and you can find an example of how to use it in our example.
 
 #### CollisionManager:addCollisionAction(component1, component2, object)
 
@@ -159,10 +160,10 @@ typeof(component1), typeof(component2) = String
 component = Name of the required components  
 object = Instance of the collision class.  
 
-Adds a new collision to the manager. If two entities, who satisfy the requirements, collide, the `collision:action(entities)` function will be triggered.   
-The entity that contains component1 will be given to you inside `entities.entity1` and the entity that contains component2 will be inside `entities.entity2`. 
+Adds a new collision to the manager. If two entities, who satisfy the requirements, collide, the `collision:action(entities)` function will be triggered.  
+The entity that contains component1 will be given to you inside `entities.entity1` and the entity that contains component2 will be inside `entities.entity2`.  
 
-If you want a entity to collide with any other entity, just name one of the required components "Everything". 
+If you want a entity to collide with any other entity, just name one of the required components "Everything".
 
 ## Class
 
