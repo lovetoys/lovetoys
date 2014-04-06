@@ -11,7 +11,7 @@ require("systems/polygonDrawSystem")
 require("systems/timeDrawSystem")
 
 -- Event systems
-require("systems/spawnSystem")
+require("systems/mainKeySystem")
 
 -- Testing and debugging systems
 require("systems/testSystem")
@@ -52,12 +52,12 @@ function love.load()
     -- If you want to see an implementation of multiple required component constellations check the MultipleRequirementsSystem
     testsystem = TestSystem()
 
-    -- New instance of SpawnSystem for adding and deleting physic bodies.
-    spawnsystem = SpawnSystem()
+    -- New instance of MainKeySystem for adding and deleting physic bodies.
+    mainkeysystem = MainKeySystem()
 
     -- The collisionmanager is beeing registered as a listener for the "BeginContact" event.
     eventmanager:addListener("BeginContact", {collisionmanager, collisionmanager.fireEvent})
-    eventmanager:addListener("KeyPressed", {spawnsystem, spawnsystem.fireEvent})
+    eventmanager:addListener("KeyPressed", {mainkeysystem, mainkeysystem .fireEvent})
     eventmanager:addListener("KeyPressed", {testsystem, testsystem.fireEvent})
 
     -- Logic (update) systems are beeing added to the engine
@@ -75,7 +75,7 @@ function love.load()
     -- Creation and adding of some Entities
     for i = 1, 20, 1 do
         entity = Entity()
-        local x, y = love.math.random(100, 900), love.math.random(100, 600)
+        local x, y = love.math.random(100, 900), love.math.random(150, 600)
         entity:addComponent(DrawablePolygonComponent(world, x, y, 100, 10, "static", wall))
         entity:addComponent(TimeComponent(love.math.random(0, 5000)))
         entity:addComponent(PositionComponent(x, y))
@@ -93,6 +93,11 @@ end
 
 function love.draw()
     -- Engine draw function
+    love.graphics.print("Press 'a' for spawning timer circles", 10, 10)
+    love.graphics.print("Press 's' for spawning circles", 10, 30)
+    love.graphics.print("Press 'd' for deleting all spawned circles", 10, 50)
+    love.graphics.print("Press 'e' for removing the CircleDrawSystem", 10, 70)
+    love.graphics.print("Press 'w' for adding the CircleDrawSystem again", 10, 90)
     engine:draw()
 end 
 

@@ -1,11 +1,11 @@
-SpawnSystem = class("SpawnSystem", System)
+MainKeySystem = class("MainKeySystem", System)
 
-function SpawnSystem:__init()
+function MainKeySystem:__init()
     -- I know this is dirty and no good practice, but i am really lazy right now
     self.stuff = {}
 end
 
-function SpawnSystem:fireEvent(event)
+function MainKeySystem:fireEvent(event)
     if event.key == "s" then
         for i = 1, 20, 1 do
             entity = Entity()
@@ -47,5 +47,9 @@ function SpawnSystem:fireEvent(event)
         for index, value in pairs(self.stuff) do
             engine:removeEntity(value)
         end
+    elseif event.key == "e" then
+        engine:removeSystem("CircleDrawSystem") 
+    elseif event.key == "w" then
+        engine:addSystem(CircleDrawSystem(), "draw", 2) 
     end
 end

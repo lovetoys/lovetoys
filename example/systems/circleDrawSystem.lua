@@ -1,4 +1,4 @@
-CircleDrawSystem = class("CircleDrawsystem", System)
+CircleDrawSystem = class("CircleDrawSystem", System)
 
 function CircleDrawSystem:draw()
     for i, v in pairs(self.targets) do

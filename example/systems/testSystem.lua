@@ -38,7 +38,7 @@ function TestSystem:fireEvent(event)
         print("Entities after adding: ")
         multi:printStuff()
         print("Removing system")
-        engine:removeSystem(multi)
+        engine:removeSystem("MultipleRequirementsSystem")
         print("Adding system again")
         engine:addSystem(multi)
         multi:printStuff()
@@ -49,7 +49,7 @@ function TestSystem:fireEvent(event)
         end
         multi:printStuff()
 
-        engine:removeSystem(multi)
+        engine:removeSystem("MultipleRequirementsSystem")
 
         print("Test ending")
     end
