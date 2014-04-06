@@ -83,6 +83,12 @@ function Engine:addSystem(system, typ, priority)
     if priority then
         system.priority = priority
     end
+    for index, value in pairs(self.allSystems) do
+        if value.__name == system.__name then
+            print("Lovetoys: System already existing. Aborting")
+            return
+        end
+    end
     -- Adding System to draw or logic table
     if typ == "draw" then
         table.insert(self.drawSystems, system)
@@ -156,7 +162,7 @@ function Engine:removeSystem(system)
             end
         end
     else
-        print("System couldn't be found")
+        print("Lovetoys: System to be removed couldn't be found")
     end
 end
 
