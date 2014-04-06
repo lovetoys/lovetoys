@@ -113,50 +113,50 @@ function Engine:addSystem(system, typ, priority)
     return system
 end
 
-function Engine:removeSystem(system, typ)
+function Engine:removeSystem(system)
     
     local requirements
     -- Removes it from the allSystem list
     for k, v in pairs(self.allSystems) do
-        if v == system then
+        if v.__name == system then
             requirements = v:requires()
             table.remove(self.allSystems, k)
         end
     end
-    
+    if requirements ~= nil then 
     --  Remove the System from all requirement lists
-    for k, v in pairs(requirements) do
-        if type(v) == "string" then
-            for k2, v2 in pairs(self.requirements[v]) do
-                if v2.__name == system then
-                    table.remove(self.requirements, k2)
+        for k, v in pairs(requirements) do
+            if type(v) == "string" then
+                for k2, v2 in pairs(self.requirements[v]) do
+                    if v2.__name == system then
+                        table.remove(self.requirements, k2)
+                    end
                 end
-            end
-        -- Removing if it has subtables
-        elseif type(v) == "table" then
-            for k2, v2 in pairs(v) do
-                for k3, v3 in pairs(self.requirements[v2]) do
-                    if v3.__name == system then
-                        table.remove(self.requirements, k3)
+            -- Removing if it has subtables
+            elseif type(v) == "table" then
+                for k2, v2 in pairs(v) do
+                    for k3, v3 in pairs(self.requirements[v2]) do
+                        if v3.__name == system then
+                            table.remove(self.requirements, k3)
+                        end
                     end
                 end
             end
         end
-    end
 
-    -- Remove the system from all systemlists
-    if typ == "draw" then
+        -- Remove the system from all systemlists
         for k, v in pairs(self.drawSystems) do
             if v.__name == system then
                 table.remove(self.drawSystems, k)
             end
         end
-    elseif typ == "logic" then
         for k, v in pairs(self.logicSystems) do
             if v.__name == system then
                 table.remove(self.logicSystems, k)
             end
         end
+    else
+        print("System couldn't be found")
     end
 end
 

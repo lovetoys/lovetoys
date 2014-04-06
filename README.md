@@ -80,9 +80,17 @@ The engine is the most important part of our framework and the most frequently u
 
 system = Instance of the system.  
 typeof(type) = String  
-type = "draw" or "logic"
+type = "draw" or "logic" or nil
 
 Adds a system of the particular type to the engine. Depending on type either `system:draw()` or `system:update(dt)` is going to be called.
+If you just want a system to get certain entities don't pass type as a parameter. The system will get all entities that contain the required components, but no functions will be called on update or draw.
+
+#### Engine:removeSystem(system)
+
+system = Name of the system to be removed
+typeof(system) = String
+
+This function removes a system from all system lists. After this the system won't be managed anymore.
 
 #### Engine:addEntity(entity)
 
