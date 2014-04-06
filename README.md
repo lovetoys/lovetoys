@@ -14,7 +14,7 @@ Another way is to just download the files, especially the lovetoys folder, and c
 
 The following text describes the different classes that the lovetoys provide. To use everything just require lovetoys/engine.
 
-For an example on how to use the lovetoys check our `example` folder.
+For an example on how to use the lovetoys check our [example](https://github.com/Nukesor/lua-lovetoys/tree/master/example) folder.
 
 ## Entity Component System
     
@@ -30,15 +30,15 @@ Adds a component to this particular entity.
 
 #### Entity:removeComponent(name)
 
+name = Name of the component class  
 typeof(name) = String  
-name = Name of the Component class  
 
 Removes a component from this particular entity.  
     
 #### Entity:getComponent(Name)
 
+name = Name of the component class
 typeof(name) = String  
-name = Name of the Component class
 
 Returns the particular component. Returns `nil` if the Entity has no component with the name `name`.
 
@@ -53,15 +53,17 @@ Systems function as service provider inside of the ECS. The engine manages all S
 There are two types of Systems: "logic" and "draw" Systems. Logic systems perform logic operations, like moving a player and updating physics. Their `update` method is called by `Engine:update()`, which in turn should be called in the `update` function of your game loop.
 Draw systems are responsible for rendering your game world on screen. Their `draw` method is called by `Engine:draw()`, which is usually called in the `draw()` function of the game loop.
 
+
 #### System:requires() return {"Componentname1", "Componentname2", ...} end 
 
-This function defines what kind of entities shall be managed by this System. The function has to be overwritten in every System!  The strings inside the returned table define the components a entity has to contain, to be managed by the System. Those entities are accessible in self.targets
+This function defines what kind of entities shall be managed by this System. The function has to be overwritten in every System!  The strings inside the returned table define the components a entity has to contain, to be managed by the System. Those entities are accessible in `self.targets`.
 
 If you want to manage different kinds of entities just return a table that looks like this:
 
 `return {name1 = {"Componentname1", "Componentname2"}, name2 = {"Componentname3", "Componentname4"}}`
 
-The different entities are now accessible under system.targets[name1] and system.targets[name2].
+The different entities are now accessible under `system.targets[name1]` and `system.targets[name2]`.  
+A entity can be contained by the same system multiple times in different target pools if they match the different component constellations.
 
 
 #### System:update(dt) 
@@ -72,15 +74,30 @@ If the system type is "logic" , this function is called every time `Engine:updat
 
 If the system type is "draw", this function is called every time `Engine:draw()` is called.
 
+#### A example for a custom created system
+
+    CustomSystem = class("CustomSystem", System)
+
+    function CustomSystem:update(dt)
+        for key, entity in pairs(self.targets) do
+            local foo =  entity:getComponent("Component1").foo
+            entity:getComponent("Component2").bar = foo
+        end
+    end
+
+    function CustumSystem:requires()
+        return {"Component1", "Component2"}
+    end
+
 ### Engine
 
 The engine is the most important part of our framework and the most frequently used interface. It contains all systems, entities, requirements and entitylists and manages them for you.
 
 #### Engine:addSystem(system, type)
 
-system = Instance of the system.  
-typeof(type) = String  
+system = Instance of the system to be added.  
 type = "draw" or "logic" or nil  
+typeof(type) = String  
 
 Adds a system of the particular type to the engine. Depending on type either `system:draw()` or `system:update(dt)` is going to be called.  
 If you just want a system to get certain entities don't pass type as a parameter. The system will get all entities that contain the required components, but no functions will be called on update or draw.
@@ -94,16 +111,20 @@ This function removes a system from all system lists. After this the system won'
 
 #### Engine:addEntity(entity)
 
+entity = Instance of Entity to be added
+
 Adds an entity to the engine and sends it to all systems that are interested in its component constellation.
 
 #### Engine:removeEntity(entity)
+
+entity = Entity to be removed
 
 Removes the particular entity from the engine and all systems.
 
 #### Engine:getEntityList(component)
 
-typeof(component) = String  
 component = Class name of the component
+typeof(component) = String  
 
 Returns a list with all entities that contain this particular component.
 
@@ -121,12 +142,13 @@ This class is a simple eventmanager for sending events to their respective liste
 
 #### EventManager:addListener(eventName, listener)
 
-typeof(listener) = Table  
+eventName = Name of the event-class to be added 
+typeof(eventName) = String  
+
 listener = {container, function}  
+typeof(listener) = Table  
 container = The table which contains the function  
 function = The function that should be called  
-typeof(eventName) = String  
-eventName = Name of the event-class  
 
 Adds a function that is listening to the Event.  
 An example for adding a Listener: `EventManager:addListener("EventName", {table, table.func})`.  
@@ -134,14 +156,13 @@ To work with `self` as we are used to, the first parameter of the listening func
 
 #### EventManager:removeListener(eventName, listener)
 
-typeof(listener) = Table  
-listener = {container, function}  
-container = The table which contains the function  
-function = The function that should be called  
-typeof(eventName) = String  
 eventName = Name of the event-class  
+typeof(eventName) = String  
 
-Removes a listener from this particular Event. `listener` has to be exactly the same as in `:addListener(eventName, listener)`.
+listener = Name of the listener to be deleted  
+typeof(listener) = String  
+
+Removes a listener from this particular Event.
 
 #### EventManager:fireEvent(event)
 
@@ -152,7 +173,7 @@ This function pipes the event through to every listener that is registered to th
 
 This helperclass helps to avoid code redundancy and to create neater code.  
 Our collisionmanager works in association with our eventmanager as it expects to get a event with the colliding entities.  
-The required event is already contained and you can find an example of how to use it in our example.
+The required event is already contained and you can find an example of how to use it in our [example](https://github.com/Nukesor/lua-lovetoys/tree/master/example) folder.
 
 #### CollisionManager:addCollisionAction(component1, component2, object)
 
