@@ -9,6 +9,12 @@ function EventManager:addListener(eventName, listener)
     if not self.eventListeners[eventName] then
         self.eventListeners[eventName] = {}
     end
+    for key, value in pairs(self.eventListeners[eventName]) do
+        if value[1].__name == listener[1].__name then
+            print("EventListener already existing. Aborting")
+            return
+        end
+    end
     table.insert(self.eventListeners[eventName], listener)
 end
 
@@ -18,9 +24,10 @@ function EventManager:removeListener(eventName, listener)
         for key, value in pairs(self.eventListener[eventName]) do
             if value[1].__name == listener then
                 table.remove(self.eventListener[eventName], key)
-                break
+                return
             end
         end
+        print("Listener to be deleted is not existing.")
     end
 end
 
