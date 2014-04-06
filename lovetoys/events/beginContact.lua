@@ -8,3 +8,4 @@ function BeginContact:__init(a, b, coll)
     -- Collisionobject
     self.coll = coll
 end
+

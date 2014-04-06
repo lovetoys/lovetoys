@@ -51,3 +51,4 @@ end
 function getName(object)
     return object.__name
 end
+

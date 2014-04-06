@@ -10,7 +10,7 @@ function CollisionManager:addCollisionAction(component1, component2, object)
 end
 
 function CollisionManager.fireEvent(self, event)
-    -- If an Event is fired, the entities are given to the specific collisions. Entities are passed in Reihenfolge^^.
+    -- If an Event is fired, the entities are given to the specific collisions. Entities are passed in the following Reihenfolge^^.
     local e1 = event.a:getUserData()
     local e2 = event.b:getUserData()
 
@@ -53,3 +53,4 @@ function CollisionManager.fireEvent(self, event)
         end
     end
 end
+

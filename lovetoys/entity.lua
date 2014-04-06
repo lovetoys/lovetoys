@@ -35,3 +35,4 @@ end
 function Entity:getComponents()
     return self.components
 end
+
