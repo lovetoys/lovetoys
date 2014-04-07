@@ -2,35 +2,46 @@
 require("lovetoys/engine")
 
 -- Logic systems
-require("systems/timerSystem")
-require("systems/physicsPositionSyncSystem")
+require("systems/logic/timerSystem")
+require("systems/logic/physicsPositionSyncSystem")
 
 -- Graphic systems
-require("systems/circleDrawSystem")
-require("systems/polygonDrawSystem")
-require("systems/timeDrawSystem")
+require("systems/graphic/circleDrawSystem")
+require("systems/graphic/polygonDrawSystem")
+require("systems/graphic/timeDrawSystem")
 
 -- Event systems
-require("systems/mainKeySystem")
+require("systems/event/mainKeySystem")
+
+-- Particle systems
+require("systems/particle/particleDrawSystem")
+require("systems/particle/particleUpdateSystem")
 
 -- Testing and debugging systems
-require("systems/testSystem")
-require("systems/multipleRequirementsSystem")
+require("systems/test/testSystem")
+require("systems/test/multipleRequirementsSystem")
 
 -- Physic components
-require("components/physicsComponent")
-require("components/positionComponent")
-require("components/drawablePolygonComponent")
+require("components/physic/physicsComponent")
+require("components/physic/positionComponent")
 
 -- Graphic components
-require("components/drawableComponent")
+require("components/graphic/drawableComponent")
+require("components/graphic/drawablePolygonComponent")
 
 -- Logic components
-require("components/timeComponent")
+require("components/logic/timeComponent")
+
+-- Particle components
+require("components/particle/particleComponent")
+require("components/particle/particleTimerComponent")
 
 -- Events
 require("events/keyPressed")
 require("events/mousePressed")
+
+-- Collisions
+require("collisions/polygonCircleCollision")
 
 function love.load()
 
@@ -41,6 +52,9 @@ function love.load()
     world:setCallbacks(beginContact, endContact)
 
     love.window.setMode(1000, 600, {fullscreen=false, vsync=true, resizable=false})
+
+    -- Loading particle image
+    particle1 = love.graphics.newImage("gfx/particle1.png")
 
     -- A new instance of an Engine is beeing created.
     engine = Engine()
@@ -60,13 +74,20 @@ function love.load()
     eventmanager:addListener("KeyPressed", {mainkeysystem, mainkeysystem .fireEvent})
     eventmanager:addListener("KeyPressed", {testsystem, testsystem.fireEvent})
 
+    local polygon = PolygonCircleCollision()
+
+    collisionmanager:addCollisionAction(polygon.component1, polygon.component2, polygon)
+
     -- Logic (update) systems are beeing added to the engine
     engine:addSystem(TimerSystem(), "logic", 1)
     engine:addSystem(PhysicsPositionSyncSystem(), "logic", 2)
+    engine:addSystem(ParticleUpdateSystem(), "logic", 3)
+    
 
     -- Drawing systems are beeing added to the engine
     engine:addSystem(PolygonDrawSystem(), "draw", 1)
-    engine:addSystem(CircleDrawSystem(), "draw", 2)
+    engine:addSystem(ParticleDrawSystem(), "draw", 2)
+    engine:addSystem(CircleDrawSystem(), "draw", 3)
     engine:addSystem(TimeDrawSystem(), "draw", 5)
 
     -- Passive System beeing added. This systems draw or update function won't be called
