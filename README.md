@@ -7,6 +7,8 @@ Besides the Entity Component System the Lovetoys also contain an event manager f
 This Software is published under GPL General Public License Version 3.
 For further information check the license.txt or read the online version under [GPL](http://www.gnu.org/licenses/gpl.txt)
 
+The Software is tested and should be stable. If you find any bugs please create an issue and report them.
+
 ## Installation
 
 The best way of installing Lovetoys is creating a submodule and cloning it right into your git repo. 
