@@ -26,7 +26,7 @@ function PolygonCircleCollision:action(entities)
     particle:setAreaSpread("normal", 5, 5 )
     particle:start()
 
-    newParticle:addComponent(ParticleTimerComponent(0.3, 0.5))
+    newParticle:addComponent(ParticleTimerComponent(0.2, 0.4))
 
     engine:addEntity(newParticle)
 end

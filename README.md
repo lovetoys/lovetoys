@@ -4,8 +4,8 @@ Lovetoys is a small bundle of helper classes and libraries consisting of 3 packa
 
 Besides the Entity Component System the Lovetoys also contain an event manager for handling keypresses etc. and a collision manager for easier management of Löve2D collisions.
 
-This Software is published under GPL General Public License Version 3.
-For further information check the license.txt or read the online version under [GPL](http://www.gnu.org/licenses/gpl.txt)
+This Software is published under the MIT license.
+For further information check the license.txt or read the online version under [MIT](https://github.com/Nukesor/lua-lovetoys/LICENSE.md)
 
 The Software is tested and should be stable. If you find any bugs please create an issue and report them.
 
