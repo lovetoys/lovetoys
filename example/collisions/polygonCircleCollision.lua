@@ -7,9 +7,9 @@ end
 
 function PolygonCircleCollision:action(entities)
     local newParticle = Entity()
-    newParticle:addComponent(ParticleComponent(particle1, 1000))
+    newParticle:add(ParticleComponent(particle1, 1000))
 
-    local particle = newParticle:getComponent("ParticleComponent").particle
+    local particle = newParticle:get("ParticleComponent").particle
     particle:setEmissionRate(300)
     particle:setSpeed(10, 10)
     particle:setSizes(0.1, 0.15)
@@ -26,14 +26,14 @@ function PolygonCircleCollision:action(entities)
     particle:setAreaSpread("normal", 5, 5 )
     particle:start()
 
-    newParticle:addComponent(ParticleTimerComponent(0.2, 0.4))
+    newParticle:add(ParticleTimerComponent(0.2, 0.4))
 
     engine:addEntity(newParticle)
 end
 
 function getMid(entity1, entity2)
-    local x1, y1 = entity1:getComponent("PositionComponent").x, entity1:getComponent("PositionComponent").y
-    local x2, y2 = entity2:getComponent("PositionComponent").x, entity2:getComponent("PositionComponent").y
+    local x1, y1 = entity1:get("PositionComponent").x, entity1:get("PositionComponent").y
+    local x2, y2 = entity2:get("PositionComponent").x, entity2:get("PositionComponent").y
 
     return (x1 + x2)/2 , (y1 + y2)/2 
 end

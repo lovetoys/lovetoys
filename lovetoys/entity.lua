@@ -7,7 +7,7 @@ end
 
 -- Sets the entities component of this type to the given component.
 -- An entity can only have one Component of each type.
-function Entity:addComponent(component)
+function Entity:add(component)
     local isNew = true
     if self.components[component.__name] then isNew = false end
 
@@ -19,7 +19,7 @@ function Entity:addComponent(component)
 end
 
 -- Removes a component from the entity.
-function Entity:removeComponent(name)
+function Entity:remove(name)
     if self.components[name] then
         self.components[name] = nil
     end
@@ -28,7 +28,7 @@ function Entity:removeComponent(name)
     end
 end
 
-function Entity:getComponent(name)
+function Entity:get(name)
     return self.components[name]
 end
 

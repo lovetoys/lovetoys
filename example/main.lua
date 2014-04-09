@@ -97,10 +97,10 @@ function love.load()
     for i = 1, 20, 1 do
         entity = Entity()
         local x, y = love.math.random(100, 900), love.math.random(150, 600)
-        entity:addComponent(DrawablePolygonComponent(world, x, y, 100, 10, "static", wall))
-        entity:addComponent(TimeComponent(love.math.random(0, 5000)))
-        entity:addComponent(PositionComponent(x, y))
-        entity:getComponent("DrawablePolygonComponent").fixture:setUserData(entity)
+        entity:add(DrawablePolygonComponent(world, x, y, 100, 10, "static", wall))
+        entity:add(TimeComponent(love.math.random(0, 5000)))
+        entity:add(PositionComponent(x, y))
+        entity:get("DrawablePolygonComponent").fixture:setUserData(entity)
         engine:addEntity(entity)
     end
 end

@@ -3,7 +3,7 @@ TimerSystem = class("TimerSystem", System)
 
 function TimerSystem:update(dt)
 	for index, value in pairs(self.targets) do
-		value:getComponent("TimeComponent").timer = value:getComponent("TimeComponent").timer+dt
+		value:get("TimeComponent").timer = value:get("TimeComponent").timer+dt
 	end
 end
 

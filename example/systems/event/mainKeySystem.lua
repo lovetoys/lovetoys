@@ -10,7 +10,7 @@ function MainKeySystem:fireEvent(event)
         for i = 1, 20, 1 do
             entity = Entity()
             local x, y = love.math.random(0, 1000), love.math.random(0, 600)
-            entity:addComponent(PositionComponent(x, y))
+            entity:add(PositionComponent(x, y))
 
             local body = love.physics.newBody(world, x, y, "dynamic")
             local shape = love.physics.newCircleShape(5) 
@@ -19,7 +19,7 @@ function MainKeySystem:fireEvent(event)
             fixture:setUserData(entity)
             body:setMass(2)
                 
-            entity:addComponent(PhysicsComponent(body, fixture, shape ))
+            entity:add(PhysicsComponent(body, fixture, shape ))
 
             table.insert(self.stuff, entity)
             engine:addEntity(entity)
@@ -28,8 +28,8 @@ function MainKeySystem:fireEvent(event)
         for i = 1, 20, 1 do
             entity = Entity()
             local x, y = love.math.random(0, 1000), love.math.random(0, 600)
-            entity:addComponent(TimeComponent(love.math.random(0, 5000)))
-            entity:addComponent(PositionComponent(x, y))
+            entity:add(TimeComponent(love.math.random(0, 5000)))
+            entity:add(PositionComponent(x, y))
 
             local body = love.physics.newBody(world, x, y, "dynamic")
             local shape = love.physics.newCircleShape(5) 
@@ -38,7 +38,7 @@ function MainKeySystem:fireEvent(event)
             fixture:setRestitution(1)  
             body:setMass(2)
                 
-            entity:addComponent(PhysicsComponent(body, fixture, shape ))
+            entity:add(PhysicsComponent(body, fixture, shape ))
 
             table.insert(self.stuff, entity)
             engine:addEntity(entity)

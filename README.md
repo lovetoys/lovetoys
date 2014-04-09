@@ -4,8 +4,7 @@ Lovetoys is a small bundle of helper classes and libraries consisting of 3 packa
 
 Besides the Entity Component System the Lovetoys also contain an event manager for handling keypresses etc. and a collision manager for easier management of Löve2D collisions.
 
-This Software is published under the MIT license.
-For further information check the license.txt or read the online version under [MIT](https://github.com/Nukesor/lua-lovetoys/LICENSE.md)
+This Software is published under the MIT license. For further information check the LICENSE.md.
 
 The Software is tested and should be stable. If you find any bugs please create an issue and report them.
 
@@ -14,43 +13,42 @@ The Software is tested and should be stable. If you find any bugs please create 
 The best way of installing Lovetoys is creating a submodule and cloning it right into your git repo. 
 Another way is to just download the files, especially the lovetoys folder, and copy them to your project folder.
 
-The following text describes the different classes that the lovetoys provide. To use everything just require lovetoys/engine.
+The following text describes the different classes the lovetoys provide. To use everything just require lovetoys/engine.
 
 For an example on how to use the lovetoys check our [example](https://github.com/Nukesor/lua-lovetoys/tree/master/example) folder.
 
 ## Entity Component System
-    
+
 ### Entity
 
 The Entity is the basic object that is beeing administrated by the engine. It functions merely as a container for components.
 
-#### Entity:addComponent(component)
-
+#### Entity:add(component)
 component = Instance of a component.
 
 Adds a component to this particular entity. 
 
-#### Entity:removeComponent(name)
+#### Entity:remove(name)
 
 name = Name of the component class  
 typeof(name) = String  
 
 Removes a component from this particular entity.  
     
-#### Entity:getComponent(Name)
+#### Entity:get(Name)
 
 name = Name of the component class
 typeof(name) = String  
 
-Returns the particular component. Returns `nil` if the Entity has no component with the name `name`.
+Returns the component or `nil` if the Entity has no component with the given `name`.
 
 ### Component
 
-This does not do anything yet. It will be used for type checks someday.
+This doesn't do anything yet. It will be used for type checks someday.
 
 ### System
 
-Systems function as service provider inside of the ECS. The engine manages all Systems and assigns all compatible entities to the respective systems.
+Systems function as service provider inside of the ECS. The engine manages all Systems and assigns all suitable entities to the respective systems.
 
 There are two types of Systems: "logic" and "draw" Systems. Logic systems perform logic operations, like moving a player and updating physics. Their `update` method is called by `Engine:update()`, which in turn should be called in the `update` function of your game loop.
 Draw systems are responsible for rendering your game world on screen. Their `draw` method is called by `Engine:draw()`, which is usually called in the `draw()` function of the game loop.
@@ -82,8 +80,8 @@ If the system type is "draw", this function is called every time `Engine:draw()`
 
     function CustomSystem:update(dt)
         for key, entity in pairs(self.targets) do
-            local foo =  entity:getComponent("Component1").foo
-            entity:getComponent("Component2").bar = foo
+            local foo =  entity:get("Component1").foo
+            entity:get("Component2").bar = foo
         end
     end
 
@@ -109,7 +107,7 @@ If you just want a system to get certain entities don't pass type as a parameter
 system = Name of the system to be removed  
 typeof(system) = String  
 
-This function removes a system from all system lists. After this the system won't be managed anymore.
+This function removes a system from all system lists. After this the system won't be managed or updated anymore.
 
 #### Engine:addEntity(entity)
 
@@ -154,7 +152,7 @@ function = The function that should be called
 
 Adds a function that is listening to the Event.  
 An example for adding a Listener: `EventManager:addListener("EventName", {table, table.func})`.  
-To work with `self` as we are used to, the first parameter of the listening function has to be `self`, e.g. `table.func(self, event)`.  
+We need to do this so we can work with `self` as we are used to, as lua doesn't provide a native class implementation.
 
 #### EventManager:removeListener(eventName, listener)
 
@@ -179,8 +177,8 @@ The required event is already contained and you can find an example of how to us
 
 #### CollisionManager:addCollisionAction(component1, component2, object)
 
-typeof(component1), typeof(component2) = String  
-component = Name of the required components  
+component1, component2 = Names of the required components  
+typeof(component1) = typeof(component2) = String  
 object = Instance of the collision class.  
 
 Adds a new collision to the manager. If two entities, who satisfy the requirements, collide, the `collision:action(entities)` function will be triggered.  
@@ -203,11 +201,16 @@ A simple class file for OOP.
 
 If you want to create a object of this class just call `Foo(parameter)` and it will return a object after calling the constructor.  
 
-If you want to create a class that inherits from a superclass you have to do the following:  
+If you want to create a class that inherits from a superclass you have to pass a superclass:  
 
     Foo = class("Foo", Superclass)
 
-Now Foo calls the constructors of all superior classes on itself.
+All superclass constructors will now be called on new Foo instances.
+To create a new instance you now just have to call `Foo()` e.g.
+
+    NewInstance = Foo()
+
+
 
 
 Copyright &copy; 2013 Arne Beer and Rafael Epplee
