@@ -6,7 +6,7 @@ Besides the Entity Component System the Lovetoys also contain an event manager f
 
 This Software is published under the MIT license. For further information check the LICENSE.md.
 
-The Software is tested and should be stable. If you find any bugs please create an issue and report them.
+The Software is tested and should be stable. If you find any bugs please create an issue and report them. Otherwise feel free to create a pull request :).
 
 ## Installation
 
@@ -123,7 +123,7 @@ Removes the particular entity from the engine and all systems.
 
 #### Engine:getEntityList(component)
 
-component = Class name of the component
+component = Class name of the component   
 typeof(component) = String  
 
 Returns a list with all entities that contain this particular component.
@@ -135,6 +135,39 @@ Updates all logic systems.
 #### Engine:draw()
 
 Updates all draw systems.
+
+#### Example
+
+For a more detailed and commented version with collisions and some other examples check the [example main.lua](https://github.com/Nukesor/lua-lovetoys/tree/master/example/main.lua).
+
+    -- Importing lovetoys
+    require("lovetoys/engine")
+
+    function love.load()
+        engine = Engine()
+        world = love.physics.newWorld(0, 9.81*80, true)
+        world:setCallbacks(beginContact, endContact)
+        eventmanager = EventManager()
+    end
+
+    function love.update(dt)
+        -- Engine update function
+        engine:update(dt)
+        world:update(dt)
+    end
+
+    function love.draw()
+        -- Engine draw function
+        engine:draw()
+    end 
+
+    function love.keypressed(key, isrepeat)
+        eventmanager:fireEvent(KeyPressed(key, isrepeat))
+    end
+
+    function love.mousepressed(x, y, button)
+        eventmanager:fireEvent(MousePressed(x, y, button))
+    end
 
 ## Eventmanager
 
