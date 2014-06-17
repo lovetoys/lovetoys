@@ -11,11 +11,12 @@ The Software is tested and should be stable. If you find any bugs please create 
 ## Installation
 
 The best way of installing Lovetoys is creating a submodule and cloning it right into your git repo. 
-Another way is to just download the files, especially the lovetoys folder, and copy them to your project folder.
-
-The following text describes the different classes the lovetoys provide. To use everything just require lovetoys/engine.
+Another way is to just download the files, especially the lovetoys folder, and copy them to your project folder.  
+To import everything just require lovetoys/engine.
 
 For an example on how to use the lovetoys check our [example](https://github.com/Nukesor/lua-lovetoys/tree/master/example) folder.
+
+The following text describes the different classes the lovetoys provide.  
 
 ## Entity Component System
 
@@ -37,7 +38,7 @@ Removes a component from this particular entity.
     
 #### Entity:get(Name)
 
-name = Name of the component class
+name = Name of the component class  
 typeof(name) = String  
 
 Returns the component or `nil` if the Entity has no component with the given `name`.
@@ -63,18 +64,18 @@ If you want to manage different kinds of entities just return a table that looks
 `return {name1 = {"Componentname1", "Componentname2"}, name2 = {"Componentname3", "Componentname4"}}`
 
 The different entities are now accessible under `system.targets[name1]` and `system.targets[name2]`.  
-A entity can be contained by the same system multiple times in different target pools if they match the different component constellations.
+An entity can be contained by the same system multiple times in different target pools if they match the varying component constellations.
 
 
 #### System:update(dt) 
 
-If the system type is "logic" , this function is called every time `Engine:update()` is called.
+If the system type is "logic" , this function is called every time `Engine:update(dt)` is called.
 
 #### System:draw() 
 
 If the system type is "draw", this function is called every time `Engine:draw()` is called.
 
-#### A example for a custom created system
+#### A example for a custom system
 
     CustomSystem = class("CustomSystem", System)
 
@@ -85,7 +86,7 @@ If the system type is "draw", this function is called every time `Engine:draw()`
         end
     end
 
-    function CustumSystem:requires()
+    function CustomSystem:requires()
         return {"Component1", "Component2"}
     end
 
@@ -246,7 +247,7 @@ To create a new instance you now just have to call `Foo()` e.g.
 
 
 
-Copyright &copy; 2013 Arne Beer and Rafael Epplee
+Copyright &copy; 2013-2014 Arne Beer and Rafael Epplee
 
 Published under GNU General Public License Version 3  
 For further information check the license.txt .
