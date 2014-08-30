@@ -76,7 +76,16 @@ function Engine:removeEntity(entity)
     for index, component in pairs(entity.components) do
         self.entityLists[component.__name][entity.id] = nil
     end
-    self.entities[entity.id] = nil
+    if self.entities[entity.id] then
+        self.entities[entity.id] = nil
+    else
+        print("Trying to remove non existing entity from engine.")
+        print("Entity id: " .. entity.id)
+        print("Entity's components:")
+        for index, component in pairs(entity.components) do
+            print(index)
+        end
+    end
 end
 
 function Engine:addSystem(system, typ, priority)
@@ -85,7 +94,7 @@ function Engine:addSystem(system, typ, priority)
     end
     for index, value in pairs(self.allSystems) do
         if value.__name == system.__name then
-            print("Lovetoys: System already existing. Aborting")
+            print("Lovetoys: " .. system.__name .. " already existing. Aborting")
             return
         end
     end
@@ -162,7 +171,7 @@ function Engine:removeSystem(system)
             end
         end
     else
-        print("Lovetoys: System to be removed couldn't be found")
+        print("Lovetoys: " .. system .. " isn't existing. System can't be removed from engine.")
     end
 end
 
