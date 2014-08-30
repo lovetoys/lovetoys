@@ -30,6 +30,7 @@ function Engine:__init()
     self.drawSystems = {}
 
     self.freeIds = {}
+    self.maxId = 1
     self.eventManager:addListener("ComponentRemoved", {self, self.componentRemoved})
     self.eventManager:addListener("ComponentAdded", {self, self.componentAdded})
 end
@@ -40,7 +41,8 @@ function Engine:addEntity(entity)
 
     -- Getting the next free ID or insert into table
     if #self.freeIds == 0 then
-        entity.id = #self.entities
+        entity.id = self.maxId
+        self.maxId = self.maxId + 1
         table.insert(self.entities, entity)
     else
         entity.id = table.remove(self.freeIds, #self.freeIds)
