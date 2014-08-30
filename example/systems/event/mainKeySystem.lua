@@ -1,10 +1,5 @@
 MainKeySystem = class("MainKeySystem", System)
 
-function MainKeySystem:__init()
-    -- I know this is dirty and no good practice, but i am really lazy right now
-    self.stuff = {}
-end
-
 function MainKeySystem:fireEvent(event)
     if event.key == "s" then
         for i = 1, 20, 1 do
@@ -20,8 +15,8 @@ function MainKeySystem:fireEvent(event)
             body:setMass(2)
                 
             entity:add(PhysicsComponent(body, fixture, shape ))
+            entity:add(IsCircle())
 
-            table.insert(self.stuff, entity)
             engine:addEntity(entity)
         end
     elseif event.key == "a" then
@@ -39,13 +34,14 @@ function MainKeySystem:fireEvent(event)
             body:setMass(2)
                 
             entity:add(PhysicsComponent(body, fixture, shape ))
+            entity:add(IsCircle())
 
-            table.insert(self.stuff, entity)
             engine:addEntity(entity)
         end
     elseif  event.key == "d" then
-        for index, value in pairs(self.stuff) do
-            engine:removeEntity(value)
+        for index, entity in pairs(engine:getEntityList("IsCircle")) do
+            entity:get("PhysicsComponent").body:destroy()
+            engine:removeEntity(entity)
         end
     elseif event.key == "e" then
         engine:removeSystem("CircleDrawSystem") 

@@ -36,6 +36,10 @@ require("components/logic/timeComponent")
 require("components/particle/particleComponent")
 require("components/particle/particleTimerComponent")
 
+-- Identifier components
+
+require("components/identifier/isCircle")
+
 -- Events
 require("events/keyPressed")
 require("events/mousePressed")
