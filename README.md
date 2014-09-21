@@ -43,6 +43,13 @@ typeof(name) = String
 
 Returns the component or `nil` if the Entity has no component with the given `name`.
 
+#### Entity:has(Name)
+
+name = Name of the component class  
+typeof(name) = String  
+
+Returns if the Entity contains this component.  
+
 ### Component
 
 This doesn't do anything yet. It will be used for type checks someday.

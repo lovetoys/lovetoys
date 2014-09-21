@@ -32,6 +32,14 @@ function Entity:get(name)
     return self.components[name]
 end
 
+function Entity:has(name)
+    if self.components[name] then
+        return true
+    else
+        return false
+    end
+end
+
 function Entity:getComponents()
     return self.components
 end
