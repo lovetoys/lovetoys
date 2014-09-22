@@ -14,7 +14,7 @@ The best way of installing Lovetoys is creating a submodule and cloning it right
 Another way is to just download the files, especially the lovetoys folder, and copy them to your project folder.  
 To import everything just require lovetoys/engine.
 
-For an example on how to use the lovetoys check our [example](https://github.com/Lovetoys/Lovetoys-example) folder.
+For an example on how to use the lovetoys check our [example](https://github.com/Lovetoys/Lovetoys-examples) folder.
 
 The following text describes the different classes the lovetoys provide.  
 
@@ -146,7 +146,7 @@ Updates all draw systems.
 
 #### Example
 
-For a more detailed and commented version with collisions and some other examples check the [example main.lua](https://github.com/Lovetoys/Lovetoys/blob/master/main.lua).
+For a more detailed and commented version with collisions and some other examples check the [example main.lua](https://github.com/Lovetoys/Lovetoys-examples/blob/master/main.lua).
 
     -- Importing lovetoys
     require("lovetoys/engine")
