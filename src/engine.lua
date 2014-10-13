@@ -81,7 +81,7 @@ function Engine:removeEntity(entity)
     if self.entities[entity.id] then
         self.entities[entity.id] = nil
     else
-        print("Trying to remove non existing entity from engine.")
+        print("Trying to remove non existent entity from engine.")
         print("Entity id: " .. entity.id)
         print("Entity's components:")
         for index, component in pairs(entity.components) do
@@ -96,7 +96,7 @@ function Engine:addSystem(system, typ, priority)
     end
     for index, value in pairs(self.allSystems) do
         if value.__name == system.__name then
-            print("Lovetoys: " .. system.__name .. " already existing. Aborting")
+            print("Lovetoys: " .. system.__name .. " already exists. Aborting")
             return
         end
     end
@@ -173,7 +173,7 @@ function Engine:removeSystem(system)
             end
         end
     else
-        print("Lovetoys: " .. system .. " isn't existing. System can't be removed from engine.")
+        print("Lovetoys: " .. system .. " doesn't exist. System can't be removed from engine.")
     end
 end
 
@@ -216,7 +216,7 @@ function Engine.componentAdded(self, event)
     end
 end
 
--- Returns an Entitylist for a specific component. If the Entitylist doesn't exists yet it'll be created and returned.
+-- Returns an Entitylist for a specific component. If the Entitylist doesn't exist yet it'll be created and returned.
 function Engine:getEntityList(component)
     if not self.entityLists[component] then self.entityLists[component] = {} end
     return self.entityLists[component]
