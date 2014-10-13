@@ -256,5 +256,5 @@ To create a new instance you now just have to call `Foo()` e.g.
 
 Copyright &copy; 2013-2014 Arne Beer and Rafael Epplee
 
-Published under GNU General Public License Version 3  
+Published under MIT License
 For further information check the license.txt .
