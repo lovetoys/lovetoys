@@ -10,6 +10,7 @@ require(folderOfThisFile .. "src/events/componentRemoved")
 require(folderOfThisFile .. "src/events/beginContact")
 
 -- Requiring the lovetoys
+require(folderOfThisFile .. "src/engine")
 require(folderOfThisFile .. "src/entity")
 require(folderOfThisFile .. "src/system")
 require(folderOfThisFile .. "src/eventManager")
