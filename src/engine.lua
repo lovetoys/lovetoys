@@ -1,22 +1,3 @@
--- Getting folder that contains engine
-local folderOfThisFile = (...):match("(.-)[^%/]+$")
-
--- Requiring class
-require(folderOfThisFile .. "class")
-
--- Requiring all Events
-require(folderOfThisFile .. "events/componentAdded")
-require(folderOfThisFile .. "events/componentRemoved")
-require(folderOfThisFile .. "events/beginContact")
-
--- Requiring the lovetoys
-require(folderOfThisFile .. "entity")
-require(folderOfThisFile .. "system")
-require(folderOfThisFile .. "eventManager")
-require(folderOfThisFile .. "collisionManager")
-require(folderOfThisFile .. "component")
-
-
 Engine = class("Engine")
 
 function Engine:__init() 

@@ -12,7 +12,7 @@ The Software is tested and should be stable. If you find any bugs please create 
 
 The best way of installing Lovetoys is creating a submodule and cloning it right into your git repo. 
 Another way is to just download the files, especially the lovetoys folder, and copy them to your project folder.  
-To import everything just require lovetoys/engine.
+To import everything just require lovetoys/lovetoys.
 
 For an example on how to use the lovetoys check our [example](https://github.com/Lovetoys/Lovetoys-examples) folder.
 
