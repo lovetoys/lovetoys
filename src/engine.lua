@@ -93,13 +93,13 @@ function Engine:addSystem(system, typ, priority)
 
     -- Registering the systems requirements and saving them in a special table for fast access
     for index, value in pairs(system:requires()) do
-        if type(value) == "string" then
+        if type(value) == "string" or type(value) == "number" then
             self.requirements[value] = self.requirements[value] or {}
             table.insert(self.requirements[value], system)
         elseif type(value) == "table" then
-            for index2, string in pairs(value) do
-                self.requirements[string] = self.requirements[string] or {}
-                table.insert(self.requirements[string], system)
+            for index2, id in pairs(value) do
+                self.requirements[id] = self.requirements[id] or {}
+                table.insert(self.requirements[id], system)
             end
             system.targets[index] = {}
         end
@@ -124,7 +124,7 @@ function Engine:removeSystem(system)
     if requirements ~= nil then 
     --  Remove the System from all requirement lists
         for k, v in pairs(requirements) do
-            if type(v) == "string" then
+            if type(v) == "string" or type(v) == "number" then
                 for k2, v2 in pairs(self.requirements[v]) do
                     if v2.__name == system then
                         table.remove(self.requirements, k2)
@@ -207,7 +207,7 @@ function Engine:checkRequirements(entity, system)
     local meetsrequirements = true
     local category = nil
     for index, req in pairs(system.requires()) do
-        if type(req) == "string" then
+        if type(req) == "string" or type(req) == "number" then
             if not entity.components[req] then
                 meetsrequirements = false
                 break
