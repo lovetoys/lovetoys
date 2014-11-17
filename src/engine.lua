@@ -97,6 +97,8 @@ function Engine:addSystem(system, typ, priority)
             self.requirements[value] = self.requirements[value] or {}
             table.insert(self.requirements[value], system)
         elseif type(value) == "table" then
+            -- Initializing the tables for access in case there are no entities matching the requirements
+            system.targets[index] = {}
             for index2, id in pairs(value) do
                 self.requirements[id] = self.requirements[id] or {}
                 table.insert(self.requirements[id], system)
@@ -104,7 +106,7 @@ function Engine:addSystem(system, typ, priority)
             system.targets[index] = {}
         end
     end
-    -- Checks if some of the already entities match the required components.
+    -- Checks if some of the already existing entities match the required components.
     for index, entity in pairs(self.entities) do
         self:checkRequirements(entity, system)
     end
