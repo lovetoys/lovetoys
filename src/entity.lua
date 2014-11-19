@@ -44,3 +44,7 @@ function Entity:getComponents()
     return self.components
 end
 
+function Entity:has(name)
+    return not (self:get(name) == nil)
+end
+
