@@ -34,13 +34,27 @@ function System:removeEntity(entity)
         if table.firstElement(self.targets).__name then
             self.targets[entity.id] = nil
         else
-        -- Removing entities from their respective category target list.
+            -- Removing entities from their respective category target list.
             if self.targets[index] then 
                 for index, value in pairs(self:requires()) do
                     self.targets[index][entity.id] = nil
                 end
             end
         end
+    end
+end
+
+function System:pickRequiredComponents(entity)
+    local components = {}
+    for i, componentName in pairs(self:requires()) do
+        table.insert(components, entity:get(componentName))
+    end
+    return unpack(components)
+end
+
+function System:eachTarget(func)
+    for k, entity in pairs(self.targets) do
+        func(self, entity, self:pickRequiredComponents(entity))
     end
 end
 
