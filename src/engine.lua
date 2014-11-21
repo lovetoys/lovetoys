@@ -6,9 +6,10 @@ function Engine:__init()
     self.entityLists = {}
     self.eventManager = EventManager()
 
-    self.allSystems = {}
-    self.logicSystems = {}
-    self.drawSystems = {}
+    self.systems = {}
+    self.systems["all"] = {}
+    self.systems["update"] = {}
+    self.systems["draw"] = {}
 
     self.freeIds = {}
     self.maxId = 1
@@ -45,21 +46,21 @@ function Engine:addEntity(entity)
 end 
 
 function Engine:removeEntity(entity)
-    if self.entities[entity.id] then
-        -- Stashing the id of the removed Entity in self.freeIds
-        table.insert(self.freeIds, entity.id)
-        -- Removing the Entity from all Systems and engine
-        for i, component in pairs(entity.components) do
-            if self.requirements[component.__name] then
-                for i2, system in pairs(self.requirements[component.__name]) do
-                    system:removeEntity(entity)
-                end
+    -- Stashing the id of the removed Entity in self.freeIds
+    table.insert(self.freeIds, entity.id)
+    -- Removing the Entity from all Systems and engine
+    for i, component in pairs(entity.components) do
+        if self.requirements[component.__name] then
+            for i2, system in pairs(self.requirements[component.__name]) do
+                system:removeEntity(entity)
             end
         end
-        -- Deleting the Entity from the specific entity lists
-        for index, component in pairs(entity.components) do
-            self.entityLists[component.__name][entity.id] = nil
-        end
+    end
+    -- Deleting the Entity from the specific entity lists
+    for index, component in pairs(entity.components) do
+        self.entityLists[component.__name][entity.id] = nil
+    end
+    if self.entities[entity.id] then
         self.entities[entity.id] = nil
     else
         print("Trying to remove non existent entity from engine.")
@@ -72,41 +73,50 @@ function Engine:removeEntity(entity)
 end
 
 function Engine:addSystem(system, typ, priority)
-    if priority then
-        system.priority = priority
+    if not priority then
+        print("Lovetoys: " .. system.__name .. " doesn't have a priority. Aborting")
     end
-    for index, value in pairs(self.allSystems) do
-        if value.__name == system.__name then
-            print("Lovetoys: " .. system.__name .. " already exists. Aborting")
-            return
+    system.priority = priority
+
+    if typ then 
+        for index, value in pairs(self.systems[typ]) do
+            if value.__name == system.__name then
+                print("Lovetoys: " .. system.__name .. " already exists. Aborting")
+                return
+            end
+        end
+    else 
+        for index, value in pairs(self.systems["all"]) do
+            if value.__name == system.__name then
+                print("Lovetoys: " .. system.__name .. " already exists. Aborting")
+                return
+            end
         end
     end
-    -- Adding System to draw or logic table
+    -- Adding System to draw or update table
     if typ == "draw" then
-        table.insert(self.drawSystems, system)
-        table.sort(self.drawSystems, function(a, b) return a.priority < b.priority end)
-    elseif typ == "logic" then
-        table.insert(self.logicSystems, system)
-        table.sort(self.logicSystems, function(a, b) return a.priority < b.priority end)
+        table.insert(self.systems["draw"], system)
+        table.sort(self.systems["draw"], function(a, b) return a.priority < b.priority end)
+    elseif typ == "update" then
+        table.insert(self.systems["update"], system)
+        table.sort(self.systems["update"], function(a, b) return a.priority < b.priority end)
     end
-    table.insert(self.allSystems, system)
+    table.insert(self.systems["all"], system)
 
     -- Registering the systems requirements and saving them in a special table for fast access
     for index, value in pairs(system:requires()) do
-        if type(value) == "string" or type(value) == "number" then
+        if type(value) == "string" then
             self.requirements[value] = self.requirements[value] or {}
             table.insert(self.requirements[value], system)
         elseif type(value) == "table" then
-            -- Initializing the tables for access in case there are no entities matching the requirements
-            system.targets[index] = {}
-            for index2, id in pairs(value) do
-                self.requirements[id] = self.requirements[id] or {}
-                table.insert(self.requirements[id], system)
+            for index2, string in pairs(value) do
+                self.requirements[string] = self.requirements[string] or {}
+                table.insert(self.requirements[string], system)
             end
             system.targets[index] = {}
         end
     end
-    -- Checks if some of the already existing entities match the required components.
+    -- Checks if some of the already entities match the required components.
     for index, entity in pairs(self.entities) do
         self:checkRequirements(entity, system)
     end
@@ -117,16 +127,16 @@ function Engine:removeSystem(system)
     
     local requirements
     -- Removes it from the allSystem list
-    for k, v in pairs(self.allSystems) do
+    for k, v in pairs(self.systems["all"]) do
         if v.__name == system then
             requirements = v:requires()
-            table.remove(self.allSystems, k)
+            table.remove(self.systems["all"], k)
         end
     end
     if requirements ~= nil then 
     --  Remove the System from all requirement lists
         for k, v in pairs(requirements) do
-            if type(v) == "string" or type(v) == "number" then
+            if type(v) == "string" then
                 for k2, v2 in pairs(self.requirements[v]) do
                     if v2.__name == system then
                         table.remove(self.requirements, k2)
@@ -145,14 +155,14 @@ function Engine:removeSystem(system)
         end
 
         -- Remove the system from all systemlists
-        for k, v in pairs(self.drawSystems) do
+        for k, v in pairs(self.systems["draw"]) do
             if v.__name == system then
-                table.remove(self.drawSystems, k)
+                table.remove(self.systems["draw"], k)
             end
         end
-        for k, v in pairs(self.logicSystems) do
+        for k, v in pairs(self.systems["update"]) do
             if v.__name == system then
-                table.remove(self.logicSystems, k)
+                table.remove(self.systems["update"], k)
             end
         end
     else
@@ -161,13 +171,13 @@ function Engine:removeSystem(system)
 end
 
 function Engine:update(dt)
-    for index, system in ipairs(self.logicSystems) do
+    for index, system in ipairs(self.systems["update"]) do
         system:update(dt)
     end
 end
 
 function Engine:draw()
-    for index, system in ipairs(self.drawSystems) do
+    for index, system in ipairs(self.systems["draw"]) do
         system:draw()
     end
 end
@@ -209,7 +219,7 @@ function Engine:checkRequirements(entity, system)
     local meetsrequirements = true
     local category = nil
     for index, req in pairs(system.requires()) do
-        if type(req) == "string" or type(req) == "number" then
+        if type(req) == "string" then
             if not entity.components[req] then
                 meetsrequirements = false
                 break
