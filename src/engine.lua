@@ -72,34 +72,33 @@ function Engine:removeEntity(entity)
     end
 end
 
-function Engine:addSystem(system, typ, priority)
-    if not priority then
-        print("Lovetoys: " .. system.__name .. " doesn't have a priority. Aborting")
-    end
-    system.priority = priority
-
-    if typ then 
-        for index, value in pairs(self.systems[typ]) do
+function Engine:addSystem(system, typ)
+    -- Adding System to draw or update table
+    if typ == "draw" or (system.draw and not system.update) then
+        for index, value in pairs(self.systems["draw"]) do
             if value.__name == system.__name then
                 print("Lovetoys: " .. system.__name .. " already exists. Aborting")
                 return
             end
         end
-    else 
+        table.insert(self.systems["draw"], system)
+    elseif typ == "update" or  (system.update and not system.draw) then
+        for index, value in pairs(self.systems["update"]) do
+            if value.__name == system.__name then
+                print("Lovetoys: " .. system.__name .. " already exists. Aborting")
+                return
+            end
+        end
+        table.insert(self.systems["update"], system)
+    elseif typ == nil and system.update and system.draw then
+        print("Lovetoys: " .. system.__name .. " has update and draw function. Please add it twice with 'draw' and 'update' specification. Aborting")
+    else
         for index, value in pairs(self.systems["all"]) do
             if value.__name == system.__name then
                 print("Lovetoys: " .. system.__name .. " already exists. Aborting")
                 return
             end
         end
-    end
-    -- Adding System to draw or update table
-    if typ == "draw" then
-        table.insert(self.systems["draw"], system)
-        table.sort(self.systems["draw"], function(a, b) return a.priority < b.priority end)
-    elseif typ == "update" then
-        table.insert(self.systems["update"], system)
-        table.sort(self.systems["update"], function(a, b) return a.priority < b.priority end)
     end
     table.insert(self.systems["all"], system)
 
@@ -123,62 +122,36 @@ function Engine:addSystem(system, typ, priority)
     return system
 end
 
-function Engine:removeSystem(system)
-    
-    local requirements
-    -- Removes it from the allSystem list
-    for k, v in pairs(self.systems["all"]) do
-        if v.__name == system then
-            requirements = v:requires()
-            table.remove(self.systems["all"], k)
+function Engine:stopSystem(name)
+    for index, system in pairs(self.systems["all"]) do
+        if name == system.__name then
+            system.active = false
         end
-    end
-    if requirements ~= nil then 
-    --  Remove the System from all requirement lists
-        for k, v in pairs(requirements) do
-            if type(v) == "string" then
-                for k2, v2 in pairs(self.requirements[v]) do
-                    if v2.__name == system then
-                        table.remove(self.requirements, k2)
-                    end
-                end
-            -- Removing if it has subtables
-            elseif type(v) == "table" then
-                for k2, v2 in pairs(v) do
-                    for k3, v3 in pairs(self.requirements[v2]) do
-                        if v3.__name == system then
-                            table.remove(self.requirements, k3)
-                        end
-                    end
-                end
-            end
-        end
-
-        -- Remove the system from all systemlists
-        for k, v in pairs(self.systems["draw"]) do
-            if v.__name == system then
-                table.remove(self.systems["draw"], k)
-            end
-        end
-        for k, v in pairs(self.systems["update"]) do
-            if v.__name == system then
-                table.remove(self.systems["update"], k)
-            end
-        end
-    else
-        print("Lovetoys: " .. system .. " doesn't exist. System can't be removed from engine.")
     end
 end
 
+function Engine:startSystem(name)
+    for index, system in pairs(self.systems["all"]) do
+        if name == system.__name then
+            system.active = true
+        end
+    end
+end
+
+
 function Engine:update(dt)
     for index, system in ipairs(self.systems["update"]) do
-        system:update(dt)
+        if system.active then
+            system:update(dt)
+        end
     end
 end
 
 function Engine:draw()
     for index, system in ipairs(self.systems["draw"]) do
-        system:draw()
+        if system.active then
+            system:draw()
+        end
     end
 end
 

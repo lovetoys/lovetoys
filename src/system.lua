@@ -8,13 +8,9 @@ System = class("System")
 
 function System:__init()
     -- Liste aller Entities, die die RequiredComponents dieses Systems haben
-    self.priority = math.huge
     self.targets = {}
+    self.active = true
 end
-
-function System:update(dt) end
-
-function System:draw() end
 
 function System:requires() return {} end
 
