@@ -60,8 +60,8 @@ function Engine:removeEntity(entity)
         self.entityLists[component.__name][entity.id] = nil
     end
     if self.entities[entity.id] then
-        self.entities[entity.id] = nil
         self.entities[entity.id].alive = false
+        self.entities[entity.id] = nil
     else
         print("Trying to remove non existent entity from engine.")
         print("Entity id: " .. entity.id)
