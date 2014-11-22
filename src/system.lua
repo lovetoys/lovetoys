@@ -47,10 +47,3 @@ function System:pickRequiredComponents(entity)
     end
     return unpack(components)
 end
-
-function System:eachTarget(func)
-    for k, entity in pairs(self.targets) do
-        func(self, entity, self:pickRequiredComponents(entity))
-    end
-end
-
