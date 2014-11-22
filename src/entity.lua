@@ -3,6 +3,7 @@ Entity = class("Entity")
 function Entity:__init()
     self.components = {}
     self.eventManager = nil
+    self.alive = true
 end
 
 -- Sets the entities component of this type to the given component.

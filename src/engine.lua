@@ -61,6 +61,7 @@ function Engine:removeEntity(entity)
     end
     if self.entities[entity.id] then
         self.entities[entity.id] = nil
+        self.entities[entity.id].alive = false
     else
         print("Trying to remove non existent entity from engine.")
         print("Entity id: " .. entity.id)
