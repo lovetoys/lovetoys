@@ -18,7 +18,6 @@ function Engine:__init()
 end
 
 function Engine:addEntity(entity)
-    
     entity.eventManager = self.eventManager
 
     -- Getting the next free ID or insert into table
