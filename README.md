@@ -76,11 +76,11 @@ An entity can be contained by the same system multiple times in different target
 
 #### System:update(dt) 
 
-If the system type is "logic" , this function is called every time `Engine:update(dt)` is called.
+If you implement this function in your system the engine detects it automatically and it will be called in the update loop.
 
 #### System:draw() 
 
-If the system type is "draw", this function is called every time `Engine:draw()` is called.
+If you implement this function in your system the engine detects it automatically and it will be called in the draw loop.
 
 #### A example for a custom system
 
@@ -107,15 +107,23 @@ system = Instance of the system to be added.
 type = "draw" or "logic" or nil  
 typeof(type) = String  
 
-Adds a system of the particular type to the engine. Depending on type either `system:draw()` or `system:update(dt)` is going to be called.  
-If you just want a system to get certain entities don't pass type as a parameter. The system will get all entities that contain the required components, but no functions will be called on update or draw.
+Adds a system of the particular type to the engine. Depending on type either `system:draw()` or `system:update(dt)` is going to be called, in this case you don't need to add a type.
+The systems will be updated in the order they've been added.  
+If a system implements both functions, you need to specify type and add it twice to the engine. Once to draw and once to engine. Otherwise the enginen doesn't know which priority the system should get.
 
-#### Engine:removeSystem(system)
 
-system = Name of the system to be removed  
-typeof(system) = String  
+##### Engine:stop(system)
 
-This function removes a system from all system lists. After this the system won't be managed or updated anymore.
+typeof(system) = string, the name of the system
+
+If you want a system to stop, call this function. It's draw/update function won't be called.
+
+### Engine:start(system)
+
+typeof(system) = string, the name of the system
+
+Call this to start a stopped system.
+
 
 #### Engine:addEntity(entity)
 
