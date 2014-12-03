@@ -31,10 +31,8 @@ function System:removeEntity(entity)
             self.targets[entity.id] = nil
         else
             -- Removing entities from their respective category target list.
-            if self.targets[index] then 
-                for index, value in pairs(self:requires()) do
-                    self.targets[index][entity.id] = nil
-                end
+            for index, _ in pairs(self.targets) do
+                self.targets[index][entity.id] = nil
             end
         end
     end
