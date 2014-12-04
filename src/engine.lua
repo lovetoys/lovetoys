@@ -1,8 +1,8 @@
 Engine = class("Engine")
 
-function Engine:__init(rootEntity) 
+function Engine:__init(sceneGraphEnabled) 
     self.entities = {}
-    if rootEntity == true then
+    if sceneGraphEnabled == true then
         self.rootEntity = Entity()
     else
         self.rootEntity = nil
@@ -25,10 +25,6 @@ end
 function Engine:addEntity(entity)
     -- Setting engine eventManager as eventManager for entity
     entity.eventManager = self.eventManager
-    -- If a rootEntity entity is defined and the entity doesn't have a parent yet, the rootEntity entity becomes the entity's parent
-    if entity.parent == nil and self.rootEntity ~= nil then
-        entity:setParent(self.rootEntity)
-    end
     -- Getting the next free ID or insert into table
     if #self.freeIds == 0 then
         entity.id = self.maxId
@@ -37,6 +33,14 @@ function Engine:addEntity(entity)
     else
         entity.id = table.remove(self.freeIds, #self.freeIds)
         self.entities[entity.id] = entity
+    end
+
+    -- If a rootEntity entity is defined and the entity doesn't have a parent yet, the rootEntity entity becomes the entity's parent
+    if entity.parent == nil and self.rootEntity ~= nil then
+        entity:setParent(self.rootEntity)
+        entity:registerAsChild()
+    else
+        entity:registerAsChild()
     end
 
     for index, component in pairs(entity.components) do
@@ -85,9 +89,7 @@ function Engine:removeEntity(entity, removeChildren)
         end
         -- Removing Reference to entity from parent
         for index, child in pairs(entity.parent.children) do
-            if child == entity then
-                entity.parent.children[index] = nil
-            end
+            entity.parent.children[entity.id] = nil
         end
         -- Setting status of entity to dead. This is for other systems, which still got a hard reference on this
         self.entities[entity.id].alive = false

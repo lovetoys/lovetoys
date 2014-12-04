@@ -37,7 +37,14 @@ end
 
 function Entity:setParent(parent)
     self.parent = parent
-    table.insert(parent.children, self)
+end
+
+function Entity:getParent(parent)
+    return self.parent
+end
+
+function Entity:registerAsChild()
+    self.parent.children[self.id] = self
 end
 
 function Entity:get(name)
