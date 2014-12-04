@@ -1,11 +1,11 @@
 Engine = class("Engine")
 
-function Engine:__init(master) 
+function Engine:__init(rootEntity) 
     self.entities = {}
-    if master == true then
-        self.master = Entity()
+    if rootEntity == true then
+        self.rootEntity = Entity()
     else
-        self.master = nil
+        self.rootEntity = nil
     end
     self.requirements = {}
     self.entityLists = {}
@@ -25,9 +25,9 @@ end
 function Engine:addEntity(entity)
     -- Setting engine eventManager as eventManager for entity
     entity.eventManager = self.eventManager
-    -- If a master entity is defined and the entity doesn't have a parent yet, the master entity becomes the entity's parent
-    if entity.parent == nil and self.master ~= nil then
-        entity:setParent(self.master)
+    -- If a rootEntity entity is defined and the entity doesn't have a parent yet, the rootEntity entity becomes the entity's parent
+    if entity.parent == nil and self.rootEntity ~= nil then
+        entity:setParent(self.rootEntity)
     end
     -- Getting the next free ID or insert into table
     if #self.freeIds == 0 then
@@ -76,8 +76,8 @@ function Engine:removeEntity(entity, removeChildren)
             end
         else
             for _, child in pairs(entity.children) do
-                if self.master then
-                    child:setParent(self.master)
+                if self.rootEntity then
+                    child:setParent(self.rootEntity)
                 else
                     child.parent = nil
                 end
@@ -222,8 +222,8 @@ function Engine.componentAdded(self, event)
 end
 
 function Engine:getMaster()
-    if self.master ~= nil then
-        return self.master
+    if self.rootEntity ~= nil then
+        return self.rootEntity
     end
 end
 

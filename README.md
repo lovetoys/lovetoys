@@ -29,12 +29,12 @@ The Entity is the basic object that is beeing administrated by the engine. It fu
 
 This function returns the new instance of an entity. If a parent entity is given, a reference to this entity will be stored in `self.parent`.
 Another reference to the newly created entity will be stored in `parent.children`.  
-If there is no parent specified, but the engine got their master entity enabled, the created entity is automatically added to master entity's children.
+If there is no parent specified, while the engine got their rootEntity entity enabled, the created entity is automatically added to rootEntity entity's children.
 
 #### Entity:setParent(parent)
 - **parent** - Parent entity
 
-This function has to be used, if you want to set a parent after having it already added to the engine. This can be used to create classes that are derived from Entity as well.
+This function has to be used, if you want to set a parent after already having the entity added to the engine. This can be used to create classes that are derived from Entity as well.
 
 #### Entity:add(component)
 - **component** - (Table) Instance of a component.
@@ -112,15 +112,15 @@ If you implement this function in your system the engine detects it automaticall
 
 The engine is the most important part of our framework and the most frequently used interface. It contains all systems, entities, requirements and entitylists and manages them for you.
 
-#### Engine(master)
+#### Engine(rootEntity)
 
-- **master** (Boolean)
+- **rootEntity** (Boolean)
 
-Creates a new engine object. If master is `true` an entity will be created inside the engine. This entity will be the parent of all entities, as long as they don't have a particular parent specified.
+Creates a new engine object. If the parameter is `true` a new rootEntity will be created inside the engine. This entity will be the parent of all entities, as long as they don't have a particular parent specified.
 
 #### Engine:getMaster()
 
-Returns the master entity, if it has been created during the engine's creation.
+Returns the rootEntity entity, if it has been created during the engine's creation.
 
 #### Engine:addSystem(system, type)
 
@@ -177,7 +177,7 @@ Updates all draw systems.
 
 #### Example
 
-For a more detailed and commented version with collisions and some other examples check the [example main.lua](https://github.com/Lovetoys/Lovetoys-examples/blob/master/main.lua).
+For a more detailed and commented version with collisions and some other examples check the [example main.lua](https://github.com/Lovetoys/Lovetoys-examples/blob/rootEntity/main.lua).
 
     -- Importing lovetoys
     require("lovetoys/engine")
