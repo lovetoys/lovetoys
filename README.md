@@ -27,7 +27,7 @@ The Entity is the basic object that is beeing administrated by the engine. It fu
 #### Entity(parent)
 - **parent** - Parent entity
 
-This function returns the new instance of an entity. If a parent entity is given, a reference to this entity will be stored in `self.parent`.
+This function returns a new instance of an entity. If a parent entity is given, a reference to this entity will be stored in `self.parent`.
 Another reference to the newly created entity will be stored in `parent.children`.  
 If there is no parent specified, while the engine got their rootEntity entity enabled, the created entity is automatically added to rootEntity entity's children.
 
@@ -36,8 +36,12 @@ If there is no parent specified, while the engine got their rootEntity entity en
 
 This function has to be used, if you want to set a parent after already having the entity added to the engine. This can be used to create classes that are derived from Entity as well.
 
+#### Entity:getParent(parent)
+
+Gets the parent entity. Returns nil if parent not specified.
+
 #### Entity:add(component)
-- **component** - (Table) Instance of a component.
+- **component** - (Component) Instance of a component.
 
 Adds a component to this particular entity. 
 
@@ -124,7 +128,7 @@ Returns the rootEntity entity, if it has been created during the engine's creati
 
 #### Engine:addSystem(system, type)
 
-- **system** (Table) - Instance of the system to be added.  
+- **system** (System) - Instance of the system to be added.  
 - **type** (String) - Should be either "draw", "logic" or nil  
 
 Adds a system of the particular type to the engine. Depending on `type`, either `system:draw()` or `system:update(dt)` is going to be called, in this case you don't need to add a type.
@@ -148,12 +152,12 @@ Call this to start a stopped system.
 
 #### Engine:addEntity(entity)
 
-- **entity** (Table) - Instance of the Entity to be added
+- **entity** (Entity) - Instance of the Entity to be added
 
 Adds an entity to the engine and sends it to all systems that are interested in its component constellation.
 
 #### Engine:removeEntity(entity, removeChildren)
-- **entity** - (Table) - Instance of the Entity to be removed
+- **entity** - (Entity) - Instance of the Entity to be removed
 - **removeChildren** - (Boolean) 
 
 Removes the particular entity from the engine and all systems.  
@@ -216,7 +220,7 @@ This class is a simple eventmanager for sending events to their respective liste
 
 - **eventName** (String) - Name of the event-class to be added 
 
-- **listener** (Table) - A table containing information about the listener function. The first entry should be a value that will be passed as `self` to the called function, while the second entry should be the function itself.
+- **listener** (Listener) - A table containing information about the listener function. The first entry should be a value that will be passed as `self` to the called function, while the second entry should be the function itself.
 
 Adds a function that is listening to the Event.  
 An example for adding a Listener: `EventManager:addListener("EventName", {table, table.func})`.  
@@ -232,7 +236,7 @@ Removes a listener from this particular Event.
 
 #### EventManager:fireEvent(event)
 
-- **event** (Table) - Instance of the event  
+- **event** (Event) - Instance of the event  
 
 This function pipes the event through to every listener that is registered to the class-name of the event and triggers `listener:fireEvent(event)`.
 
@@ -245,7 +249,7 @@ The required event is already contained and you can find an example of how to us
 #### CollisionManager:addCollisionAction(component1, component2, object)
 
 - **component1**, **component2** (String) Names of the required components  
-- **object** (Table) - Instance of the collision class.  
+- **object** (Collision) - Instance of the collision class.  
 
 Adds a new collision to the manager. If two entities, who satisfy the requirements, collide, the `collision:action(entities)` function will be triggered.  
 The entity that contains component1 will be given to you inside `entities.entity1` and the entity that contains component2 will be inside `entities.entity2`.  
