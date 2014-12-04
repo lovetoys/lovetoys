@@ -1,9 +1,15 @@
 Entity = class("Entity")
 
-function Entity:__init()
+function Entity:__init(parent)
     self.components = {}
     self.eventManager = nil
     self.alive = true
+    if parent then
+        self:setParent(parent)
+    else
+        parent = nil
+    end
+    self.children = {}
 end
 
 -- Sets the entities component of this type to the given component.
@@ -27,6 +33,11 @@ function Entity:remove(name)
     if self.eventManager then
         self.eventManager:fireEvent(ComponentRemoved(self, name))
     end
+end
+
+function Entity:setParent(parent)
+    self.parent = parent
+    table.insert(parent.children, self)
 end
 
 function Entity:get(name)

@@ -24,6 +24,18 @@ The following text describes the different classes the lovetoys provide.
 
 The Entity is the basic object that is beeing administrated by the engine. It functions merely as a container for components.
 
+#### Entity(parent)
+- **parent** - Parent entity
+
+This function returns the new instance of an entity. If a parent entity is given, a reference to this entity will be stored in `self.parent`.
+Another reference to the newly created entity will be stored in `parent.children`.  
+If there is no parent specified, but the engine got their master entity enabled, the created entity is automatically added to master entity's children.
+
+#### Entity:setParent(parent)
+- **parent** - Parent entity
+
+This function has to be used, if you want to set a parent after having it already added to the engine. This can be used to create classes that are derived from Entity as well.
+
 #### Entity:add(component)
 - **component** - (Table) Instance of a component.
 
@@ -100,6 +112,16 @@ If you implement this function in your system the engine detects it automaticall
 
 The engine is the most important part of our framework and the most frequently used interface. It contains all systems, entities, requirements and entitylists and manages them for you.
 
+#### Engine(master)
+
+- **master** (Boolean)
+
+Creates a new engine object. If master is `true` an entity will be created inside the engine. This entity will be the parent of all entities, as long as they don't have a particular parent specified.
+
+#### Engine:getMaster()
+
+Returns the master entity, if it has been created during the engine's creation.
+
 #### Engine:addSystem(system, type)
 
 - **system** (Table) - Instance of the system to be added.  
@@ -130,11 +152,12 @@ Call this to start a stopped system.
 
 Adds an entity to the engine and sends it to all systems that are interested in its component constellation.
 
-#### Engine:removeEntity(entity)
-
+#### Engine:removeEntity(entity, removeChildren)
 - **entity** - (Table) - Instance of the Entity to be removed
+- **removeChildren** - (Boolean) 
 
-Removes the particular entity from the engine and all systems.
+Removes the particular entity from the engine and all systems.  
+Depending on `removeChildren` all Children are going to deleted recursivly as well.
 
 #### Engine:getEntityList(component)
 

@@ -1,7 +1,12 @@
 Engine = class("Engine")
 
-function Engine:__init() 
+function Engine:__init(master) 
     self.entities = {}
+    if master == true then
+        self.master = Entity()
+    else
+        self.master = nil
+    end
     self.requirements = {}
     self.entityLists = {}
     self.eventManager = EventManager()
@@ -18,8 +23,12 @@ function Engine:__init()
 end
 
 function Engine:addEntity(entity)
+    -- Setting engine eventManager as eventManager for entity
     entity.eventManager = self.eventManager
-
+    -- If a master entity is defined and the entity doesn't have a parent yet, the master entity becomes the entity's parent
+    if entity.parent == nil and self.master ~= nil then
+        entity:setParent(self.master)
+    end
     -- Getting the next free ID or insert into table
     if #self.freeIds == 0 then
         entity.id = self.maxId
@@ -44,7 +53,7 @@ function Engine:addEntity(entity)
     end
 end 
 
-function Engine:removeEntity(entity)
+function Engine:removeEntity(entity, removeChildren)
     -- Stashing the id of the removed Entity in self.freeIds
     table.insert(self.freeIds, entity.id)
     -- Removing the Entity from all Systems and engine
@@ -60,7 +69,29 @@ function Engine:removeEntity(entity)
         self.entityLists[component.__name][entity.id] = nil
     end
     if self.entities[entity.id] then
+        -- If removeChild is defined, all children become deleted recursively
+        if removeChildren then
+            for _, child in pairs(entity.children) do
+                self:removeEntity(child, true)
+            end
+        else
+            for _, child in pairs(entity.children) do
+                if self.master then
+                    child:setParent(self.master)
+                else
+                    child.parent = nil
+                end
+            end
+        end
+        -- Removing Reference to entity from parent
+        for index, child in pairs(entity.parent.children) do
+            if child == entity then
+                entity.parent.children[index] = nil
+            end
+        end
+        -- Setting status of entity to dead. This is for other systems, which still got a hard reference on this
         self.entities[entity.id].alive = false
+        -- Removing entity from engine
         self.entities[entity.id] = nil
     else
         print("Trying to remove non existent entity from engine.")
@@ -187,6 +218,12 @@ function Engine.componentAdded(self, event)
         for index, system in pairs(self.requirements[component]) do
             self:checkRequirements(entity, system)
         end
+    end
+end
+
+function Engine:getMaster()
+    if self.master ~= nil then
+        return self.master
     end
 end
 
