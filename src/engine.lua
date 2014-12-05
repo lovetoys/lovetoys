@@ -1,12 +1,8 @@
 Engine = class("Engine")
 
-function Engine:__init(sceneGraphEnabled) 
+function Engine:__init() 
     self.entities = {}
-    if sceneGraphEnabled == true then
-        self.rootEntity = Entity()
-    else
-        self.rootEntity = nil
-    end
+    self.rootEntity = Entity()
     self.requirements = {}
     self.entityLists = {}
     self.eventManager = EventManager()
@@ -36,12 +32,10 @@ function Engine:addEntity(entity)
     end
 
     -- If a rootEntity entity is defined and the entity doesn't have a parent yet, the rootEntity entity becomes the entity's parent
-    if entity.parent == nil and self.rootEntity ~= nil then
+    if entity.parent == nil then
         entity:setParent(self.rootEntity)
-        entity:registerAsChild()
-    else
-        entity:registerAsChild()
     end
+    entity:registerAsChild()
 
     for index, component in pairs(entity.components) do
         -- Adding Entity to specific Entitylist

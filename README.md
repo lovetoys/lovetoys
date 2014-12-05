@@ -29,7 +29,7 @@ The Entity is the basic object that is beeing administrated by the engine. It fu
 
 This function returns a new instance of an entity. If a parent entity is given, a reference to this entity will be stored in `self.parent`.
 Another reference to the newly created entity will be stored in `parent.children`.  
-If there is no parent specified, while the engine got their rootEntity entity enabled, the created entity is automatically added to the rootEntity's children.
+If there is no parent specified, the created entity is automatically added to the engine's rootEntity's children.
 
 #### Entity:setParent(parent)
 - **parent** (Entity) - Parent entity
@@ -118,15 +118,13 @@ This function is going to be called by the engine every draw.
 
 The engine is the most important part of our framework and the most frequently used interface. It contains all systems, entities, requirements and entitylists and manages them for you.
 
-#### Engine(rootEntity)
+#### Engine()
 
-- **rootEntity** (Boolean)
-
-Creates a new engine object. If the parameter is `true` a new rootEntity will be created inside the engine. This entity will be the parent of all entities, as long as they don't have a particular parent specified.
+Creates a new engine object. Every engine containes a rootEntity which becomes parent of all entities, as long as they don't have a particular parent specified. 
 
 #### Engine:getMaster()
 
-Returns the rootEntity entity, if it has been created during the engine's creation.
+Returns the rootEntity entity, to get its children or add/remove components.
 
 #### Engine:addSystem(system, type)
 
