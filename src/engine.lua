@@ -134,11 +134,11 @@ function Engine:addSystem(system, typ)
         if type(value) == "string" then
             self.requirements[value] = self.requirements[value] or {}
             table.insert(self.requirements[value], system)
+            break
         elseif type(value) == "table" then
-            for index2, string in pairs(value) do
-                self.requirements[string] = self.requirements[string] or {}
-                table.insert(self.requirements[string], system)
-            end
+            local targetList = value[1]
+            self.requirements[targetList] = self.requirements[targetList] or {}
+            table.insert(self.requirements[targetList], system)
             system.targets[index] = {}
         end
     end
