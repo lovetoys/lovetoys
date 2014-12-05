@@ -25,14 +25,14 @@ The following text describes the different classes the lovetoys provide.
 The Entity is the basic object that is beeing administrated by the engine. It functions merely as a container for components.
 
 #### Entity(parent)
-- **parent** - Parent entity
+- **parent** (Entity) - Parent entity
 
 This function returns a new instance of an entity. If a parent entity is given, a reference to this entity will be stored in `self.parent`.
 Another reference to the newly created entity will be stored in `parent.children`.  
 If there is no parent specified, while the engine got their rootEntity entity enabled, the created entity is automatically added to the rootEntity's children.
 
 #### Entity:setParent(parent)
-- **parent** - Parent entity
+- **parent** (Entity) - Parent entity
 
 This function has to be used, if you want to set a parent after already having the entity added to the engine. This can be used to create classes that are derived from Entity as well.
 
@@ -71,6 +71,8 @@ This doesn't do anything yet. It will be used for type checks someday.
 
 Systems function as service provider inside of the ECS. The engine manages all Systems and assigns all suitable entities to the respective systems.
 
+All custom systems have to be derived from the `System` class. An example how to do this can be found below.
+
 There are two types of Systems: "logic" and "draw" Systems. Logic systems perform logic operations, like moving a player and updating physics. Their `update` method is called by `Engine:update()`, which in turn should be called in the `update` function of your game loop.
 Draw systems are responsible for rendering your game world on screen. Their `draw` method is called by `Engine:draw()`, which is usually called in the `draw()` function of the game loop.
 
@@ -84,18 +86,18 @@ If you want to manage different kinds of entities just return a table that looks
 `return {name1 = {"Componentname1", "Componentname2"}, name2 = {"Componentname3", "Componentname4"}}`
 
 The different entities are now accessible under `system.targets[name1]` and `system.targets[name2]`.  
-An entity can be contained by the same system multiple times in different target pools if they match the varying component constellations.
+An entity can be contained by the same system multiple times in different target pools if it matches the varying component constellations.
 
 
 #### System:update(dt)
 
 - **dt** (Number) - The time passed since the last update, in seconds.
 
-If you implement this function in your system the engine detects it automatically and it will be called in the update loop.
+This function is going to be called by the engine every tick.
 
 #### System:draw() 
 
-If you implement this function in your system the engine detects it automatically and it will be called in the draw loop.
+This function is going to be called by the engine every draw.
 
 #### An example for a custom system
 
@@ -129,18 +131,17 @@ Returns the rootEntity entity, if it has been created during the engine's creati
 #### Engine:addSystem(system, type)
 
 - **system** (System) - Instance of the system to be added.  
-- **type** (String) - Should be either "draw", "logic" or nil  
+- **type** (String) - Should be either "draw", "logic" or unspecified
 
-Adds a system of the particular type to the engine. Depending on `type`, either `system:draw()` or `system:update(dt)` is going to be called, in this case you don't need to add a type.
-The systems will be updated in the order they've been added.  
-If a system implements both draw and update functions, you will need to specify the type and add it twice to the engine. Once to draw and once to update. Otherwise the engine doesn't know which priority the system should get.
+This function registers the system in the engine. The systems' functions will be called in the order they've been added. As long as the system implements either the `update` or the `draw` function, type doesn't have to be specified.
+If a system implements both, draw and update function, you will need to specify the type and add it twice to the engine. Once to draw and once to update. Otherwise the engine doesn't know which priority the system should get.
 
 
 #### Engine:stop(system)
 
 - **system** (String) - the name of the system
 
-If you want a system to stop, call this function. It's draw/update function won't be called.
+If you want a system to stop, just call this function. It's draw/update function won't be called anymore, until it's beeing started again.
 
 #### Engine:start(system)
 
@@ -181,10 +182,12 @@ Updates all draw systems.
 
 #### Example
 
+The external example is outdated!!! It needs to be adjusted to the changes made in the last days.
+
 For a more detailed and commented version with collisions and some other examples check the [example main.lua](https://github.com/Lovetoys/Lovetoys-examples/blob/rootEntity/main.lua).
 
     -- Importing lovetoys
-    require("lovetoys/engine")
+    require("lib/lovetoys/lovetoys")
 
     function love.load()
         engine = Engine()
