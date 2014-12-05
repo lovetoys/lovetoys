@@ -180,8 +180,6 @@ Updates all draw systems.
 
 #### Example
 
-The external example is outdated!!! It needs to be adjusted to the changes made in the last days.
-
 For a more detailed and commented version with collisions and some other examples check the [example main.lua](https://github.com/Lovetoys/Lovetoys-examples/blob/rootEntity/main.lua).
 
     -- Importing lovetoys
