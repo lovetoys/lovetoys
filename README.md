@@ -29,14 +29,14 @@ The Entity is the basic object that is beeing administrated by the engine. It fu
 
 This function returns a new instance of an entity. If a parent entity is given, a reference to this entity will be stored in `self.parent`.
 Another reference to the newly created entity will be stored in `parent.children`.  
-If there is no parent specified, while the engine got their rootEntity entity enabled, the created entity is automatically added to rootEntity entity's children.
+If there is no parent specified, while the engine got their rootEntity entity enabled, the created entity is automatically added to the rootEntity's children.
 
 #### Entity:setParent(parent)
 - **parent** - Parent entity
 
 This function has to be used, if you want to set a parent after already having the entity added to the engine. This can be used to create classes that are derived from Entity as well.
 
-#### Entity:getParent(parent)
+#### Entity:getParent()
 
 Gets the parent entity. Returns nil if parent not specified.
 
@@ -61,7 +61,7 @@ Returns the component or `nil` if the Entity has no component with the given `na
 
 - **name** (String) - Name of the component class  
 
-Returns if the Entity contains this component.  
+Returns boolean depending on if the component is contained by the entity.  
 
 ### Component
 
