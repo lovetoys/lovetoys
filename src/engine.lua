@@ -52,7 +52,7 @@ function Engine:addEntity(entity)
     end
 end 
 
-function Engine:removeEntity(entity, removeChildren)
+function Engine:removeEntity(entity, removeChildren, newParent)
     -- Stashing the id of the removed Entity in self.freeIds
     table.insert(self.freeIds, entity.id)
     -- Removing the Entity from all Systems and engine
@@ -75,10 +75,10 @@ function Engine:removeEntity(entity, removeChildren)
             end
         else
             for _, child in pairs(entity.children) do
-                if self.rootEntity then
-                    child:setParent(self.rootEntity)
+                if newParent then
+                    child:setParent(newParent)
                 else
-                    child.parent = nil
+                    child:setParent(self.rootEntity)
                 end
             end
         end

@@ -155,12 +155,14 @@ Call this to start a stopped system.
 
 Adds an entity to the engine and sends it to all systems that are interested in its component constellation.
 
-#### Engine:removeEntity(entity, removeChildren)
+#### Engine:removeEntity(entity, removeChildren, newParent)
 - **entity** - (Entity) - Instance of the Entity to be removed
 - **removeChildren** - (Boolean) 
+- **newParent** - (Entity) - Instance of another entity, which should become the new Parent
 
 Removes the particular entity from the engine and all systems.  
 Depending on `removeChildren` all Children are going to deleted recursivly as well.
+If there is a new Parent defined, this entity becomes the new Parent of all children, otherwise they become children of `engine.rootEntity`.
 
 #### Engine:getEntityList(component)
 
