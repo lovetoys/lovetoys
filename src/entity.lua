@@ -15,15 +15,24 @@ end
 -- Sets the entities component of this type to the given component.
 -- An entity can only have one Component of each type.
 function Entity:add(component)
-    local isNew = true
-    if self.components[component.__name] then isNew = false end
-
-    self.components[component.__name] = component
-
-    if self.eventManager and isNew then
-        self.eventManager:fireEvent(ComponentAdded(self, component.__name))
+    if self.components[component.__name] then 
+        print("Trying to add " .. component.__name .. ", but it's already existing. Please use Entity:set to overwrite a component in an entity.")
+    else
+        self.components[component.__name] = component
+        if self.eventManager then
+            self.eventManager:fireEvent(ComponentAdded(self, component.__name))
+        end
     end
 end
+
+function Entity:set(component)
+    if not self.components[component.__name] then 
+        print("Trying to set " .. component.__name .. " which isn't contained by this entity yet. Please use Entity:add to add a component to an entity.")
+    else
+        self.components[component.__name] = component
+    end
+end
+
 
 -- Removes a component from the entity.
 function Entity:remove(name)
