@@ -122,7 +122,7 @@ The engine is the most important part of our framework and the most frequently u
 
 Creates a new engine object. Every engine containes a rootEntity which becomes parent of all entities, as long as they don't have a particular parent specified. 
 
-#### Engine:getMaster()
+#### Engine:getRootEntity()
 
 Returns the rootEntity entity, to get its children or add/remove components.
 

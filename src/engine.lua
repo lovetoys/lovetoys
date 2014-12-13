@@ -3,7 +3,8 @@ Engine = class("Engine")
 function Engine:__init() 
     self.entities = {}
     self.rootEntity = Entity()
-    self.requirements = {}
+    self.singleRequirements = {}
+    self.allRequirements = {}
     self.entityLists = {}
     self.eventManager = EventManager()
 
@@ -43,8 +44,8 @@ function Engine:addEntity(entity)
         self.entityLists[component.__name][entity.id] = entity
 
         -- Adding Entity to System if all requirements are granted
-        if self.requirements[component.__name] then
-            for index2, system in pairs(self.requirements[component.__name]) do
+        if self.singleRequirements[component.__name] then
+            for index2, system in pairs(self.singleRequirements[component.__name]) do
                 self:checkRequirements(entity, system)
             end
         end
@@ -56,8 +57,8 @@ function Engine:removeEntity(entity, removeChildren)
     table.insert(self.freeIds, entity.id)
     -- Removing the Entity from all Systems and engine
     for i, component in pairs(entity.components) do
-        if self.requirements[component.__name] then
-            for i2, system in pairs(self.requirements[component.__name]) do
+        if self.singleRequirements[component.__name] then
+            for i2, system in pairs(self.singleRequirements[component.__name]) do
                 system:removeEntity(entity)
             end
         end
@@ -132,13 +133,13 @@ function Engine:addSystem(system, typ)
     -- Registering the systems requirements and saving them in a special table for fast access
     for index, value in pairs(system:requires()) do
         if type(value) == "string" then
-            self.requirements[value] = self.requirements[value] or {}
-            table.insert(self.requirements[value], system)
+            self.singleRequirements[value] = self.singleRequirements[value] or {}
+            table.insert(self.singleRequirements[value], system)
             break
         elseif type(value) == "table" then
             local targetList = value[1]
-            self.requirements[targetList] = self.requirements[targetList] or {}
-            table.insert(self.requirements[targetList], system)
+            self.singleRequirements[targetList] = self.singleRequirements[targetList] or {}
+            table.insert(self.singleRequirements[targetList], system)
             system.targets[index] = {}
         end
     end
@@ -196,8 +197,8 @@ function Engine.componentRemoved(self, event)
     -- Removing Entity from Entitylists
     self.entityLists[component][entity.id] = nil
     -- Removing Entity from old systems
-    if self.requirements[component] then
-        for index, system in pairs(self.requirements[component]) do 
+    if self.singleRequirements[component] then
+        for index, system in pairs(self.singleRequirements[component]) do 
             system:removeEntity(entity)
         end
     end
@@ -210,14 +211,14 @@ function Engine.componentAdded(self, event)
     if not self.entityLists[component] then self.entityLists[component] = {} end
     self.entityLists[component][entity.id] = entity
     -- Adding the Entity to the requiring systems
-    if self.requirements[component] then
-        for index, system in pairs(self.requirements[component]) do
+    if self.singleRequirements[component] then
+        for index, system in pairs(self.singleRequirements[component]) do
             self:checkRequirements(entity, system)
         end
     end
 end
 
-function Engine:getMaster()
+function Engine:getRootEntity()
     if self.rootEntity ~= nil then
         return self.rootEntity
     end
