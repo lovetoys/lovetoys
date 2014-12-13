@@ -33,11 +33,18 @@ function Entity:set(component)
     end
 end
 
+function Entity:addMultiple(componentList)
+    for _, component in  pairs(componentList) do
+        self:add(component)
+    end
+end
 
 -- Removes a component from the entity.
 function Entity:remove(name)
     if self.components[name] then
         self.components[name] = nil
+    else
+        print("Trying to remove unexisting component " ..name " from Entity. Please fix this")
     end
     if self.eventManager then
         self.eventManager:fireEvent(ComponentRemoved(self, name))
