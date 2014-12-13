@@ -44,7 +44,7 @@ function Entity:remove(name)
     if self.components[name] then
         self.components[name] = nil
     else
-        print("Trying to remove unexisting component " ..name " from Entity. Please fix this")
+        print("Trying to remove unexisting component " .. name .. " from Entity. Please fix this")
     end
     if self.eventManager then
         self.eventManager:fireEvent(ComponentRemoved(self, name))
