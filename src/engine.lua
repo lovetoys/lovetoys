@@ -56,9 +56,9 @@ function Engine:removeEntity(entity, removeChildren, newParent)
     -- Stashing the id of the removed Entity in self.freeIds
     table.insert(self.freeIds, entity.id)
     -- Removing the Entity from all Systems and engine
-    for i, component in pairs(entity.components) do
+    for _, component in pairs(entity.components) do
         if self.singleRequirements[component.__name] then
-            for i2, system in pairs(self.singleRequirements[component.__name]) do
+            for _, system in pairs(self.singleRequirements[component.__name]) do
                 system:removeEntity(entity)
             end
         end
@@ -106,7 +106,7 @@ end
 function Engine:addSystem(system, typ)
     -- Adding System to draw or update table
     if typ == "draw" or (system.draw and not system.update) then
-        for index, value in pairs(self.systems["draw"]) do
+        for _, value in pairs(self.systems["draw"]) do
             if value.__name == system.__name then
                 print("Lovetoys: " .. system.__name .. " already exists. Aborting")
                 return
@@ -114,7 +114,7 @@ function Engine:addSystem(system, typ)
         end
         table.insert(self.systems["draw"], system)
     elseif typ == "update" or  (system.update and not system.draw) then
-        for index, value in pairs(self.systems["update"]) do
+        for _, value in pairs(self.systems["update"]) do
             if value.__name == system.__name then
                 print("Lovetoys: " .. system.__name .. " already exists. Aborting")
                 return
@@ -124,7 +124,7 @@ function Engine:addSystem(system, typ)
     elseif typ == nil and system.update and system.draw then
         print("Lovetoys: " .. system.__name .. " has update and draw function. Please add it twice with 'draw' and 'update' specification. Aborting")
     else
-        for index, value in pairs(self.systems["all"]) do
+        for _, value in pairs(self.systems["all"]) do
             if value.__name == system.__name then
                 print("Lovetoys: " .. system.__name .. " already exists. Aborting")
                 return
@@ -132,25 +132,55 @@ function Engine:addSystem(system, typ)
         end
     end
     table.insert(self.systems["all"], system)
+    
+    self:registerSystem(system)
+    -- Checks if some of the already existing entities match the required components.
+    for index, entity in pairs(self.entities) do
+        self:checkRequirements(entity, system)
+    end
+    return system
+end
 
+function Engine:registerSystem(system)
     -- Registering the systems requirements and saving them in a special table for fast access
     for index, value in pairs(system:requires()) do
-        if type(value) == "string" then
+        -- Registering at singleRequirements in case its a normal table with strings
+        if type(value) == "string" and index == 1 then
             self.singleRequirements[value] = self.singleRequirements[value] or {}
             table.insert(self.singleRequirements[value], system)
-            break
+
+        -- Registering at singleRequirements in case its a table of tables which contain strings
         elseif type(value) == "table" then
             local targetList = value[1]
             self.singleRequirements[targetList] = self.singleRequirements[targetList] or {}
             table.insert(self.singleRequirements[targetList], system)
             system.targets[index] = {}
         end
+
+        -- Registering at allRequirements in case its a normal table with strings
+        if type(value) == "string" then
+            self.allRequirements[value] = self.allRequirements[value] or {}
+            table.insert(self.allRequirements[value], system)
+
+        -- Registering at allRequirements in case its a table of tables which contain strings
+        elseif type(value) == "table" then
+            for _, req in pairs(system.requires()[index]) do
+                self.allRequirements[req] = self.allRequirements[req] or {}
+                -- Check if this List already contains the System
+                local contained = false
+                for _, registeredSystem in pairs(self.allRequirements[req]) do
+                    if registeredSystem == system then
+                        contained = true
+                        break
+                    end
+                end
+                if not contained then
+                    table.insert(self.allRequirements[req], system)
+                end
+            end
+            system.targets[index] = {}
+        end
     end
-    -- Checks if some of the already entities match the required components.
-    for index, entity in pairs(self.entities) do
-        self:checkRequirements(entity, system)
-    end
-    return system
 end
 
 function Engine:stopSystem(name)
@@ -200,8 +230,8 @@ function Engine.componentRemoved(self, event)
     -- Removing Entity from Entitylists
     self.entityLists[component][entity.id] = nil
     -- Removing Entity from old systems
-    if self.singleRequirements[component] then
-        for index, system in pairs(self.singleRequirements[component]) do 
+    if self.allRequirements[component] then
+        for index, system in pairs(self.allRequirements[component]) do 
             system:removeEntity(entity)
         end
     end
@@ -214,8 +244,8 @@ function Engine.componentAdded(self, event)
     if not self.entityLists[component] then self.entityLists[component] = {} end
     self.entityLists[component][entity.id] = entity
     -- Adding the Entity to the requiring systems
-    if self.singleRequirements[component] then
-        for index, system in pairs(self.singleRequirements[component]) do
+    if self.allRequirements[component] then
+        for index, system in pairs(self.allRequirements[component]) do
             self:checkRequirements(entity, system)
         end
     end
@@ -232,6 +262,7 @@ function Engine:getEntityList(component)
     if not self.entityLists[component] then self.entityLists[component] = {} end
     return self.entityLists[component]
 end
+
 
 function Engine:checkRequirements(entity, system)
     local meetsrequirements = true
