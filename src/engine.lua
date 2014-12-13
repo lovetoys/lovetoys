@@ -74,12 +74,15 @@ function Engine:removeEntity(entity, removeChildren, newParent)
                 self:removeEntity(child, true)
             end
         else
+            -- If a new Parent is defined, this Entity will be set as the new Parent
             for _, child in pairs(entity.children) do
                 if newParent then
                     child:setParent(newParent)
                 else
                     child:setParent(self.rootEntity)
                 end
+                -- Registering as child
+                entity:registerAsChild()
             end
         end
         -- Removing Reference to entity from parent
