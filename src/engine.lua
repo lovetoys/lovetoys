@@ -7,6 +7,7 @@ function Engine:__init()
     self.allRequirements = {}
     self.entityLists = {}
     self.eventManager = EventManager()
+    self.initializer = {}
 
     self.systems = {}
     self.systems["all"] = {}
@@ -37,6 +38,13 @@ function Engine:addEntity(entity)
         entity:setParent(self.rootEntity)
     end
     entity:registerAsChild()
+
+    -- Calling initializer
+    for component, func in pairs(self.initializer) do
+        if entity:has(component) then
+            func(entity)
+        end
+    end
 
     for index, component in pairs(entity.components) do
         -- Adding Entity to specific Entitylist
@@ -207,13 +215,20 @@ function Engine:toggleSystem(name)
     end
 end
 
-
 function Engine:update(dt)
     for index, system in ipairs(self.systems["update"]) do
         if system.active then
             system:update(dt)
         end
     end
+end
+
+function Engine:addInitializer(name, func)
+    self.initializer[name] = func
+end
+
+function Engine:removeInitializer(name)
+    self.initializer[name] = nil
 end
 
 function Engine:draw()
@@ -227,8 +242,10 @@ end
 function Engine.componentRemoved(self, event)
     local entity = event.entity
     local component = event.component
+
     -- Removing Entity from Entitylists
     self.entityLists[component][entity.id] = nil
+
     -- Removing Entity from old systems
     if self.allRequirements[component] then
         for index, system in pairs(self.allRequirements[component]) do 
@@ -240,14 +257,21 @@ end
 function Engine.componentAdded(self, event)
     local entity = event.entity
     local component = event.component
+
     -- Adding the Entity to Entitylist
     if not self.entityLists[component] then self.entityLists[component] = {} end
     self.entityLists[component][entity.id] = entity
+
     -- Adding the Entity to the requiring systems
     if self.allRequirements[component] then
         for index, system in pairs(self.allRequirements[component]) do
             self:checkRequirements(entity, system)
         end
+    end
+
+    -- Calling Initializer
+    if self.initializer[event.component] then
+        self.initializer[event.component](event.entity)
     end
 end
 
