@@ -26,8 +26,8 @@ function Entity:add(component)
 end
 
 function Entity:set(component)
-    if not self.components[component.__name] then 
-        print("Trying to set " .. component.__name .. " which isn't contained by this entity yet. Please use Entity:add to add a component to an entity.")
+    if self.components[component.__name] == nil then
+        self:add(component)
     else
         self.components[component.__name] = component
     end
