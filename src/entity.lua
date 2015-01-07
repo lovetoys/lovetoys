@@ -52,7 +52,9 @@ function Entity:remove(name)
 end
 
 function Entity:setParent(parent)
+    if self.parent then self.parent.children[self.id] = nil end
     self.parent = parent
+    self:registerAsChild()
 end
 
 function Entity:getParent(parent)
@@ -60,7 +62,7 @@ function Entity:getParent(parent)
 end
 
 function Entity:registerAsChild()
-    self.parent.children[self.id] = self
+    if self.id then self.parent.children[self.id] = self end
 end
 
 function Entity:get(name)
