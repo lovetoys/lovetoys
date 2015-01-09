@@ -164,7 +164,7 @@ Removes the particular entity from the engine and all systems.
 Depending on `removeChildren` all Children are going to deleted recursivly as well.
 If there is a new Parent defined, this entity becomes the new Parent of all children, otherwise they become children of `engine.rootEntity`.
 
-#### Engine:getEntityList(component)
+#### Engine:getEntitiesWithComponent(component)
 
 - **component** (String) - Class name of the component   
 

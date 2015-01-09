@@ -282,7 +282,7 @@ function Engine:getRootEntity()
 end
 
 -- Returns an Entitylist for a specific component. If the Entitylist doesn't exist yet it'll be created and returned.
-function Engine:getEntityList(component)
+function Engine:getEntitiesWithComponent(component)
     if not self.entityLists[component] then self.entityLists[component] = {} end
     return self.entityLists[component]
 end
