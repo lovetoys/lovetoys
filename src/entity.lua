@@ -3,7 +3,7 @@ Entity = class("Entity")
 function Entity:__init(parent)
     self.components = {}
     self.eventManager = nil
-    self.alive = true
+    self.alive = false
     if parent then
         self:setParent(parent)
     else
@@ -16,7 +16,7 @@ end
 -- An entity can only have one Component of each type.
 function Entity:add(component)
     if self.components[component.__name] then 
-        print("Trying to add " .. component.__name .. ", but it's already existing. Please use Entity:set to overwrite a component in an entity.")
+        print("Trying to add Component '" .. component.__name .. "', but it's already existing. Please use Entity:set to overwrite a component in an entity.")
     else
         self.components[component.__name] = component
         if self.eventManager then
