@@ -1,6 +1,6 @@
 Entity = class("Entity")
 
-function Entity:__init(parent)
+function Entity:__init(parent, name)
     self.components = {}
     self.eventManager = nil
     self.alive = false
@@ -9,6 +9,7 @@ function Entity:__init(parent)
     else
         parent = nil
     end
+    self.name = name
     self.children = {}
 end
 
@@ -70,18 +71,10 @@ function Entity:get(name)
 end
 
 function Entity:has(name)
-    if self.components[name] then
-        return true
-    else
-        return false
-    end
+    return not not self.components[name] 
 end
 
 function Entity:getComponents()
     return self.components
-end
-
-function Entity:has(name)
-    return not (self:get(name) == nil)
 end
 

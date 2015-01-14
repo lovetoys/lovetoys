@@ -38,7 +38,7 @@ This function has to be used, if you want to set a parent after already having t
 
 #### Entity:getParent()
 
-Gets the parent entity. Returns nil if parent not specified.
+Gets the parent entity.
 
 #### Entity:add(component)
 - **component** - (Component) Instance of a component.
@@ -79,7 +79,7 @@ Draw systems are responsible for rendering your game world on screen. Their `dra
 
 #### System:requires() return {"Componentname1", "Componentname2", ...} end 
 
-This function defines what kind of entities shall be managed by this System. The function has to be overwritten in every System! The strings inside the returned table define the components a entity has to contain, to be managed by the System. Those entities are accessible in `self.targets`.
+This function defines what kind of entities shall be managed by this System. The function has to be overwritten in every System or it won't get any entities! The strings inside the returned table define the components a entity has to contain, to be managed by the System. Those entities are accessible in `self.targets`.
 
 If you want to manage different kinds of entities just return a table that looks like this:
 
@@ -164,7 +164,7 @@ Removes the particular entity from the engine and all systems.
 Depending on `removeChildren` all Children are going to deleted recursivly as well.
 If there is a new Parent defined, this entity becomes the new Parent of all children, otherwise they become children of `engine.rootEntity`.
 
-#### Engine:getEntityList(component)
+#### Engine:getEntitiesWithComponent(component)
 
 - **component** (String) - Class name of the component   
 
@@ -300,4 +300,4 @@ Copyright &copy; 2013-2014 Arne Beer and Rafael Epplée
 
 Published under the MIT License.
 
-For further information check `license.txt`.
+For further information check `LICENSE.md`.
