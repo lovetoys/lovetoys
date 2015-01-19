@@ -25,14 +25,23 @@ function System:addEntity(entity, category)
     end
 end
 
-function System:removeEntity(entity)
+function System:removeEntity(entity, component)
     if table.firstElement(self.targets) then
         if table.firstElement(self.targets).__name then
             self.targets[entity.id] = nil
         else
             -- Removing entities from their respective category target list.
             for index, _ in pairs(self.targets) do
-                self.targets[index][entity.id] = nil
+                if component then
+                    for _, req in pairs(self:requires()[index]) do
+                        if req == component then
+                            self.targets[index][entity.id] = nil
+                            break
+                        end
+                    end
+                else
+                    self.targets[index][entity.id] = nil
+                end
             end
         end
     end

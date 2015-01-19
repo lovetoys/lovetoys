@@ -249,7 +249,7 @@ function Engine.componentRemoved(self, event)
     -- Removing Entity from old systems
     if self.allRequirements[component] then
         for index, system in pairs(self.allRequirements[component]) do 
-            system:removeEntity(entity)
+            system:removeEntity(entity, component)
         end
     end
 end
