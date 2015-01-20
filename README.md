@@ -45,23 +45,38 @@ Gets the parent entity.
 
 Adds a component to this particular entity. 
 
+#### Entity:set(component)
+- **component** - (Component) Instance of a component.
+
+Adds the component to this particular entity. If there already exists a component of this type the previous component will be overwritten.
+
+#### Entity:addMultiple(component)
+- **component** - (List) A list containing instances of a component.
+
+Adds a component to this particular entity. 
+
 #### Entity:remove(name)
 
 - **name** (String) - Name of the component class 
 
-Removes a component from this particular entity.  
-    
-#### Entity:get(Name)
-
-- **name** (String) - Name of the component class  
-
-Returns the component or `nil` if the Entity has no component with the given `name`.
+Removes a component from this particular entity.
 
 #### Entity:has(Name)
 
-- **name** (String) - Name of the component class  
+- **name** (String) - Name of the component class
 
-Returns boolean depending on if the component is contained by the entity.  
+Returns boolean depending on if the component is contained by the entity.
+
+
+#### Entity:get(Name)
+
+- **name** (String) - Name of the component class
+
+Returns the component or `nil` if the Entity has no component with the given `name`.
+
+#### Entity:getComponents()
+
+Returns the list that contains all components.
 
 ### Component
 
@@ -76,7 +91,6 @@ All custom systems have to be derived from the `System` class. An example how to
 There are two types of Systems: "logic" and "draw" Systems. Logic systems perform logic operations, like moving a player and updating physics. Their `update` method is called by `Engine:update()`, which in turn should be called in the `update` function of your game loop.
 Draw systems are responsible for rendering your game world on screen. Their `draw` method is called by `Engine:draw()`, which is usually called in the `draw()` function of the game loop.
 
-
 #### System:requires() return {"Componentname1", "Componentname2", ...} end 
 
 This function defines what kind of entities shall be managed by this System. The function has to be overwritten in every System or it won't get any entities! The strings inside the returned table define the components a entity has to contain, to be managed by the System. Those entities are accessible in `self.targets`.
@@ -85,15 +99,15 @@ If you want to manage different kinds of entities just return a table that looks
 
 `return {name1 = {"Componentname1", "Componentname2"}, name2 = {"Componentname3", "Componentname4"}}`
 
-The different entities are now accessible under `system.targets[name1]` and `system.targets[name2]`.  
+The different entities are now accessible under `system.targets[name1]` and `system.targets[name2]`.
 An entity can be contained by the same system multiple times in different target pools if it matches the varying component constellations.
-
 
 #### System:update(dt)
 
 - **dt** (Number) - The time passed since the last update, in seconds.
 
 This function is going to be called by the engine every tick.
+
 
 #### System:draw() 
 
@@ -128,12 +142,11 @@ Returns the rootEntity entity, to get its children or add/remove components.
 
 #### Engine:addSystem(system, type)
 
-- **system** (System) - Instance of the system to be added.  
+- **system** (System) - Instance of the system to be added.
 - **type** (String) - Should be either "draw", "logic" or unspecified
 
 This function registers the system in the engine. The systems' functions will be called in the order they've been added. As long as the system implements either the `update` or the `draw` function, type doesn't have to be specified.
 If a system implements both, draw and update function, you will need to specify the type and add it twice to the engine. Once to draw and once to update. Otherwise the engine doesn't know which priority the system should get.
-
 
 #### Engine:stop(system)
 
@@ -148,6 +161,12 @@ If you want a system to stop, just call this function. It's draw/update function
 
 Call this to start a stopped system.
 
+#### Engine:toggleSystem(system)
+
+- **system** (String) 
+    the name of the system
+
+Toggle the specified system.
 
 #### Engine:addEntity(entity)
 
@@ -166,7 +185,7 @@ If there is a new Parent defined, this entity becomes the new Parent of all chil
 
 #### Engine:getEntitiesWithComponent(component)
 
-- **component** (String) - Class name of the component   
+- **component** (String) - Class name of the component
 
 Returns a list with all entities that contain this particular component.
 
@@ -241,15 +260,15 @@ We need to do this so we can work with `self` as we are used to, as lua doesn't 
 
 #### EventManager:removeListener(eventName, listener)
 
-- **eventName** (String) - Name of the event-class  
+- **eventName** (String) - Name of the event-class
 
-- **listener** (String) - Name of the listener to be deleted  
+- **listener** (String) - Name of the listener to be deleted
 
 Removes a listener from this particular Event.
 
 #### EventManager:fireEvent(event)
 
-- **event** (Event) - Instance of the event  
+- **event** (Event) - Instance of the event
 
 This function pipes the event through to every listener that is registered to the class-name of the event and triggers `listener:fireEvent(event)`.
 
@@ -282,9 +301,9 @@ A simple class implementation for OOP.
         self.bar = parameter
     end
 
-If you want to create a object of this class just call `Foo(parameter)` and it will return a object after calling the constructor.  
+If you want to create a object of this class just call `Foo(parameter)` and it will return a object after calling the constructor.
 
-If you want to create a class that inherits from a superclass you have to pass a superclass:  
+If you want to create a class that inherits from a superclass you have to pass a superclass:
 
     Foo = class("Foo", Superclass)
 
