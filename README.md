@@ -45,15 +45,15 @@ Gets the parent entity.
 
 Adds a component to this particular entity. 
 
+#### Entity:addMultiple(components)
+- **components** - (List) A list containing instances of components.
+
+Adds multiple components to the entity at once.
+
 #### Entity:set(component)
 - **component** - (Component) Instance of a component.
 
 Adds the component to this particular entity. If there already exists a component of this type the previous component will be overwritten.
-
-#### Entity:addMultiple(component)
-- **component** - (List) A list containing instances of a component.
-
-Adds a component to this particular entity. 
 
 #### Entity:remove(name)
 
