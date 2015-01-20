@@ -157,7 +157,7 @@ Adds an entity to the engine and sends it to all systems that are interested in 
 
 #### Engine:removeEntity(entity, removeChildren, newParent)
 - **entity** - (Entity) - Instance of the Entity to be removed
-- **removeChildren** - (Boolean) 
+- **removeChildren** - (Boolean) Default is false
 - **newParent** - (Entity) - Instance of another entity, which should become the new Parent
 
 Removes the particular entity from the engine and all systems.  
@@ -190,7 +190,7 @@ Just pass the name of a componentname and a function and for every entity that c
 #### Engine:removeInitializer(name)
 - **name** - (String) - Name of the component
 
-The initializer that is registert to this component will be deleted.
+The initializer that is registered to this component will be deleted.
 
 #### Example
 
