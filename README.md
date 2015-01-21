@@ -1,6 +1,6 @@
 # Lovetoys
 
-Lovetoys is a small bundle of helper classes and libraries consisting of 3 packages. The most important one is the Entity Component System which is based on [Richard Lords Introduction](http://www.richardlord.net/blog/what-is-an-entity-framework) to ECS's. If you don't have any idea what this entity component stuff is all about, click that link and give it a read! It's totally worth it!
+Lovetoys is an Entity Component System framework which is based on [Richard Lords Introduction](http://www.richardlord.net/blog/what-is-an-entity-framework) to ECS's. If you don't have any idea what this entity component stuff is all about, click that link and give it a read! It's totally worth it!
 
 Besides the Entity Component System the Lovetoys also contain an event manager for handling keypresses etc. and a collision manager for easier management of Löve2D collisions.
 
@@ -272,21 +272,10 @@ Removes a listener from this particular Event.
 
 This function pipes the event through to every listener that is registered to the class-name of the event and triggers `listener:fireEvent(event)`.
 
+
 ## CollisionManager
 
-This helperclass helps to avoid code redundancy and to create neater code.  
-Our collisionmanager works in association with our eventmanager as it expects to get a event with the colliding entities.  
-The required event is already contained and you can find an example of how to use it in our [example](https://github.com/Lovetoys/Lovetoys-example) folder.
-
-#### CollisionManager:addCollisionAction(component1, component2, object)
-
-- **component1**, **component2** (String) Names of the required components  
-- **object** (Collision) - Instance of the collision class.  
-
-Adds a new collision to the manager. If two entities, who satisfy the requirements, collide, the `collision:action(entities)` function will be triggered.  
-The entity that contains component1 will be given to you inside `entities.entity1` and the entity that contains component2 will be inside `entities.entity2`.  
-
-If you want a entity to collide with any other entity, just name one of the required components "Everything".
+We removed the collisionmanager from Lovetoys. It performed too poorly and doesn't belong into an entity component system. 
 
 ## Class
 
@@ -320,3 +309,4 @@ Copyright &copy; 2013-2014 Arne Beer and Rafael Epplée
 Published under the MIT License.
 
 For further information check `LICENSE.md`.
+
