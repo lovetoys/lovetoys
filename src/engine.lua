@@ -172,7 +172,7 @@ function Engine:registerSystem(system)
 
         -- Registering at allRequirements in case its a table of tables which contain strings
         elseif type(value) == "table" then
-            for _, req in pairs(system.requires()[index]) do
+            for _, req in pairs(system:requires()[index]) do
                 self.allRequirements[req] = self.allRequirements[req] or {}
                 -- Check if this List already contains the System
                 local contained = false
@@ -291,7 +291,7 @@ end
 function Engine:checkRequirements(entity, system)
     local meetsrequirements = true
     local category = nil
-    for index, req in pairs(system.requires()) do
+    for index, req in pairs(system:requires()) do
         if type(req) == "string" then
             if not entity.components[req] then
                 meetsrequirements = false
