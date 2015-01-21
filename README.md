@@ -2,21 +2,15 @@
 
 Lovetoys is an Entity Component System framework which is based on [Richard Lords Introduction](http://www.richardlord.net/blog/what-is-an-entity-framework) to ECS's. If you don't have any idea what this entity component stuff is all about, click that link and give it a read! It's totally worth it!
 
-Besides the Entity Component System the Lovetoys also contain an event manager for handling keypresses etc.
-
-This Software is published under the MIT license. For further information check the LICENSE.md.
-
-The Software is tested and should be stable. If you find any bugs please create an issue and report them. Otherwise feel free to create a pull request :).
+The Software is tested and should be stable. If you find any bugs please create an issue and report them. Or just create a pull request :).
 
 ## Installation
 
-The best way of installing Lovetoys is creating a submodule and cloning it right into your git repo. 
-Another way is to just download the files, especially the lovetoys folder, and copy them to your project folder.  
-To import everything just require lovetoys/lovetoys.
+The best way of installing Lovetoys is by creating a submodule and cloning it right into your git repo.
+Another way is to just download the files, especially the `src` folder, and copy them to your project folder.
+To import everything just `require('lovetoys/src').
 
-For an example on how to use the lovetoys check our [example](https://github.com/Lovetoys/Lovetoys-examples) folder.
-
-The following text describes the different classes the lovetoys provide.
+For an example on how to use the lovetoys have a look at our [example](https://github.com/Lovetoys/Lovetoys-examples) repository.
 
 ## Entity Component System
 
@@ -28,8 +22,8 @@ The Entity is the basic object that is beeing administrated by the engine. It fu
 - **parent** (Entity) - Parent entity
 
 This function returns a new instance of an entity. If a parent entity is given, a reference to this entity will be stored in `self.parent`.
-Another reference to the newly created entity will be stored in `parent.children`.  
-If there is no parent specified, the created entity is automatically added to the engine's rootEntity's children.
+Another reference to the newly created entity will be stored in `parent.children`.
+If the entity has no parent when being added to the engine, the root entity will be set as its parent.
 
 #### Entity:setParent(parent)
 - **parent** (Entity) - Parent entity
@@ -43,7 +37,7 @@ Gets the parent entity.
 #### Entity:add(component)
 - **component** - (Component) Instance of a component.
 
-Adds a component to this particular entity. 
+Adds a component to this particular entity.
 
 #### Entity:addMultiple(components)
 - **components** - (List) A list containing instances of components.
@@ -57,7 +51,7 @@ Adds the component to this particular entity. If there already exists a componen
 
 #### Entity:remove(name)
 
-- **name** (String) - Name of the component class 
+- **name** (String) - Name of the component class
 
 Removes a component from this particular entity.
 
@@ -91,7 +85,7 @@ All custom systems have to be derived from the `System` class. An example how to
 There are two types of Systems: "logic" and "draw" Systems. Logic systems perform logic operations, like moving a player and updating physics. Their `update` method is called by `Engine:update()`, which in turn should be called in the `update` function of your game loop.
 Draw systems are responsible for rendering your game world on screen. Their `draw` method is called by `Engine:draw()`, which is usually called in the `draw()` function of the game loop.
 
-#### System:requires() return {"Componentname1", "Componentname2", ...} end 
+#### System:requires() return {"Componentname1", "Componentname2", ...} end
 
 This function defines what kind of entities shall be managed by this System. The function has to be overwritten in every System or it won't get any entities! The strings inside the returned table define the components a entity has to contain, to be managed by the System. Those entities are accessible in `self.targets`.
 
@@ -109,7 +103,7 @@ An entity can be contained by the same system multiple times in different target
 This function is going to be called by the engine every tick.
 
 
-#### System:draw() 
+#### System:draw()
 
 This function is going to be called by the engine every draw.
 
@@ -134,7 +128,7 @@ The engine is the most important part of our framework and the most frequently u
 
 #### Engine()
 
-Creates a new engine object. Every engine containes a rootEntity which becomes parent of all entities, as long as they don't have a particular parent specified. 
+Creates a new engine object. Every engine containes a rootEntity which becomes parent of all entities, as long as they don't have a particular parent specified.
 
 #### Engine:getRootEntity()
 
@@ -156,14 +150,14 @@ If you want a system to stop, just call this function. It's draw/update function
 
 #### Engine:start(system)
 
-- **system** (String) 
+- **system** (String)
     the name of the system
 
 Call this to start a stopped system.
 
 #### Engine:toggleSystem(system)
 
-- **system** (String) 
+- **system** (String)
     the name of the system
 
 Toggle the specified system.
@@ -179,7 +173,7 @@ Adds an entity to the engine and sends it to all systems that are interested in 
 - **removeChildren** - (Boolean) Default is false
 - **newParent** - (Entity) - Instance of another entity, which should become the new Parent
 
-Removes the particular entity from the engine and all systems.  
+Removes the particular entity from the engine and all systems.
 Depending on `removeChildren` all Children are going to deleted recursivly as well.
 If there is a new Parent defined, this entity becomes the new Parent of all children, otherwise they become children of `engine.rootEntity`.
 
@@ -234,7 +228,7 @@ For a more detailed and commented version with collisions and some other example
     function love.draw()
         -- Engine draw function
         engine:draw()
-    end 
+    end
 
     function love.keypressed(key, isrepeat)
         eventmanager:fireEvent(KeyPressed(key, isrepeat))
@@ -250,12 +244,12 @@ This class is a simple eventmanager for sending events to their respective liste
 
 #### EventManager:addListener(eventName, listener)
 
-- **eventName** (String) - Name of the event-class to be added 
+- **eventName** (String) - Name of the event-class to be added
 
 - **listener** (Listener) - A table containing information about the listener function. The first entry should be a value that will be passed as `self` to the called function, while the second entry should be the function itself.
 
-Adds a function that is listening to the Event.  
-An example for adding a Listener: `EventManager:addListener("EventName", {table, table.func})`.  
+Adds a function that is listening to the Event.
+An example for adding a Listener: `EventManager:addListener("EventName", {table, table.func})`.
 We need to do this so we can work with `self` as we are used to, as lua doesn't provide a native class implementation.
 
 #### EventManager:removeListener(eventName, listener)
@@ -275,11 +269,11 @@ This function pipes the event through to every listener that is registered to th
 
 ## CollisionManager
 
-We removed the collisionmanager from Lovetoys. It performed too poorly and doesn't belong into an entity component system. 
+We removed the Collision Manager from the Lovetoys. It performed too poorly and doesn't belong into an entity component system.
 
 ## Class
 
-A simple class implementation for OOP. 
+A simple class implementation for OOP.
 
 #### How to create a class
 
@@ -306,7 +300,7 @@ To create a new instance you now just have to call `Foo()` e.g.
 
 Copyright &copy; 2013-2014 Arne Beer and Rafael Epplée
 
-Published under the MIT License.
+This Software is published under the MIT License.
 
 For further information check `LICENSE.md`.
 
