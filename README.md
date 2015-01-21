@@ -2,7 +2,7 @@
 
 Lovetoys is an Entity Component System framework which is based on [Richard Lords Introduction](http://www.richardlord.net/blog/what-is-an-entity-framework) to ECS's. If you don't have any idea what this entity component stuff is all about, click that link and give it a read! It's totally worth it!
 
-Besides the Entity Component System the Lovetoys also contain an event manager for handling keypresses etc. and a collision manager for easier management of Löve2D collisions.
+Besides the Entity Component System the Lovetoys also contain an event manager for handling keypresses etc.
 
 This Software is published under the MIT license. For further information check the LICENSE.md.
 
@@ -309,4 +309,5 @@ Copyright &copy; 2013-2014 Arne Beer and Rafael Epplée
 Published under the MIT License.
 
 For further information check `LICENSE.md`.
+
 
