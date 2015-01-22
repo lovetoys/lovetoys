@@ -1,8 +1,11 @@
 # Lovetoys
 
-Lovetoys is an Entity Component System framework which is based on [Richard Lords Introduction](http://www.richardlord.net/blog/what-is-an-entity-framework) to ECS's. If you don't have any idea what this entity component stuff is all about, click that link and give it a read! It's totally worth it!
+Lovetoys is an Entity Component System framework for the LÖVE 2D game engine. 
+It is loosely based on [Richard Lords Introduction](http://www.richardlord.net/blog/what-is-an-entity-framework) to ECS's. If you don't have any idea what this entity component stuff is all about, click that link and give it a read! It's totally worth it!
 
-The Software is tested and should be stable. If you find any bugs please create an issue and report them. Or just create a pull request :).
+Lovetoys is a full-featured game development framework, not only providing the core parts like Entity, Component and System classes but also containing a Publish-Subscribe messaging system as well as an Entity Tree, enabling you to build even complex games easily and in an organized way.
+
+The Software is tested and used in multiple games and is stable. If you find any bugs please create an issue and report them. Or just create a pull request :).
 
 ## Installation
 
@@ -269,7 +272,7 @@ This function pipes the event through to every listener that is registered to th
 
 ## CollisionManager
 
-We removed the Collision Manager from the Lovetoys. It performed too poorly and doesn't belong into an entity component system.
+We removed the Collision Manager from the Lovetoys. It performed too poorly and we felt it only bloated the framework while not being needed in many cases.
 
 ## Class
 
