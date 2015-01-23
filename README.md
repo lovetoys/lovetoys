@@ -198,7 +198,7 @@ Updates all draw systems.
 
 #### Engine:addInitializer(name, func)
 - **name** - (String) - Name of the component
-- **func** - (function) - Instance of another entity, which should become the new Parent
+- **func** - (function)
 
 Every time you want to call a function on an entity as soon as it has been added to the engine you want to use Initializer.
 Just pass the name of a componentname and a function and for every entity that contains such a component `func(entity)` will be called.
