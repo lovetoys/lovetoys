@@ -113,7 +113,7 @@ end
 
 function Engine:addSystem(system, typ)
     -- Adding System to draw or update table
-    if typ == "draw" or (system.draw and not system.update) then
+    if system.draw and (not typ or typ == "draw") then
         for _, value in pairs(self.systems["draw"]) do
             if value.__name == system.__name then
                 print("Lovetoys: " .. system.__name .. " already exists. Aborting")
@@ -121,7 +121,8 @@ function Engine:addSystem(system, typ)
             end
         end
         table.insert(self.systems["draw"], system)
-    elseif typ == "update" or  (system.update and not system.draw) then
+    end
+    if system.update and (not typ or typ == "update") then
         for _, value in pairs(self.systems["update"]) do
             if value.__name == system.__name then
                 print("Lovetoys: " .. system.__name .. " already exists. Aborting")
@@ -129,9 +130,8 @@ function Engine:addSystem(system, typ)
             end
         end
         table.insert(self.systems["update"], system)
-    elseif typ == nil and system.update and system.draw then
-        print("Lovetoys: " .. system.__name .. " has update and draw function. Please add it twice with 'draw' and 'update' specification. Aborting")
-    else
+    end
+    if not system.update and system.draw then
         for _, value in pairs(self.systems["all"]) do
             if value.__name == system.__name then
                 print("Lovetoys: " .. system.__name .. " already exists. Aborting")
