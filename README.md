@@ -96,7 +96,7 @@ If you want to manage different kinds of entities just return a table that looks
 
 `return {name1 = {"Componentname1", "Componentname2"}, name2 = {"Componentname3", "Componentname4"}}`
 
-The different entities are now accessible under `system.targets[name1]` and `system.targets[name2]`.
+The different entities are now accessible under `system.targets.name1` and `system.targets.name2`.
 An entity can be contained by the same system multiple times in different target pools if it matches the varying component constellations.
 
 #### System:update(dt)
