@@ -10,8 +10,8 @@ The Software is tested and used in multiple games and is stable. If you find any
 ## Installation
 
 The best way of installing Lovetoys is by creating a submodule and cloning it right into your git repo.
-Another way is to just download the files, especially the `src` folder, and copy them to your project folder.
-To import everything just `require('lovetoys/src').
+Another way is to just download the files, especially the `src` folder, and copy them to your project folder.  
+To import everything just `require('lovetoys/lovetoys')`.
 
 For an example on how to use the lovetoys have a look at our [example](https://github.com/Lovetoys/Lovetoys-examples) repository.
 
