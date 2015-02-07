@@ -96,7 +96,7 @@ If you want to manage different kinds of entities just return a table that looks
 
 `return {name1 = {"Componentname1", "Componentname2"}, name2 = {"Componentname3", "Componentname4"}}`
 
-The different entities are now accessible under `system.targets[name1]` and `system.targets[name2]`.
+The different entities are now accessible under `system.targets.name1` and `system.targets.name2`.
 An entity can be contained by the same system multiple times in different target pools if it matches the varying component constellations.
 
 #### System:update(dt)
@@ -198,7 +198,7 @@ Updates all draw systems.
 
 #### Engine:addInitializer(name, func)
 - **name** - (String) - Name of the component
-- **func** - (function) - Instance of another entity, which should become the new Parent
+- **func** - (function)
 
 Every time you want to call a function on an entity as soon as it has been added to the engine you want to use Initializer.
 Just pass the name of a componentname and a function and for every entity that contains such a component `func(entity)` will be called.
