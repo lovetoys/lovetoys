@@ -215,6 +215,14 @@ function Engine:toggleSystem(name)
     end
 end
 
+function Engine:getSystem(name)
+    for index, system in pairs(self.systems["all"]) do
+        if name == system.__name then
+            return system
+        end
+    end
+end
+
 function Engine:update(dt)
     for index, system in ipairs(self.systems["update"]) do
         if system.active then
