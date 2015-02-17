@@ -276,13 +276,13 @@ We removed the Collision Manager from the Lovetoys. It performed too poorly and 
 
 ## Class
 
-A simple class implementation for OOP.
+We use our own small class implementation for OOP.
 
-#### How to create a class
+You can create a class as follows:
 
     Foo = class("Foo")
 
-    -- The constructor of this class
+    -- The constructor of a class is specified by the __init method
     function Foo:__init(parameter)
         self.bar = parameter
     end
