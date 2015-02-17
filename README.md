@@ -210,7 +210,7 @@ The initializer that is registered to this component will be deleted.
 
 #### Example
 
-For a more detailed and commented version with collisions and some other examples check the [example main.lua](https://github.com/Lovetoys/Lovetoys-examples/blob/rootEntity/main.lua).
+For a more detailed and commented version with collisions and some other examples check the [main.lua file of the lovetoys example game](https://github.com/lovetoys/example/blob/master/main.lua).
 
     -- Importing lovetoys
     require("lib/lovetoys/lovetoys")
