@@ -272,7 +272,8 @@ This function pipes the event through to every listener that is registered to th
 
 ## CollisionManager
 
-We removed the Collision Manager from the Lovetoys. It performed too poorly and we felt it only bloated the framework while not being needed in many cases.
+`CollisionManager` was a class that helped with specifying callbacks for certain collision events.
+We removed it from the Lovetoys. It performed too poorly and we felt it only bloated the framework while not being needed in many cases.
 
 ## Class
 
