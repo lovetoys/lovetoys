@@ -1,6 +1,6 @@
 # Lovetoys
 
-Lovetoys is an Entity Component System framework for the LÖVE 2D game engine. 
+Lovetoys is an Entity Component System framework for the LÖVE 2D game engine.
 It is loosely based on [Richard Lords Introduction](http://www.richardlord.net/blog/what-is-an-entity-framework) to ECS's. If you don't have any idea what this entity component stuff is all about, click that link and give it a read! It's totally worth it!
 
 Lovetoys is a full-featured game development framework, not only providing the core parts like Entity, Component and System classes but also containing a Publish-Subscribe messaging system as well as an Entity Tree, enabling you to build even complex games easily and in an organized way.
@@ -10,7 +10,7 @@ The Software is tested and used in multiple games and is stable. If you find any
 ## Installation
 
 The best way of installing Lovetoys is by creating a submodule and cloning it right into your git repo.
-Another way is to just download the files, especially the `src` folder, and copy them to your project folder.  
+Another way is to just download the files, especially the `src` folder, and copy them to your project folder.
 To import everything just `require('lovetoys/lovetoys')`.
 
 For an example on how to use the lovetoys have a look at our [example](https://github.com/Lovetoys/Lovetoys-examples) repository.
@@ -298,6 +298,11 @@ To create a new instance you now just have to call `Foo()` e.g.
 
     NewInstance = Foo()
 
+## Testing
+
+You can find the tests in the `spec` folder. They are defined using the [busted](http://olivinelabs.com/busted) test framework.
+
+To run the suite, install busted and simply execute `busted` in the lovetoys directory.
 
 * * *
 
