@@ -25,7 +25,6 @@ function Engine:addEntity(entity)
     local newId = #self.entities + 1
     entity.id = newId
     self.entities[entity.id] = entity
-    print(newId)
 
     -- If a rootEntity entity is defined and the entity doesn't have a parent yet, the rootEntity entity becomes the entity's parent
     if entity.parent == nil then
