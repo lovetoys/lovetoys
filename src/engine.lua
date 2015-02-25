@@ -14,8 +14,6 @@ function Engine:__init()
     self.systems["update"] = {}
     self.systems["draw"] = {}
 
-    self.freeIds = {}
-    self.maxId = 1
     self.eventManager:addListener("ComponentRemoved", {self, self.componentRemoved})
     self.eventManager:addListener("ComponentAdded", {self, self.componentAdded})
 end
@@ -24,14 +22,10 @@ function Engine:addEntity(entity)
     -- Setting engine eventManager as eventManager for entity
     entity.eventManager = self.eventManager
     -- Getting the next free ID or insert into table
-    if #self.freeIds == 0 then
-        entity.id = self.maxId
-        self.maxId = self.maxId + 1
-        table.insert(self.entities, entity)
-    else
-        entity.id = table.remove(self.freeIds, #self.freeIds)
-        self.entities[entity.id] = entity
-    end
+    local newId = #self.entities + 1
+    entity.id = newId
+    self.entities[entity.id] = entity
+    print(newId)
 
     -- If a rootEntity entity is defined and the entity doesn't have a parent yet, the rootEntity entity becomes the entity's parent
     if entity.parent == nil then
@@ -61,8 +55,6 @@ function Engine:addEntity(entity)
 end 
 
 function Engine:removeEntity(entity, removeChildren, newParent)
-    -- Stashing the id of the removed Entity in self.freeIds
-    table.insert(self.freeIds, entity.id)
     -- Removing the Entity from all Systems and engine
     for _, component in pairs(entity.components) do
         if self.singleRequirements[component.__name] then
