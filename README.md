@@ -1,6 +1,6 @@
 # Lovetoys
 
-Lovetoys is an Entity Component System framework for the LÖVE 2D game engine. 
+Lovetoys is an Entity Component System framework for the LÖVE 2D game engine.
 It is loosely based on [Richard Lords Introduction](http://www.richardlord.net/blog/what-is-an-entity-framework) to ECS's. If you don't have any idea what this entity component stuff is all about, click that link and give it a read! It's totally worth it!
 
 Lovetoys is a full-featured game development framework, not only providing the core parts like Entity, Component and System classes but also containing a Publish-Subscribe messaging system as well as an Entity Tree, enabling you to build even complex games easily and in an organized way.
@@ -10,7 +10,7 @@ The Software is tested and used in multiple games and is stable. If you find any
 ## Installation
 
 The best way of installing Lovetoys is by creating a submodule and cloning it right into your git repo.
-Another way is to just download the files, especially the `src` folder, and copy them to your project folder.  
+Another way is to just download the files, especially the `src` folder, and copy them to your project folder.
 To import everything just `require('lovetoys/lovetoys')`.
 
 For an example on how to use the lovetoys have a look at our [example](https://github.com/Lovetoys/Lovetoys-examples) repository.
@@ -210,7 +210,7 @@ The initializer that is registered to this component will be deleted.
 
 #### Example
 
-For a more detailed and commented version with collisions and some other examples check the [example main.lua](https://github.com/Lovetoys/Lovetoys-examples/blob/rootEntity/main.lua).
+For a more detailed and commented version with collisions and some other examples check the [main.lua file of the lovetoys example game](https://github.com/lovetoys/example/blob/master/main.lua).
 
     -- Importing lovetoys
     require("lib/lovetoys/lovetoys")
@@ -272,17 +272,18 @@ This function pipes the event through to every listener that is registered to th
 
 ## CollisionManager
 
-We removed the Collision Manager from the Lovetoys. It performed too poorly and we felt it only bloated the framework while not being needed in many cases.
+`CollisionManager` was a class that helped with specifying callbacks for certain collision events.
+We removed it from the Lovetoys. It performed too poorly and we felt it only bloated the framework while not being needed in many cases.
 
 ## Class
 
-A simple class implementation for OOP.
+We use our own small class implementation for OOP.
 
-#### How to create a class
+You can create a class as follows:
 
     Foo = class("Foo")
 
-    -- The constructor of this class
+    -- The constructor of a class is specified by the __init method
     function Foo:__init(parameter)
         self.bar = parameter
     end
@@ -298,6 +299,11 @@ To create a new instance you now just have to call `Foo()` e.g.
 
     NewInstance = Foo()
 
+## Testing
+
+You can find the tests in the `spec` folder. They are defined using the [busted](http://olivinelabs.com/busted) test framework.
+
+To run the suite, install busted and simply execute `busted` in the lovetoys directory.
 
 * * *
 
