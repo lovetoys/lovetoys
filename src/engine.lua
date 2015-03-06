@@ -21,8 +21,8 @@ function Engine:__init()
     self.systems["update"] = {}
     self.systems["draw"] = {}
 
-    self.eventManager:addListener("ComponentRemoved", {self, self.componentRemoved})
-    self.eventManager:addListener("ComponentAdded", {self, self.componentAdded})
+    self.eventManager:addListener("ComponentRemoved", self, self.componentRemoved)
+    self.eventManager:addListener("ComponentAdded", self, self.componentAdded)
 end
 
 function Engine:addEntity(entity)

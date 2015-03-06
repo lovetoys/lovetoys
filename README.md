@@ -245,14 +245,16 @@ For a more detailed and commented version with collisions and some other example
 
 This class is a simple eventmanager for sending events to their respective listeners.
 
-#### EventManager:addListener(eventName, listener)
+#### EventManager:addListener(eventName, listener, listenerFunction)
 
 - **eventName** (String) - Name of the event-class to be added
 
-- **listener** (Listener) - A table containing information about the listener function. The first entry should be a value that will be passed as `self` to the called function, while the second entry should be the function itself.
+- **listener** (Listener) - The first entry is the table/class that will is supposed to be passed as `self` to the called function.
+
+- **listenerFunction** (Function) - The function that should be called.
 
 Adds a function that is listening to the Event.
-An example for adding a Listener: `EventManager:addListener("EventName", {table, table.func})`.
+An example for adding a Listener: `EventManager:addListener("EventName", listener, listener.func)`. The resulting function call will be `func(table, event)`.
 We need to do this so we can work with `self` as we are used to, as lua doesn't provide a native class implementation.
 
 #### EventManager:removeListener(eventName, listener)
