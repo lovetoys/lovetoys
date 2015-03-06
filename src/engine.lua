@@ -1,3 +1,9 @@
+function table.firstElement(list)
+    for index, value in pairs(list) do
+        return value
+    end
+end
+
 Engine = class("Engine")
 
 function Engine:__init() 
@@ -10,6 +16,7 @@ function Engine:__init()
     self.initializer = {}
 
     self.systems = {}
+    self.systemRegistry= {}
     self.systems["all"] = {}
     self.systems["update"] = {}
     self.systems["draw"] = {}
@@ -103,10 +110,22 @@ function Engine:removeEntity(entity, removeChildren, newParent)
 end
 
 function Engine:addSystem(system, typ)
+    -- Adding System to engine system reference table
+    if not (self.systemRegistry[system.__name]) then 
+        self.systemRegistry[system.__name] = system
+        table.insert(self.systems["all"], system)
+        self:registerSystem(system)
+    elseif not system.update and system.draw then
+        if self.systemRegistry[system.__name] then
+            print("Lovetoys: " .. system.__name .. " already exists. Aborting")
+            return
+        end
+    end
+
     -- Adding System to draw or update table
     if system.draw and (not typ or typ == "draw") then
-        for _, value in pairs(self.systems["draw"]) do
-            if value.__name == system.__name then
+        for _, registeredSystem in pairs(self.systems["draw"]) do
+            if registeredSystem.__name == system.__name then
                 print("Lovetoys: " .. system.__name .. " already exists. Aborting")
                 return
             end
@@ -114,25 +133,15 @@ function Engine:addSystem(system, typ)
         table.insert(self.systems["draw"], system)
     end
     if system.update and (not typ or typ == "update") then
-        for _, value in pairs(self.systems["update"]) do
-            if value.__name == system.__name then
+        for _, registeredSystem in pairs(self.systems["update"]) do
+            if registeredSystem.__name == system.__name then
                 print("Lovetoys: " .. system.__name .. " already exists. Aborting")
                 return
             end
         end
         table.insert(self.systems["update"], system)
     end
-    if not system.update and system.draw then
-        for _, value in pairs(self.systems["all"]) do
-            if value.__name == system.__name then
-                print("Lovetoys: " .. system.__name .. " already exists. Aborting")
-                return
-            end
-        end
-    end
-    table.insert(self.systems["all"], system)
-    
-    self:registerSystem(system)
+
     -- Checks if some of the already existing entities match the required components.
     for index, entity in pairs(self.entities) do
         self:checkRequirements(entity, system)
@@ -141,29 +150,30 @@ function Engine:addSystem(system, typ)
 end
 
 function Engine:registerSystem(system)
-    -- Registering the systems requirements and saving them in a special table for fast access
-    for index, value in pairs(system:requires()) do
-        -- Registering at singleRequirements in case its a normal table with strings
-        if type(value) == "string" and index == 1 then
-            self.singleRequirements[value] = self.singleRequirements[value] or {}
-            table.insert(self.singleRequirements[value], system)
-
-        -- Registering at singleRequirements in case its a table of tables which contain strings
-        elseif type(value) == "table" then
-            local targetList = value[1]
-            self.singleRequirements[targetList] = self.singleRequirements[targetList] or {}
-            table.insert(self.singleRequirements[targetList], system)
-            system.targets[index] = {}
+    -- Registering in case system:requires returns a table of strings
+    if system:requires()[1] and type(system:requires()[1]) == "string" then
+        for index, req in pairs(system:requires()) do
+            -- Registering at singleRequirements
+            if index == 1 then
+                self.singleRequirements[req] = self.singleRequirements[req] or {}
+                table.insert(self.singleRequirements[req], system)
+            end
+            -- Registering at allRequirements
+            self.allRequirements[req] = self.allRequirements[req] or {}
+            table.insert(self.allRequirements[req], system)
         end
+    end
 
-        -- Registering at allRequirements in case its a normal table with strings
-        if type(value) == "string" then
-            self.allRequirements[value] = self.allRequirements[value] or {}
-            table.insert(self.allRequirements[value], system)
+    -- Registering in case its a table of tables which contain strings
+    if table.firstElement(system:requires()) and type(table.firstElement(system:requires())) == "table" then
+        for index, componentList in pairs(system:requires()) do
+            -- Registering at singleRequirements
+            local component = componentList[1]
+            self.singleRequirements[component] = self.singleRequirements[component] or {}
+            table.insert(self.singleRequirements[component], system)
 
-        -- Registering at allRequirements in case its a table of tables which contain strings
-        elseif type(value) == "table" then
-            for _, req in pairs(system:requires()[index]) do
+            -- Registering at allRequirements
+            for _, req in pairs(componentList) do
                 self.allRequirements[req] = self.allRequirements[req] or {}
                 -- Check if this List already contains the System
                 local contained = false
@@ -288,22 +298,22 @@ function Engine:checkRequirements(entity, system)
                 meetsrequirements = false
                 break
             end
-        elseif type(req) == "table" then
-            meetsrequirements = true
-            for index2, req2 in pairs(req) do
-                if not entity.components[req2] then
-                    meetsrequirements = false
-                    break
+            elseif type(req) == "table" then
+                meetsrequirements = true
+                for index2, req2 in pairs(req) do
+                    if not entity.components[req2] then
+                        meetsrequirements = false
+                        break
+                    end
+                end
+                if meetsrequirements == true then
+                    category = index 
+                    system:addEntity(entity, category)
                 end
             end
-            if meetsrequirements == true then
-                category = index 
-                system:addEntity(entity, category)
-            end
+        end
+        if meetsrequirements == true and category == nil then
+            system:addEntity(entity)
         end
     end
-    if meetsrequirements == true and category == nil then
-        system:addEntity(entity)
-    end
-end
 
