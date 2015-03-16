@@ -1,6 +1,7 @@
 require 'lovetoys'
 
 describe('System', function()
+
     describe(':addEntity()', function()
         it('adds single', function()
             local TestSystem = class('TestSystem', System)
@@ -26,6 +27,7 @@ describe('System', function()
             assert.is_true(testSystem.targets['ComponentType2'][2] == entity2)
         end)
     end)
+
     describe(':removeEntity()', function()
         it('removes single', function()
             local TestSystem = class('TestSystem', System)
@@ -35,55 +37,55 @@ describe('System', function()
             testSystem:addEntity(entity)
 
             assert.is_true(testSystem.targets[2] == entity)
-
             testSystem:removeEntity(entity)
-
             assert.is_false(testSystem.targets[2] == entity)
         end)
 
-        it('removes from different constellations', function()
+        it('handles multiple requirement lists', function()
+            local engine, AnimalSystem, animalSystem, A, B
 
-            local TestSystem = class('TestSystem', System)
-            function TestSystem:update() end
-            function TestSystem:requires()
-              return {constellation1 = {'ComponentType1'}, constellation2 = {'ComponentType2'}}
+            engine = Engine()
+
+            AnimalSystem = class('AnimalSystem', System)
+
+            function AnimalSystem:update() end
+
+            function AnimalSystem:requires()
+              return {animals = {'Animal'}, dogs = {'Dog'}}
             end
 
-            local ComponentType1 = class('ComponentType1', Component)
-            local ComponentType2 = class('ComponentType2', Component)
+            animalSystem = AnimalSystem()
+            engine:addSystem(animalSystem)
 
-            local testSystem = TestSystem()
-            local entity1, entity2 = Entity(), Entity()
-            entity1.id = 1
-            entity2.id = 2
+            Animal, Dog = class('Animal', Component), class('Dog', Component)
 
-            entity1:add(ComponentType1())
-            entity1:add(ComponentType2())
+            function count(t)
+              local c = 0
+              for _, _ in pairs(t) do
+                c = c + 1
+              end
+              return c
+            end
+            testSystem:removeEntity(entity)
+            e1:add(Animal())
 
-            entity2:add(ComponentType2())
-
-            testSystem:addEntity(entity1, 'constellation1')
-            testSystem:addEntity(entity1, 'constellation2')
-            testSystem:addEntity(entity2, 'constellation2')
-
-            assert.is_true(testSystem.targets['constellation1'][1] == entity1)
-            assert.is_true(testSystem.targets['constellation2'][1] == entity1)
-            assert.is_true(testSystem.targets['constellation2'][2] == entity2)
+            e2:add(Animal())
+            e2:add(Dog())
 
             -- Check for removal from a specific target list
             -- This is needed if a single Component is removed from an entity
             testSystem:removeEntity(entity1, 'ComponentType2')
 
-            assert.is_true(testSystem.targets['constellation1'][1] == entity1)
-            assert.is_false(testSystem.targets['constellation2'][1] == entity1)
-            assert.is_true(testSystem.targets['constellation2'][2] == entity2)
+            assert.is.equal(count(s.targets.animals), 2)
+            assert.is.equal(count(s.targets.dogs),1)
 
-            testSystem:removeEntity(entity1)
-            testSystem:removeEntity(entity2)
+            e2:remove('Dog')
+            assert.is.equal(count(s.targets.animals), 2)
+            assert.is.equal(count(s.targets.dogs), 0)
 
-            assert.is_false(testSystem.targets['constellation1'][1] == entity1)
-            assert.is_false(testSystem.targets['constellation2'][1] == entity1)
-            assert.is_false(testSystem.targets['constellation2'][2] == entity2)
+            e1:add(Dog())
+            assert.is.equal(count(s.targets.animals), 2)
+            assert.is.equal(count(s.targets.dogs), 1)
         end)
     end)
 end)
