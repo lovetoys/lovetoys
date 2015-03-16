@@ -1,60 +1,89 @@
 require 'lovetoys'
 
 describe('System', function()
-    describe(':require()', function()
-        it('handles multiple requirement lists', function()
-            function len(t)
-              local c = 0
-              for _, _ in pairs(t) do
-              	c = c + 1
-              end
-              return c
+    describe(':addEntity()', function()
+        it('adds single', function()
+            local TestSystem = class('TestSystem', System)
+            entity = Entity()
+            entity.id = 2
+            testSystem = TestSystem()
+            testSystem:addEntity(entity)
+
+            assert.is_true(testSystem.targets[2] == entity)
+        end)
+
+        it('adds entities into different categories', function()
+            local TestSystem = class('TestSystem', System)
+            entity1 = Entity()
+            entity2.id = 1
+            entity2 = Entity()
+            entity2.id = 2
+            testSystem = TestSystem()
+            testSystem:addEntity(entity1, 'ComponentType1')
+            testSystem:addEntity(entity2, 'ComponentType2')
+
+            assert.is_true(testSystem.targets['ComponentType1'][1] == entity1)
+            assert.is_true(testSystem.targets['ComponentType2'][2] == entity2)
+        end)
+    end)
+    describe(':removeEntity()', function()
+        it('removes single', function()
+            local TestSystem = class('TestSystem', System)
+            entity = Entity()
+            entity.id = 2
+            testSystem = TestSystem()
+            testSystem:addEntity(entity)
+
+            assert.is_true(testSystem.targets[2] == entity)
+
+            testSystem:removeEntity(entity)
+
+            assert.is_false(testSystem.targets[2] == entity)
+        end)
+
+        it('removes from different constellations', function()
+
+            local TestSystem = class('TestSystem', System)
+            function TestSystem:update() end
+            function TestSystem:requires()
+              return {constellation1 = {'ComponentType1'}, constellation2 = {'ComponentType2'}}
             end
 
-            -- character, type1, type2, active
-            C, T1, T2, A = class('C', Component), class('T1', Component), class('T2', Component), class('A', Component)
+            local ComponentType1 = class('ComponentType1', Component)
+            local ComponentType2 = class('ComponentType2', Component)
 
-            local e1, e2 = Entity(), Entity()
+            local testSystem = TestSystem()
+            local entity1, entity2 = Entity(), Entity()
+            entity1.id = 1
+            entity2.id = 2
 
+            entity1:add(ComponentType1())
+            entity1:add(ComponentType2())
 
-            -- type 1 character who is active
-            e1:add(C())
-            e1:add(T1())
-            e1:add(A())
+            entity2:add(ComponentType2())
 
-            -- type 2 character, not active
-            e2:add(C())
-            e2:add(T2())
+            testSystem:addEntity(entity1, 'constellation1')
+            testSystem:addEntity(entity1, 'constellation2')
+            testSystem:addEntity(entity2, 'constellation2')
 
+            assert.is_true(testSystem.targets['constellation1'][1] == entity1)
+            assert.is_true(testSystem.targets['constellation2'][1] == entity1)
+            assert.is_true(testSystem.targets['constellation2'][2] == entity2)
 
-            local S = class('S', System)
+            -- Check for removal from a specific target list
+            -- This is needed if a single Component is removed from an entity
+            testSystem:removeEntity(entity1, 'ComponentType2')
 
-            function S:update() end
+            assert.is_true(testSystem.targets['constellation1'][1] == entity1)
+            assert.is_false(testSystem.targets['constellation2'][1] == entity1)
+            assert.is_true(testSystem.targets['constellation2'][2] == entity2)
 
-            function S:requires()
-              return {activeCharacters = {'A'}, allCharacters = {'C'}}
-            end
+            testSystem:removeEntity(entity1)
+            testSystem:removeEntity(entity2)
 
-            local s = S()
-
-            local engine = Engine()
-            engine:addSystem(s)
-
-            engine:addEntity(e1)
-            engine:addEntity(e2)
-
-            assert.is_true(1 == len(s.targets.activeCharacters))
-            assert.is_true(2 == len(s.targets.allCharacters))
-
-            -- make e1 non-active
-            e1:remove('A')
-            assert.is_true(0 == len(s.targets.activeCharacters))
-            assert.is_true(2 == len(s.targets.allCharacters))
-
-            -- mark e2 as active
-            e2:add(A())
-            assert.is_true(1 == len(s.targets.activeCharacters))
-            assert.is_true(2 == len(s.targets.allCharacters))
+            assert.is_false(testSystem.targets['constellation1'][1] == entity1)
+            assert.is_false(testSystem.targets['constellation2'][1] == entity1)
+            assert.is_false(testSystem.targets['constellation2'][2] == entity2)
         end)
     end)
 end)
