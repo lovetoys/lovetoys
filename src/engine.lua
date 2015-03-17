@@ -297,7 +297,6 @@ function Engine:checkRequirements(entity, system)
             if not entity.components[req] then
                 meetsrequirements = false
                 break
-            end
             elseif type(req) == "table" then
                 meetsrequirements = true
                 for index2, req2 in pairs(req) do
@@ -316,4 +315,4 @@ function Engine:checkRequirements(entity, system)
             system:addEntity(entity)
         end
     end
-
+end
