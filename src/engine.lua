@@ -288,7 +288,6 @@ function Engine:getEntitiesWithComponent(component)
     return self.entityLists[component]
 end
 
-
 function Engine:checkRequirements(entity, system)
     local meetsrequirements = true
     local category = nil
