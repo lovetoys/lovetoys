@@ -47,6 +47,8 @@ function System:removeEntity(entity, component)
     end
 end
 
+-- TODO: Refactorn!!!! Entweder universal anwendbar machen oder
+-- weghauen. Was passiert bei Component constallations in :requires()??
 function System:pickRequiredComponents(entity)
     local components = {}
     for i, componentName in pairs(self:requires()) do
