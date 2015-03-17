@@ -240,7 +240,7 @@ function Engine:draw()
     end
 end
 
-function Engine.componentRemoved(self, event)
+function Engine:componentRemoved(event)
     local entity = event.entity
     local component = event.component
 
@@ -255,7 +255,7 @@ function Engine.componentRemoved(self, event)
     end
 end
 
-function Engine.componentAdded(self, event)
+function Engine:componentAdded(event)
     local entity = event.entity
     local component = event.component
 
