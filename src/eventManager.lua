@@ -37,9 +37,9 @@ end
 -- Removing an eventlistener from an event
 function EventManager:removeListener(eventName, listener)
     if self.eventListeners[eventName] then
-        for key, registeredListener in pairs(self.eventListener[eventName]) do
+        for key, registeredListener in pairs(self.eventListeners[eventName]) do
             if registeredListener[1].__name == listener then
-                table.remove(self.eventListener[eventName], key)
+                table.remove(self.eventListeners[eventName], key)
                 return
             end
         end

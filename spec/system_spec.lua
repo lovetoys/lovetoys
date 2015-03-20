@@ -1,91 +1,101 @@
 require 'lovetoys'
 
 describe('System', function()
+    local TestSystem
+    local entity, entity1, entity2
+    local testSystem, engine
 
-    describe(':addEntity()', function()
-        it('adds single', function()
-            local TestSystem = class('TestSystem', System)
-            entity = Entity()
-            entity.id = 2
-            testSystem = TestSystem()
-            testSystem:addEntity(entity)
+    setup(
+    function()
+        TestSystem = class('TestSystem', System)
+        function TestSystem:requires()
+            return {ComponentType1 = {'Component1'}, ComponentType2 = {'Component'}}
+        end
+    end
+    )
 
-            assert.is_true(testSystem.targets[2] == entity)
-        end)
+    before_each(
+    function()
+        entity = Entity()
+        entity.id = 1
+        entity1 = Entity()
+        entity1.id = 1
+        entity2 = Entity()
+        entity2.id = 2
 
-        it('adds entities into different categories', function()
-            local TestSystem = class('TestSystem', System)
-            entity1 = Entity()
-            entity2.id = 1
-            entity2 = Entity()
-            entity2.id = 2
-            testSystem = TestSystem()
-            testSystem:addEntity(entity1, 'ComponentType1')
-            testSystem:addEntity(entity2, 'ComponentType2')
+        testSystem = TestSystem()
+        engine = Engine()
+    end
+    )
 
-            assert.is_true(testSystem.targets['ComponentType1'][1] == entity1)
-            assert.is_true(testSystem.targets['ComponentType2'][2] == entity2)
-        end)
+
+    it(':addEntity() adds single', function()
+        testSystem:addEntity(entity)
+
+        assert.is_true(testSystem.targets[1] == entity)
     end)
 
-    describe(':removeEntity()', function()
-        it('removes single', function()
-            local TestSystem = class('TestSystem', System)
-            entity = Entity()
-            entity.id = 2
-            testSystem = TestSystem()
-            testSystem:addEntity(entity)
+    it(':addEntity() adds entities into different categories', function()
+        engine:addSystem(testSystem)
 
-            assert.is_true(testSystem.targets[2] == entity)
-            testSystem:removeEntity(entity)
-            assert.is_false(testSystem.targets[2] == entity)
-        end)
+        testSystem:addEntity(entity1, 'ComponentType1')
+        testSystem:addEntity(entity2, 'ComponentType2')
 
-        it('handles multiple requirement lists', function()
-            local engine, AnimalSystem, animalSystem, A, B
+        assert.is_true(testSystem.targets['ComponentType1'][1] == entity1)
+        assert.is_true(testSystem.targets['ComponentType2'][2] == entity2)
+    end)
 
-            engine = Engine()
+    it(':removeEntity() removes single', function()
+        testSystem:addEntity(entity)
+        assert.is_true(testSystem.targets[1] == entity)
 
-            AnimalSystem = class('AnimalSystem', System)
+        testSystem:removeEntity(entity)
+        assert.is_false(testSystem.targets[1] == entity)
+    end)
 
-            function AnimalSystem:update() end
+    it('handles multiple requirement lists', function()
+        local AnimalSystem, animalSystem, A, B
 
-            function AnimalSystem:requires()
-              return {animals = {'Animal'}, dogs = {'Dog'}}
-            end
 
-            animalSystem = AnimalSystem()
-            engine:addSystem(animalSystem)
+        AnimalSystem = class('AnimalSystem', System)
 
-            Animal, Dog = class('Animal', Component), class('Dog', Component)
+        function AnimalSystem:update() end
 
-            function count(t)
-              local c = 0
-              for _, _ in pairs(t) do
+        function AnimalSystem:requires()
+            return {animals = {'Animal'}, dogs = {'Dog'}}
+        end
+
+        animalSystem = AnimalSystem()
+        engine:addSystem(animalSystem)
+
+        Animal, Dog = class('Animal', Component), class('Dog', Component)
+
+        function count(t)
+            local c = 0
+            for _, _ in pairs(t) do
                 c = c + 1
-              end
-              return c
             end
-            testSystem:removeEntity(entity)
-            e1:add(Animal())
+            return c
+        end
+        testSystem:removeEntity(entity)
+        e1:add(Animal())
 
-            e2:add(Animal())
-            e2:add(Dog())
+        e2:add(Animal())
+        e2:add(Dog())
 
-            -- Check for removal from a specific target list
-            -- This is needed if a single Component is removed from an entity
-            testSystem:removeEntity(entity1, 'ComponentType2')
+        -- Check for removal from a specific target list
+        -- This is needed if a single Component is removed from an entity
+        testSystem:removeEntity(entity1, 'ComponentType2')
 
-            assert.is.equal(count(s.targets.animals), 2)
-            assert.is.equal(count(s.targets.dogs),1)
+        assert.is.equal(count(s.targets.animals), 2)
+        assert.is.equal(count(s.targets.dogs),1)
 
-            e2:remove('Dog')
-            assert.is.equal(count(s.targets.animals), 2)
-            assert.is.equal(count(s.targets.dogs), 0)
+        e2:remove('Dog')
+        assert.is.equal(count(s.targets.animals), 2)
+        assert.is.equal(count(s.targets.dogs), 0)
 
-            e1:add(Dog())
-            assert.is.equal(count(s.targets.animals), 2)
-            assert.is.equal(count(s.targets.dogs), 1)
-        end)
+        e1:add(Dog())
+        assert.is.equal(count(s.targets.animals), 2)
+        assert.is.equal(count(s.targets.dogs), 1)
     end)
 end)
