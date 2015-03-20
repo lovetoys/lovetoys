@@ -2,15 +2,14 @@ require 'lovetoys'
 
 describe('Eventmanager', function()
     local Listener, TestEvent
-    local listener, eventManager, testEvent 
+    local listener, eventManager, testEvent
 
     setup(
     function()
         -- Test Listener
         Listener = class('Listener')
         Listener.number = 0
-        function Listener:test(event) 
-            print(event.number)
+        function Listener:test(event)
             self.number = event.number
         end
         -- Test Event

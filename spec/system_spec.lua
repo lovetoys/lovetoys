@@ -54,8 +54,15 @@ describe('System', function()
     end)
 
     it('handles multiple requirement lists', function()
-        local AnimalSystem, animalSystem, A, B
+        function count(t)
+            local c = 0
+            for _, _ in pairs(t) do
+                c = c + 1
+            end
+            return c
+        end
 
+        local Animal, Dog = class('Animal', Component), class('Dog', Component)
 
         AnimalSystem = class('AnimalSystem', System)
 
@@ -68,34 +75,27 @@ describe('System', function()
         animalSystem = AnimalSystem()
         engine:addSystem(animalSystem)
 
-        Animal, Dog = class('Animal', Component), class('Dog', Component)
+        entity1:add(Animal())
 
-        function count(t)
-            local c = 0
-            for _, _ in pairs(t) do
-                c = c + 1
-            end
-            return c
-        end
-        testSystem:removeEntity(entity)
-        e1:add(Animal())
+        entity2:add(Animal())
+        entity2:add(Dog())
 
-        e2:add(Animal())
-        e2:add(Dog())
+        engine:addEntity(entity1)
+        engine:addEntity(entity2)
 
         -- Check for removal from a specific target list
         -- This is needed if a single Component is removed from an entity
         testSystem:removeEntity(entity1, 'ComponentType2')
 
-        assert.is.equal(count(s.targets.animals), 2)
-        assert.is.equal(count(s.targets.dogs),1)
+        assert.is.equal(count(animalSystem.targets.animals), 2)
+        assert.is.equal(count(animalSystem.targets.dogs), 1)
 
-        e2:remove('Dog')
-        assert.is.equal(count(s.targets.animals), 2)
-        assert.is.equal(count(s.targets.dogs), 0)
+        entity2:remove('Dog')
+        assert.is.equal(count(animalSystem.targets.animals), 2)
+        assert.is.equal(count(animalSystem.targets.dogs), 0)
 
-        e1:add(Dog())
-        assert.is.equal(count(s.targets.animals), 2)
-        assert.is.equal(count(s.targets.dogs), 1)
+        entity1:add(Dog())
+        assert.is.equal(count(animalSystem.targets.animals), 2)
+        assert.is.equal(count(animalSystem.targets.dogs), 1)
     end)
 end)
