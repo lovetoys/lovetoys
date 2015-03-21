@@ -1,7 +1,7 @@
 require 'lovetoys'
 
 describe('Engine', function()
-    local TestSystem
+    local TestSystem, Component1, Component2
     local entity, entity2
     local testSystem, engine
 
@@ -11,6 +11,8 @@ describe('Engine', function()
         function TestSystem:requires()
             return {'Component1'}
         end
+        Component1 = class('Component1')
+        Component2 = class('Component2')
     end
     )
 
@@ -24,7 +26,43 @@ describe('Engine', function()
     end
     )
 
-    it(':addEntitiy() handles multiple requirement lists', function()
+    it(':addEntity() gives entity an id', function()
+        engine:addEntity(entity)
+        assert.are.equal(entity.id, 1)
+    end)
+
+    it(':addEntity() sets self.rootEntity as parent', function()
+        engine:addEntity(entity)
+        assert.are.equal(engine.rootEntity, entity.parent)
+        assert.are.equal(engine.rootEntity.children[1], entity)
+    end)
+
+    it(':addEntity() sets self.rootEntity as parent', function()
+        engine:addEntity(entity)
+        assert.are.equal(engine.rootEntity, entity.parent)
+    end)
+
+    it(':addEntity() adds entity to componentlist', function()
+        entity:add(Component1())
+        engine:addEntity(entity)
+        assert.are.equal(engine:getEntitiesWithComponent('Component1')[1], entity)
+    end)
+
+    it(':addEntity() adds entity to system, before system is added', function()
+        entity:add(Component1())
+        engine:addEntity(entity)
+        engine:addSystem(testSystem)
+        assert.are.equal(testSystem.targets[1], entity)
+    end)
+
+    it(':addEntity() adds entity to system, after system is added', function()
+        engine:addSystem(testSystem)
+        entity:add(Component1())
+        engine:addEntity(entity)
+        assert.are.equal(testSystem.targets[1], entity)
+    end)
+
+    it(':addEntity() handles multiple requirement lists', function()
         function count(t)
             local c = 0
             for _, _ in pairs(t) do
