@@ -1,53 +1,72 @@
 require 'lovetoys'
 
 describe('Engine', function()
-    describe(':addEntity()', function()
-        it('handles multiple requirement lists', function()
-            function table.getLength(t)
-              local length = 0
-              for _, _ in pairs(t) do
-              	length = length + 1
-              end
-              return length
+    local TestSystem
+    local entity, entity2
+    local testSystem, engine
+
+    setup(
+    function()
+        TestSystem = class('TestSystem', System)
+        function TestSystem:requires()
+            return {'Component1'}
+        end
+    end
+    )
+
+    before_each(
+    function()
+        entity = Entity()
+        entity2 = Entity()
+
+        testSystem = TestSystem()
+        engine = Engine()
+    end
+    )
+
+    it(':addEntitiy() handles multiple requirement lists', function()
+        function count(t)
+            local c = 0
+            for _, _ in pairs(t) do
+                c = c + 1
             end
-            -- character, type1, type2, active
-            local ComponentType1 = class('ComponentType1', Component)
-            local ComponentType2 = class('ComponentType2', Component)
+            return c
+        end
 
-            local entity1, entity2 = Entity(), Entity()
+        local Animal, Dog = class('Animal', Component), class('Dog', Component)
 
-            entity1:add(ComponentType1())
-            entity1:add(ComponentType2())
+        AnimalSystem = class('AnimalSystem', System)
 
-            entity2:add(ComponentType1())
+        function AnimalSystem:update() end
 
+        function AnimalSystem:requires()
+            return {animals = {'Animal'}, dogs = {'Dog'}}
+        end
 
-            local TestSystem = class('TestSystem', System)
-            function TestSystem:update() end
-            function TestSystem:requires()
-              return {constellation1 = {'ComponentType2'}, constellation2 = {'ComponentType1'}}
-            end
+        animalSystem = AnimalSystem()
+        engine:addSystem(animalSystem)
 
-            local testSystem = TestSystem()
+        entity:add(Animal())
 
-            local engine = Engine()
-            engine:addSystem(testSystem)
+        entity2:add(Animal())
+        entity2:add(Dog())
 
-            engine:addEntity(entity1)
-            engine:addEntity(entity2)
+        engine:addEntity(entity)
+        engine:addEntity(entity2)
 
-            assert.is_true(1 == table.getLength(testSystem.targets.constellation1))
-            assert.is_true(2 == table.getLength(testSystem.targets.constellation2))
+        -- Check for removal from a specific target list
+        -- This is needed if a single Component is removed from an entity
+        testSystem:removeEntity(entity, 'ComponentType2')
 
-            -- make entity1 non-active
-            entity1:remove('ComponentType2')
-            assert.is_true(0 == table.getLength(testSystem.targets.constellation1))
-            assert.is_true(2 == table.getLength(testSystem.targets.constellation2))
+        assert.are.equal(count(animalSystem.targets.animals), 2)
+        assert.are.equal(count(animalSystem.targets.dogs), 1)
 
-            -- mark entity2 as active
-            entity2:add(ComponentType2())
-            assert.is_true(1 == table.getLength(testSystem.targets.constellation1))
-            assert.is_true(2 == table.getLength(testSystem.targets.constellation2))
-        end)
+        entity2:remove('Dog')
+        assert.are.equal(count(animalSystem.targets.animals), 2)
+        assert.are.equal(count(animalSystem.targets.dogs), 0)
+
+        entity:add(Dog())
+        assert.are.equal(count(animalSystem.targets.animals), 2)
+        assert.are.equal(count(animalSystem.targets.dogs), 1)
     end)
 end)

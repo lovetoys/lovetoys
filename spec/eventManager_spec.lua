@@ -28,37 +28,37 @@ describe('Eventmanager', function()
 
     it('addListener() adds Listener', function()
         eventManager:addListener('TestEvent', listener, listener.test)
-        assert.is_true(type(eventManager.eventListeners['TestEvent']) == 'table')
-        assert.is_true(eventManager.eventListeners['TestEvent'][1][1] == listener )
+        assert.are.equal(type(eventManager.eventListeners['TestEvent']), 'table')
+        assert.are.equal(eventManager.eventListeners['TestEvent'][1][1], listener )
     end)
 
     it('addListener() doesn`t add Listener twice', function()
         eventManager:addListener('TestEvent', listener, listener.test)
-        assert.is_true(type(eventManager.eventListeners['TestEvent']) == 'table')
-        assert.is_true(eventManager.eventListeners['TestEvent'][1][1].number  == 0)
+        assert.are.equal(type(eventManager.eventListeners['TestEvent']), 'table')
+        assert.are.equal(eventManager.eventListeners['TestEvent'][1][1].number , 0)
         -- Creation of new Listener with same name but different variable
         listener = Listener()
         listener.number = 5
         eventManager:addListener('TestEvent', listener, listener.test)
-        assert.is_true(eventManager.eventListeners['TestEvent'][1][1].number  == 0)
+        assert.are_not.equal(eventManager.eventListeners['TestEvent'][1][1].number, 5)
     end)
 
     it('removeListener() removes Listener', function()
         eventManager:addListener('TestEvent', listener, listener.test)
-        assert.is_true(type(eventManager.eventListeners['TestEvent']) == 'table')
-        assert.is_true(eventManager.eventListeners['TestEvent'][1][1] == listener )
+        assert.are.equal(type(eventManager.eventListeners['TestEvent']), 'table')
+        assert.are.equal(eventManager.eventListeners['TestEvent'][1][1], listener )
 
         eventManager:removeListener('TestEvent', listener.__name)
-        assert.is_true(eventManager.eventListeners['TestEvent'][1] == nil )
+        assert.are.equal(eventManager.eventListeners['TestEvent'][1], nil )
     end)
 
     it('fireEvent() listener Function is beeing called', function()
         eventManager:addListener('TestEvent', listener, listener.test)
-        assert.is_true(type(eventManager.eventListeners['TestEvent']) == 'table')
-        assert.is_true(eventManager.eventListeners['TestEvent'][1][1] == listener )
+        assert.are.equal(type(eventManager.eventListeners['TestEvent']), 'table')
+        assert.are.equal(eventManager.eventListeners['TestEvent'][1][1], listener )
 
         eventManager:fireEvent(testEvent)
-        assert.is_true(eventManager.eventListeners['TestEvent'][1][1].number  == testEvent.number)
+        assert.are.equal(eventManager.eventListeners['TestEvent'][1][1].number , testEvent.number)
     end)
 
 end)
