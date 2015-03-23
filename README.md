@@ -1,5 +1,7 @@
 # Lovetoys
 
+[![Build Status](https://travis-ci.org/lovetoys/lovetoys.svg?branch=master)](https://travis-ci.org/lovetoys/lovetoys) 
+
 Lovetoys is an Entity Component System framework for the LÖVE 2D game engine.
 It is loosely based on [Richard Lords Introduction](http://www.richardlord.net/blog/what-is-an-entity-framework) to ECS's. If you don't have any idea what this entity component stuff is all about, click that link and give it a read! It's totally worth it!
 
