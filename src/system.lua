@@ -56,3 +56,4 @@ function System:pickRequiredComponents(entity)
     end
     return unpack(components)
 end
+

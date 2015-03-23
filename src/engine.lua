@@ -332,3 +332,4 @@ function Engine:checkRequirements(entity, system)
         system:addEntity(entity)
     end
 end
+
