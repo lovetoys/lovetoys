@@ -112,12 +112,19 @@ function Engine:removeEntity(entity, removeChildren, newParent)
 end
 
 function Engine:addSystem(system, typ)
+
+    -- Check if system has both function without specified type
+    if system.draw and system.update and not typ then
+        if lovetoyDebug then
+            print("Lovetoys: Trying to add " .. system.__name .. ", which has an update and a draw function, without specifying typ. Aborting")
+        end
+        return
+    end
     -- Adding System to engine system reference table
     if not (self.systemRegistry[system.__name]) then 
-        self.systemRegistry[system.__name] = system
-        table.insert(self.systems["all"], system)
         self:registerSystem(system)
-    elseif not system.update and system.draw then
+    -- This triggers if the system doesn't have update and draw and it's already existing.
+    elseif not (system.update and system.draw) then
         if self.systemRegistry[system.__name] then
             if lovetoyDebug then
                 print("Lovetoys: " .. system.__name .. " already exists. Aborting")
@@ -126,13 +133,8 @@ function Engine:addSystem(system, typ)
         end
     end
 
-    if system.draw and system.update and not typ then
-        if lovetoyDebug then
-            print("Lovetoys: Trying to add " .. system.__name .. ", which has an update and a draw function, without specfiying typ. Aborting")
-        end
-        return
-    -- Adding System to draw or update table
-    elseif system.draw and (not typ or typ == "draw") then
+    -- Adding System to draw table
+    if system.draw and (not typ or typ == "draw") then
         for _, registeredSystem in pairs(self.systems["draw"]) do
             if registeredSystem.__name == system.__name then
                 if lovetoyDebug then
@@ -142,6 +144,7 @@ function Engine:addSystem(system, typ)
             end
         end
         table.insert(self.systems["draw"], system)
+    -- Adding System to update table
     elseif system.update and (not typ or typ == "update") then
         for _, registeredSystem in pairs(self.systems["update"]) do
             if registeredSystem.__name == system.__name then
@@ -162,6 +165,8 @@ function Engine:addSystem(system, typ)
 end
 
 function Engine:registerSystem(system)
+    self.systemRegistry[system.__name] = system
+    table.insert(self.systems["all"], system)
     -- Registering in case system:requires returns a table of strings
     if system:requires()[1] and type(system:requires()[1]) == "string" then
         for index, req in pairs(system:requires()) do

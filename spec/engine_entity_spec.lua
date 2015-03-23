@@ -69,6 +69,20 @@ describe('Engine', function()
         assert.are.equal(testSystem.targets[1], entity)
     end)
 
+    it(':add() adds entity to system, after Component is added to entity', function()
+        engine:addEntity(entity)
+        engine:addSystem(testSystem)
+        entity:add(Component1())
+        assert.are.equal(testSystem.targets[1], entity)
+    end)
+
+    it(':addEntity() adds entity to system, after Component is added to system', function()
+        engine:addEntity(entity)
+        engine:addSystem(testSystem)
+        entity:add(Component1())
+        assert.are.equal(testSystem.targets[1], entity)
+    end)
+
     it(':addEntity() handles multiple requirement lists', function()
         function count(t)
             local c = 0
@@ -181,6 +195,16 @@ describe('Engine', function()
         engine:addSystem(testSystem)
         assert.are.equal(testSystem.targets[1], entity)
         engine:removeEntity(entity)
+        assert.are_not.equal(testSystem.targets[1], entity)
+    end)
+
+    it('Entity:remove() removes entity from system, after removing component', function()
+        entity:add(Component1())
+        engine:addEntity(entity)
+        engine:addSystem(testSystem)
+        assert.are.equal(testSystem.targets[1], entity)
+
+        entity:remove('Component1')
         assert.are_not.equal(testSystem.targets[1], entity)
     end)
 
