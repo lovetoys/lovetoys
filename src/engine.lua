@@ -100,11 +100,13 @@ function Engine:removeEntity(entity, removeChildren, newParent)
         -- Removing entity from engine
         self.entities[entity.id] = nil
     else
-        print("Trying to remove non existent entity from engine.")
-        print("Entity id: " .. entity.id)
-        print("Entity's components:")
-        for index, component in pairs(entity.components) do
-            print(index)
+        if lovetoyDebug then
+            print("Trying to remove non existent entity from engine.")
+            print("Entity id: " .. entity.id)
+            print("Entity's components:")
+            for index, component in pairs(entity.components) do
+                print(index)
+            end
         end
     end
 end
@@ -117,7 +119,9 @@ function Engine:addSystem(system, typ)
         self:registerSystem(system)
     elseif not system.update and system.draw then
         if self.systemRegistry[system.__name] then
-            print("Lovetoys: " .. system.__name .. " already exists. Aborting")
+            if lovetoyDebug then
+                print("Lovetoys: " .. system.__name .. " already exists. Aborting")
+            end
             return
         end
     end
@@ -126,7 +130,9 @@ function Engine:addSystem(system, typ)
     if system.draw and (not typ or typ == "draw") then
         for _, registeredSystem in pairs(self.systems["draw"]) do
             if registeredSystem.__name == system.__name then
-                print("Lovetoys: " .. system.__name .. " already exists. Aborting")
+                if lovetoyDebug then
+                    print("Lovetoys: " .. system.__name .. " already exists. Aborting")
+                end
                 return
             end
         end
@@ -135,7 +141,9 @@ function Engine:addSystem(system, typ)
     if system.update and (not typ or typ == "update") then
         for _, registeredSystem in pairs(self.systems["update"]) do
             if registeredSystem.__name == system.__name then
-                print("Lovetoys: " .. system.__name .. " already exists. Aborting")
+                if lovetoyDebug then
+                    print("Lovetoys: " .. system.__name .. " already exists. Aborting")
+                end
                 return
             end
         end

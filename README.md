@@ -15,6 +15,10 @@ To import everything just `require('lovetoys/lovetoys')`.
 
 For an example on how to use the lovetoys have a look at our [example](https://github.com/Lovetoys/Lovetoys-examples) repository.
 
+### Debugging
+
+If you want debug messages, set `lovetoyDebug = true` after adding lovetoys.
+
 ## Entity Component System
 
 ### Entity

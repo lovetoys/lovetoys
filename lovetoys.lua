@@ -1,6 +1,8 @@
 -- Getting folder that contains engine
 local folderOfThisFile = (...):match("(.-)[^%/]+$")
 
+lovetoyDebug = false
+
 -- Requiring class
 require(folderOfThisFile .. "src/class")
 

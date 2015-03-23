@@ -17,7 +17,9 @@ end
 -- An entity can only have one Component of each type.
 function Entity:add(component)
     if self.components[component.__name] then 
-        print("Trying to add Component '" .. component.__name .. "', but it's already existing. Please use Entity:set to overwrite a component in an entity.")
+        if lovetoyDebug then
+            print("Trying to add Component '" .. component.__name .. "', but it's already existing. Please use Entity:set to overwrite a component in an entity.")
+        end
     else
         self.components[component.__name] = component
         if self.eventManager then
@@ -45,7 +47,9 @@ function Entity:remove(name)
     if self.components[name] then
         self.components[name] = nil
     else
-        print("Trying to remove unexisting component " .. name .. " from Entity. Please fix this")
+        if lovetoyDebug then
+            print("Trying to remove unexisting component " .. name .. " from Entity. Please fix this")
+        end
     end
     if self.eventManager then
         self.eventManager:fireEvent(ComponentRemoved(self, name))

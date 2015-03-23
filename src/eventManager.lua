@@ -14,7 +14,9 @@ function EventManager:addListener(eventName, listener, listenerFunction)
     if not listenerFunction then
         for key, registeredListener in pairs(self.eventListeners[eventName]) do
             if registeredListener[1].__name == listener[1].__name then
-                print("EventListener already existing. Aborting")
+                if lovetoyDebug then
+                    print("EventListener already existing. Aborting")
+                end
                 return
             end
         end
@@ -22,14 +24,18 @@ function EventManager:addListener(eventName, listener, listenerFunction)
     else
         for key, registeredListener in pairs(self.eventListeners[eventName]) do
             if registeredListener[1].__name == listener.__name then
-                print("EventListener already existing. Aborting")
+                if lovetoyDebug then
+                    print("EventListener already existing. Aborting")
+                end
                 return
             end
         end
         if type(listenerFunction) == 'function' then
             table.insert(self.eventListeners[eventName], {listener, listenerFunction})
         else
-            print('Eventmanager: Second parameter has to be a function! Pls check ' .. listener.__name)
+            if lovetoyDebug then
+                print('Eventmanager: Second parameter has to be a function! Pls check ' .. listener.__name)
+            end
         end
     end
 end
@@ -43,7 +49,9 @@ function EventManager:removeListener(eventName, listener)
                 return
             end
         end
-        print("Listener to be deleted is not existing.")
+        if lovetoyDebug then
+            print("Listener to be deleted is not existing.")
+        end
     end
 end
 
