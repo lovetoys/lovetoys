@@ -126,8 +126,13 @@ function Engine:addSystem(system, typ)
         end
     end
 
+    if system.draw and system.update and not typ then
+        if lovetoyDebug then
+            print("Lovetoys: Trying to add " .. system.__name .. ", which has an update and a draw function, without specfiying typ. Aborting")
+        end
+        return
     -- Adding System to draw or update table
-    if system.draw and (not typ or typ == "draw") then
+    elseif system.draw and (not typ or typ == "draw") then
         for _, registeredSystem in pairs(self.systems["draw"]) do
             if registeredSystem.__name == system.__name then
                 if lovetoyDebug then
@@ -137,8 +142,7 @@ function Engine:addSystem(system, typ)
             end
         end
         table.insert(self.systems["draw"], system)
-    end
-    if system.update and (not typ or typ == "update") then
+    elseif system.update and (not typ or typ == "update") then
         for _, registeredSystem in pairs(self.systems["update"]) do
             if registeredSystem.__name == system.__name then
                 if lovetoyDebug then
