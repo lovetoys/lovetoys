@@ -1,0 +1,19 @@
+language: python
+
+env:
+  - LUA=""
+  - LUA="luajit"
+
+install:
+  - sudo apt-get install luajit
+  - sudo apt-get install luarocks
+  - sudo luarocks install luafilesystem
+  - sudo luarocks install busted
+
+script: "busted spec"
+
+notifications:
+  recipients:
+    - arne@twobeer.de
+  email:
+    on_failure: always
