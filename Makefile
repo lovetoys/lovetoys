@@ -2,7 +2,7 @@
 
 test: hooks
 	echo 'test' >> test.txt
-	git add test.txt
+	git add -f test.txt
 	git commit -m "test"
 	git reset --soft HEAD~1
 
