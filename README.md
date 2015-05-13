@@ -1,6 +1,6 @@
 # Lovetoys
 
-[![Build Status](https://travis-ci.org/lovetoys/lovetoys.svg?branch=master)](https://travis-ci.org/lovetoys/lovetoys) 
+[![Build Status](https://travis-ci.org/lovetoys/lovetoys.svg?branch=master)](https://travis-ci.org/lovetoys/lovetoys)
 
 Lovetoys is an Entity Component System framework for game development with lua. Originally written for the LÖVE 2D game engine it is now compatible with pretty much everything!
 It is loosely based on [Richard Lords Introduction](http://www.richardlord.net/blog/what-is-an-entity-framework) to ECS's. If you don't have any idea what this entity component stuff is all about, click that link and give it a read! It's totally worth it!
@@ -83,7 +83,20 @@ Returns the list that contains all components.
 
 ### Component
 
-This doesn't do anything yet. It will be used for type checks someday.
+Metaclass that creates Component classes and provides utilities for working with them.
+
+#### Component(name, [fields])
+
+Create a new Component class.
+
+- **fields** (Table) - A table describing the fields of the new Component. Each field can be either described by a String value or by a String key and an arbitrary value:
+
+    Component("Color", {r=255, g=255, b=255})
+    Component("Drawable", {"image"})
+
+#### Component.register(path)
+
+#### Component.load(components)
 
 ### System
 
