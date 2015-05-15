@@ -9,16 +9,20 @@ function Component.create(name, fields)
 	local component = class(name)
 
 	if fields then
-		for index, fieldName in ipairs(fields) do
-			fields[fieldName] = fieldName
-			fields[index] = nil
+		for index, field in ipairs(fields) do
+			if type(field) == "table" then
+				-- Quick hack to find the first table element
+				for fieldName, defaultValue in pairs(field) do
+					fields[index] = {fieldName, defaultValue}
+				end
+			elseif type(field) == "string" then
+				fields[index] = {field, nil}
+			end
 		end
 
 		component.__init = function(self, ...)
-			local index = 1
-			for fieldName, defaultValue in pairs(fields) do
-				self[fieldName] = select(index, ...) or defaultValue
-				index = index + 1
+			for index, field in ipairs(fields) do
+				self[field[1]] = select(index, ...) or field[2]
 			end
 		end
 	end
@@ -40,8 +44,8 @@ function Component.load(names)
   setmetatable(env, {__index = _G})
   setfenv(2, env)
 
-  for _,path in pairs(names) do
-    env[componentName] = Component.all[componentName]
+  for _, name in pairs(names) do
+    env[name] = Component.all[name]
   end
 end
 
