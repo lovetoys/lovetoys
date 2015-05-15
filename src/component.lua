@@ -5,7 +5,7 @@ Component.all = {}
 
 -- Create a Component class with the specified name and fields
 -- which will automatically get a constructor accepting the fields as arguments
-function Component.create(stuff, name, fields)
+function Component.create(name, fields)
 	local component = class(name)
 
 	if fields then
