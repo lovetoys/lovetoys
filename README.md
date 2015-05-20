@@ -98,11 +98,12 @@ Create a new component class.
 - **defaults** (Table) - Key value pairs where each pair describes the default value for the property named like the pairs key.
 
 Example:
-
-    -- Create a Color component with the default color set to blue
-    local Color = Component.create("Color",
-        {"r", "g", "b"},
-        {r = 0, g = 0, b = 255})
+```lua
+-- Create a Color component with the default color set to blue
+local Color = Component.create("Color",
+    {"r", "g", "b"},
+    {r = 0, g = 0, b = 255})
+```
 
 ### System
 
