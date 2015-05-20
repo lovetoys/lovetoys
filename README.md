@@ -297,12 +297,6 @@ Removes a listener from this particular Event.
 
 This function pipes the event through to every listener that is registered to the class-name of the event and triggers `listener:fireEvent(event)`.
 
-
-## CollisionManager
-
-`CollisionManager` was a class that helped with specifying callbacks for certain collision events.
-We removed it from the Lovetoys. It performed too poorly and we felt it only bloated the framework while not being needed in many cases.
-
 ## Class
 
 We use our own small class implementation for OOP.
@@ -332,6 +326,11 @@ To create a new instance you now just have to call `Foo()` e.g.
 You can find the tests in the `spec` folder. They are defined using the [busted](http://olivinelabs.com/busted) test framework.
 
 To run the suite, install busted and simply execute `busted` in the lovetoys directory.
+
+## CollisionManager
+
+`CollisionManager` was a class that helped with integrating a physics engine with the Lovetoys.
+We removed it from the framework. It performed too poorly and we felt it only bloated the framework while not being needed in many cases.
 
 * * *
 
