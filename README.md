@@ -85,18 +85,24 @@ Returns the list that contains all components.
 
 Metaclass that creates Component classes and provides utilities for working with them.
 
-#### Component(name, [fields])
-
-Create a new Component class.
-
-- **fields** (Table) - A table describing the fields of the new Component. Each field can be either described by a String value or by a String key and an arbitrary value:
-
-    Component("Color", {r=255, g=255, b=255})
-    Component("Drawable", {"image"})
-
 #### Component.register(path)
 
 #### Component.load(components)
+
+#### Component.create(name, [fields, defaults])
+
+Create a new component class.
+
+- **fields** (Table) - A list of Strings specifying the property names of the new component. The constructor of the component class will accept each of these properties as arguments, in the order they appear in the `fields` list.
+
+- **defaults** (Table) - Key value pairs where each pair describes the default value for the property named like the pairs key.
+
+Example:
+
+    -- Create a Color component with the default color set to blue
+    local Color = Component.create("Color",
+        {"r", "g", "b"},
+        {r = 0, g = 0, b = 255})
 
 ### System
 

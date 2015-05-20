@@ -5,24 +5,15 @@ Component.all = {}
 
 -- Create a Component class with the specified name and fields
 -- which will automatically get a constructor accepting the fields as arguments
-function Component.create(name, fields)
+function Component.create(name, fields, defaults)
 	local component = class(name)
 
 	if fields then
-		for index, field in ipairs(fields) do
-			if type(field) == "table" then
-				-- Quick hack to find the first table element
-				for fieldName, defaultValue in pairs(field) do
-					fields[index] = {fieldName, defaultValue}
-				end
-			elseif type(field) == "string" then
-				fields[index] = {field, nil}
-			end
-		end
-
+    defaults = defaults or {}
 		component.__init = function(self, ...)
+      local args = {...}
 			for index, field in ipairs(fields) do
-				self[field[1]] = select(index, ...) or field[2]
+				self[field] = args[index] or defaults[field]
 			end
 		end
 	end
