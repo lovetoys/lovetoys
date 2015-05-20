@@ -131,18 +131,20 @@ This function is going to be called by the engine every draw.
 
 #### An example for a custom system
 
-    CustomSystem = class("CustomSystem", System)
+```lua
+CustomSystem = class("CustomSystem", System)
 
-    function CustomSystem:update(dt)
-        for key, entity in pairs(self.targets) do
-            local foo =  entity:get("Component1").foo
-            entity:get("Component2").bar = foo
-        end
+function CustomSystem:update(dt)
+    for key, entity in pairs(self.targets) do
+        local foo =  entity:get("Component1").foo
+        entity:get("Component2").bar = foo
     end
+end
 
-    function CustomSystem:requires()
-        return {"Component1", "Component2"}
-    end
+function CustomSystem:requires()
+    return {"Component1", "Component2"}
+end
+```
 
 ### Engine
 
@@ -231,34 +233,36 @@ The initializer that is registered to this component will be deleted.
 
 For a more detailed and commented version with collisions and some other examples check the [main.lua file of the lovetoys example game](https://github.com/lovetoys/example/blob/master/main.lua).
 
-    -- Importing lovetoys
-    require("lib/lovetoys/lovetoys")
+```lua
+-- Importing lovetoys
+require("lib/lovetoys/lovetoys")
 
-    function love.load()
-        engine = Engine()
-        world = love.physics.newWorld(0, 9.81*80, true)
-        world:setCallbacks(beginContact, endContact)
-        eventmanager = EventManager()
-    end
+function love.load()
+    engine = Engine()
+    world = love.physics.newWorld(0, 9.81*80, true)
+    world:setCallbacks(beginContact, endContact)
+    eventmanager = EventManager()
+end
 
-    function love.update(dt)
-        -- Engine update function
-        engine:update(dt)
-        world:update(dt)
-    end
+function love.update(dt)
+    -- Engine update function
+    engine:update(dt)
+    world:update(dt)
+end
 
-    function love.draw()
-        -- Engine draw function
-        engine:draw()
-    end
+function love.draw()
+    -- Engine draw function
+    engine:draw()
+end
 
-    function love.keypressed(key, isrepeat)
-        eventmanager:fireEvent(KeyPressed(key, isrepeat))
-    end
+function love.keypressed(key, isrepeat)
+    eventmanager:fireEvent(KeyPressed(key, isrepeat))
+end
 
-    function love.mousepressed(x, y, button)
-        eventmanager:fireEvent(MousePressed(x, y, button))
-    end
+function love.mousepressed(x, y, button)
+    eventmanager:fireEvent(MousePressed(x, y, button))
+end
+```
 
 ## Eventmanager
 
@@ -302,23 +306,29 @@ We use our own small class implementation for OOP.
 
 You can create a class as follows:
 
-    Foo = class("Foo")
+```lua
+Foo = class("Foo")
 
-    -- The constructor of a class is specified by the __init method
-    function Foo:__init(parameter)
-        self.bar = parameter
-    end
+-- The constructor of a class is specified by the __init method
+function Foo:__init(parameter)
+    self.bar = parameter
+end
+```
 
 If you want to create a object of this class just call `Foo(parameter)` and it will return a object after calling the constructor.
 
 If you want to create a class that inherits from a superclass you have to pass a superclass:
 
-    Foo = class("Foo", Superclass)
+```lua
+Foo = class("Foo", Superclass)
+```
 
 All superclass constructors will now be called on new Foo instances.
 To create a new instance you now just have to call `Foo()` e.g.
 
-    NewInstance = Foo()
+```lua
+NewInstance = Foo()
+```
 
 ## Testing
 
