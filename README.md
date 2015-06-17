@@ -85,18 +85,40 @@ Returns the list that contains all components.
 
 Metaclass that creates Component classes and provides utilities for working with them.
 
-#### Component(name, [fields])
+#### Component.load(components)
 
-Create a new Component class.
+Load the specified components into the current environment.
 
-- **fields** (Table) - A table describing the fields of the new Component. Each field can be either described by a String value or by a String key and an arbitrary value:
+- **components** A list containing component names
 
-    Component("Color", {r=255, g=255, b=255})
-    Component("Drawable", {"image"})
+```lua
+Component.load("Color", "Transform", "Drawable")
+-- Create a component for the color black
+Color(0, 0, 0)
+```
 
 #### Component.register(path)
 
-#### Component.load(components)
+Register the component for loading it conveniently with Component.load.
+
+- **path** A path in a format accepted by require()
+
+#### Component.create(name, [fields, defaults])
+
+Create a new component class.
+
+- **fields** (Table) - A list of Strings specifying the property names of the new component. The constructor of the component class will accept each of these properties as arguments, in the order they appear in the `fields` list.
+
+- **defaults** (Table) - Key value pairs where each pair describes the default value for the property named like the pairs key.
+
+```lua
+-- Create a Color component with the default color set to blue
+local Color = Component.create("Color",
+    {"r", "g", "b"},
+    {r = 0, g = 0, b = 255})
+-- Create a component for the color violet
+Color(255)
+```
 
 ### System
 
@@ -294,12 +316,6 @@ Removes a listener from this particular Event.
 
 This function pipes the event through to every listener that is registered to the class-name of the event and triggers `listener:fireEvent(event)`.
 
-
-## CollisionManager
-
-`CollisionManager` was a class that helped with specifying callbacks for certain collision events.
-We removed it from the Lovetoys. It performed too poorly and we felt it only bloated the framework while not being needed in many cases.
-
 ## Class
 
 We use our own small class implementation for OOP.
@@ -335,6 +351,11 @@ NewInstance = Foo()
 You can find the tests in the `spec` folder. They are defined using the [busted](http://olivinelabs.com/busted) test framework.
 
 To run the suite, install busted and simply execute `busted` in the lovetoys directory.
+
+## CollisionManager
+
+`CollisionManager` was a class that helped with integrating a physics engine with the Lovetoys.
+We removed it from the framework. It performed too poorly and we felt it only bloated the framework while not being needed in many cases.
 
 * * *
 
