@@ -85,9 +85,23 @@ Returns the list that contains all components.
 
 Metaclass that creates Component classes and provides utilities for working with them.
 
+#### Component.load(components)
+
+Load the specified components into the current environment.
+
+- **components** A list containing component names
+
+```lua
+Component.load("Color", "Transform", "Drawable")
+-- Create a component for the color black
+Color(0, 0, 0)
+```
+
 #### Component.register(path)
 
-#### Component.load(components)
+Register the component for loading it conveniently with Component.load.
+
+- **path** A path in a format accepted by require()
 
 #### Component.create(name, [fields, defaults])
 
@@ -97,12 +111,13 @@ Create a new component class.
 
 - **defaults** (Table) - Key value pairs where each pair describes the default value for the property named like the pairs key.
 
-Example:
 ```lua
 -- Create a Color component with the default color set to blue
 local Color = Component.create("Color",
     {"r", "g", "b"},
     {r = 0, g = 0, b = 255})
+-- Create a component for the color violet
+Color(255)
 ```
 
 ### System
