@@ -1,13 +1,14 @@
 # Lovetoys
-
 [![Build Status](https://travis-ci.org/lovetoys/lovetoys.svg?branch=master)](https://travis-ci.org/lovetoys/lovetoys)
 
-Lovetoys is an Entity Component System framework for game development with lua. Originally written for the LÖVE 2D game engine it is now compatible with pretty much everything!
+`v0.1`
+
+Lovetoys is an Entity Component System framework for game development with lua. Originally written for the LÖVE 2D game engine it is now compatible with pretty much any game that uses lua!
 It is loosely based on [Richard Lords Introduction](http://www.richardlord.net/blog/what-is-an-entity-framework) to ECS's. If you don't have any idea what this entity component stuff is all about, click that link and give it a read! It's totally worth it!
 
-Lovetoys is a full-featured game development framework, not only providing the core parts like Entity, Component and System classes but also containing a Publish-Subscribe messaging system as well as an Entity Tree, enabling you to build even complex games easily and in an organized way.
+Lovetoys is a full-featured game development framework, not only providing the core parts like Entity, Component and System classes but also containing a Publish-Subscribe messaging system as well as a Scene Graph, enabling you to build even complex games easily and in a structured way.
 
-The Software is tested and used in multiple games and is stable. If you find any bugs please create an issue and report them. Or just create a pull request :).
+Though we have not reached version 1.0 yet, the software is tested, used in multiple games and definitely stable. If you find any bugs please create an issue and report them. Or just create a pull request :).
 
 ## Installation
 
