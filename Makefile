@@ -1,11 +1,5 @@
 .PHONY: test hooks setup arch-setup arch-pre-setup
 
-test: hooks
-	echo 'test' >> test.txt
-	git add -f test.txt
-	git commit -m "test"
-	git reset --soft HEAD~1
-
 hooks:
 	chmod 700 hooks/*
 	cp hooks/* .git/hooks/
