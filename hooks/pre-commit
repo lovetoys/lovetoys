@@ -1,0 +1,9 @@
+#!/bin/sh
+#
+
+cat src/class.lua src/component.lua src/entity.lua src/system.lua src/eventManager.lua src/events/componentAdded.lua src/events/componentRemoved.lua src/engine.lua > concat.lua
+mkdir -p dist
+cat concat.lua | luamin -c > dist/lovetoys-min.lua
+rm concat.lua
+git add dist
+
