@@ -2,7 +2,7 @@
 
 hooks:
 	cp hooks/* .git/hooks/
-	chmod +x .git/hooks/pre-commmit
+	chmod +x .git/hooks/pre-commit
 
 setup:
 	sudo npm install -g luamin
