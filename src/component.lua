@@ -40,4 +40,3 @@ function Component.load(names)
   end
 end
 
-return Component
