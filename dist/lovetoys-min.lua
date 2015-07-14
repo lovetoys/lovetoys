@@ -19,13 +19,13 @@ snippet:  function class(name, super)
     cls = setmetatable(cls, {__call = function(c, ...)
         local obj = {}
         for k,v in pairs(cls) do
-                obj[k] = v
+            obj[k] = v
         end
         superInit(obj)
         if obj.__init then obj:__init(...) end
         return obj
     end})
-    
+
     return cls
 end
 
