@@ -91,7 +91,7 @@ function Engine:removeEntity(entity, removeChildren, newParent)
             end
         end
         -- Removing Reference to entity from parent
-        for index, child in pairs(entity.parent.children) do
+        for _, _ in pairs(entity.parent.children) do
             entity.parent.children[entity.id] = nil
         end
         -- Setting status of entity to dead. This is for other systems, which still got a hard reference on this
@@ -104,7 +104,7 @@ function Engine:removeEntity(entity, removeChildren, newParent)
             print("Entity id: " .. entity.id)
             print("Entity's components:")
             for index, component in pairs(entity.components) do
-                print(index)
+                print(index, component)
             end
         end
     end
@@ -157,7 +157,7 @@ function Engine:addSystem(system, typ)
     end
 
     -- Checks if some of the already existing entities match the required components.
-    for index, entity in pairs(self.entities) do
+    for _, entity in pairs(self.entities) do
         self:checkRequirements(entity, system)
     end
     return system
