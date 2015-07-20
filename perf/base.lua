@@ -1,5 +1,4 @@
-require('lovetoys')
-package.path = 'src/?.lua;'..package.path
+package.path = './src/?.lua;'..package.path
 local class = require('middleclass')
 local Entity = require('Entity')
 local Engine = require('Engine')
@@ -31,7 +30,7 @@ end
 
 local names = {}
 for k,component in pairs(components) do
-  table.insert(names, component.class.name)
+  table.insert(names, component.name)
 end
 
 function BigSystem:requires()
