@@ -93,7 +93,7 @@ Load the specified components into the current environment.
 - **components** A list containing component names
 
 ```lua
-Component.load("Color", "Transform", "Drawable")
+local Color, Transform, Drawable = Component.load("Color", "Transform", "Drawable")
 -- Create a component for the color black
 Color(0, 0, 0)
 ```
@@ -104,9 +104,12 @@ Register the component for loading it conveniently with Component.load.
 
 - **path** A path in a format accepted by require()
 
-#### Component.create(name, [fields, defaults])
+#### Component:initialize([fields, defaults])
 
-Create a new component class.
+Create a new component class by inherits form Component, this will automatically
+register new created component.
+
+This constructor has the follow arguments:
 
 - **fields** (Table) - A list of Strings specifying the property names of the new component. The constructor of the component class will accept each of these properties as arguments, in the order they appear in the `fields` list.
 
@@ -114,9 +117,12 @@ Create a new component class.
 
 ```lua
 -- Create a Color component with the default color set to blue
-local Color = Component.create("Color",
-    {"r", "g", "b"},
-    {r = 0, g = 0, b = 255})
+local class = require('middleclass')
+local Color = class("Color", Component)
+
+function Color:initialize(...)
+    Component.initialize(self, {"r", "g", "b"}, {r = 0, g = 0, b = 255}, ...)
+end
 -- Create a component for the color violet
 Color(255)
 ```
@@ -365,5 +371,3 @@ Copyright &copy; 2013-2014 Arne Beer and Rafael Epplée
 This Software is published under the MIT License.
 
 For further information check `LICENSE.md`.
-
-

@@ -1,4 +1,9 @@
-require 'lovetoys'
+-- luacheck: globals describe setup before_each it
+local class = require('middleclass')
+local Entity = require('Entity')
+local Engine = require('Engine')
+local System = require('System')
+local Component = require('Component')
 
 describe('Engine', function()
     local TestSystem, Component1, Component2
@@ -8,7 +13,7 @@ describe('Engine', function()
     setup(
     function()
         TestSystem = class('TestSystem', System)
-        function TestSystem:requires()
+        function TestSystem:requires() -- luacheck: ignore self
             return {'Component1'}
         end
         Component1 = class('Component1')
@@ -84,7 +89,7 @@ describe('Engine', function()
     end)
 
     it(':addEntity() handles multiple requirement lists', function()
-        function count(t)
+        local function count(t)
             local c = 0
             for _, _ in pairs(t) do
                 c = c + 1
@@ -94,15 +99,15 @@ describe('Engine', function()
 
         local Animal, Dog = class('Animal', Component), class('Dog', Component)
 
-        AnimalSystem = class('AnimalSystem', System)
+        local AnimalSystem = class('AnimalSystem', System)
 
-        function AnimalSystem:update() end
+        function AnimalSystem:update() end -- luacheck: ignore self
 
-        function AnimalSystem:requires()
+        function AnimalSystem:requires() -- luacheck: ignore self
             return {animals = {'Animal'}, dogs = {'Dog'}}
         end
 
-        animalSystem = AnimalSystem()
+        local animalSystem = AnimalSystem()
         engine:addSystem(animalSystem)
 
         entity:add(Animal())

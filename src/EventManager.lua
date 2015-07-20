@@ -1,6 +1,7 @@
-EventManager = class("EventManager")
+local class = require('middleclass')
+local EventManager = class("EventManager")
 
-function EventManager:__init()
+function EventManager:initialize()
     self.eventListeners = {}
 end
 
@@ -12,8 +13,8 @@ function EventManager:addListener(eventName, listener, listenerFunction)
     end
     -- Backward compability. This'll be removed in some time
     if not listenerFunction then
-        for key, registeredListener in pairs(self.eventListeners[eventName]) do
-            if registeredListener[1].__name == listener[1].__name then
+        for _, registeredListener in pairs(self.eventListeners[eventName]) do
+            if registeredListener[1].class == listener[1].class then
                 if lovetoyDebug then
                     print("EventListener already existing. Aborting")
                 end
@@ -22,8 +23,8 @@ function EventManager:addListener(eventName, listener, listenerFunction)
         end
         table.insert(self.eventListeners[eventName], listener)
     else
-        for key, registeredListener in pairs(self.eventListeners[eventName]) do
-            if registeredListener[1].__name == listener.__name then
+        for _, registeredListener in pairs(self.eventListeners[eventName]) do
+            if registeredListener[1].class == listener.class then
                 if lovetoyDebug then
                     print("EventListener already existing. Aborting")
                 end
@@ -34,7 +35,7 @@ function EventManager:addListener(eventName, listener, listenerFunction)
             table.insert(self.eventListeners[eventName], {listener, listenerFunction})
         else
             if lovetoyDebug then
-                print('Eventmanager: Second parameter has to be a function! Pls check ' .. listener.__name)
+                print('Eventmanager: Second parameter has to be a function! Pls check ' .. listener.class.name)
             end
         end
     end
@@ -44,7 +45,7 @@ end
 function EventManager:removeListener(eventName, listener)
     if self.eventListeners[eventName] then
         for key, registeredListener in pairs(self.eventListeners[eventName]) do
-            if registeredListener[1].__name == listener then
+            if registeredListener[1].class.name == listener then
                 table.remove(self.eventListeners[eventName], key)
                 return
             end
@@ -57,10 +58,12 @@ end
 
 -- Firing an event. All registered listener will react to this event
 function EventManager:fireEvent(event)
-    if self.eventListeners[event.__name] then
-        for _,listener in pairs(self.eventListeners[event.__name]) do
+    local name = event.class.name
+    if self.eventListeners[name] then
+        for _,listener in pairs(self.eventListeners[name]) do
             listener[2](listener[1], event)
         end
     end
 end
 
+return EventManager

@@ -1,4 +1,6 @@
-require 'lovetoys'
+-- luacheck: globals describe setup before_each it
+local class = require('middleclass')
+local EventManager = require('EventManager')
 
 describe('Eventmanager', function()
     local Listener, TestEvent
@@ -48,7 +50,7 @@ describe('Eventmanager', function()
         assert.are.equal(type(eventManager.eventListeners['TestEvent']), 'table')
         assert.are.equal(eventManager.eventListeners['TestEvent'][1][1], listener )
 
-        eventManager:removeListener('TestEvent', listener.__name)
+        eventManager:removeListener('TestEvent', listener.class.name)
         assert.are.equal(eventManager.eventListeners['TestEvent'][1], nil )
     end)
 
