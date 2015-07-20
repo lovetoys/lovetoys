@@ -1,42 +1,37 @@
 -- Collection of utilities for handling Components
-Component = {}
+local class = require('middleclass')
+local Component = class('Component')
 
-Component.all = {}
-
--- Create a Component class with the specified name and fields
--- which will automatically get a constructor accepting the fields as arguments
-function Component.create(name, fields, defaults)
-	local component = class(name)
-
-	if fields then
-    defaults = defaults or {}
-		component.__init = function(self, ...)
-      local args = {...}
-			for index, field in ipairs(fields) do
-				self[field] = args[index] or defaults[field]
-			end
-		end
-	end
-
-	Component.register(component)
-
-	return component
-end
+Component.static.all = {}
 
 -- Register a Component to make it available to Component.load
-function Component.register(componentClass)
-	Component.all[componentClass.__name] = componentClass
+local function register(componentClass)
+  --print('Component subclassed by '..componentClass.name)
+  Component.all[componentClass.name] = componentClass
 end
 
--- Load multiple components and populate the calling functions namespace with them
--- This should only be called from the top level of a file!
-function Component.load(names)
-  local env = {}
-  setmetatable(env, {__index = _G})
-  setfenv(2, env)
+function Component.static:subclassed(other) -- luacheck: ignore self
+  register(other)
+end
 
-  for _, name in pairs(names) do
-    env[name] = Component.all[name]
+function Component:initialize(fields, defaults, ...)
+  if fields then
+    defaults = defaults or {}
+      local args = {...}
+      for index, field in ipairs(fields) do
+        self[field] = args[index] or defaults[field]
+      end
   end
 end
 
+-- Load multiple components
+function Component.static.load(names)
+  local components = {}
+
+  for _, name in pairs(names) do
+    components[#components+1] = Component.all[name]
+  end
+  return unpack(components)
+end
+
+return Component

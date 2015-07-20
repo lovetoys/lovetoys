@@ -1,33 +1,38 @@
-function table.firstElement(list)
-    for index, value in pairs(list) do
-        return value
-    end
-end
+local class = require('middleclass')
+local System = class("System")
 
-System = class("System")
-
-function System:__init()
+function System:initialize()
     -- Liste aller Entities, die die RequiredComponents dieses Systems haben
     self.targets = {}
     self.active = true
 end
 
-function System:requires() return {} end
+function System:requires() return {} end -- luacheck: ignore self
 
 function System:addEntity(entity, category)
-    -- If there are multiple requirement lists, the added entities will 
-    -- be added to their respetive list. 
+    -- If there are multiple requirement lists, the added entities will
+    -- be added to their respetive list.
     if category then
-        self.targets[category][entity.id] = entity
+        local c = self.targets[category]
+        if not c then
+          c = {}
+          self.targets[category] = c
+        end
+        c[entity.id] = entity
     else
     -- Otherwise they'll be added to the normal self.targets list
         self.targets[entity.id] = entity
     end
 end
 
+local function first(list)
+  local _, v = next(list)
+  return v
+end
+
 function System:removeEntity(entity, component)
-    if table.firstElement(self.targets) then
-        if table.firstElement(self.targets).__name then
+    if first(self.targets) then
+        if first(self.targets).class then
             self.targets[entity.id] = nil
         else
             -- Removing entities from their respective category target list.
@@ -51,9 +56,10 @@ end
 -- weghauen. Was passiert bei Component constallations in :requires()??
 function System:pickRequiredComponents(entity)
     local components = {}
-    for i, componentName in pairs(self:requires()) do
+    for _, componentName in pairs(self:requires()) do
         table.insert(components, entity:get(componentName))
     end
     return unpack(components)
 end
 
+return System

@@ -1,4 +1,8 @@
-require 'lovetoys'
+-- luacheck: globals describe setup before_each it
+local class = require('middleclass')
+local Engine = require('Engine')
+local Entity = require('Entity')
+local System = require('System')
 
 describe('System', function()
     local TestSystem
@@ -8,7 +12,7 @@ describe('System', function()
     setup(
     function()
         TestSystem = class('TestSystem', System)
-        function TestSystem:requires()
+        function TestSystem:requires() -- luacheck: ignore self
             return {ComponentType1 = {'Component1'}, ComponentType2 = {'Component'}}
         end
     end

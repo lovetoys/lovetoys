@@ -1,9 +1,15 @@
-require 'lovetoys'
+-- luacheck: globals describe setup before_each it assert
+local class = require('middleclass')
+local Component = require('Component')
+local Engine = require('Engine')
+local Entity = require('Entity')
+local System = require('System')
 
 describe('Engine', function()
-    local UpdateSystem, DrawSystem, MultiSystem, Component1, Component2
-    local entity, entity2, entity3
-    local testSystem, engine
+    local UpdateSystem, DrawSystem, MultiSystem, BothSystem, Component1, Component2
+    local updateSystem, drawSystem, multiSystem2, bothSystem
+    local entity
+    local engine
 
     setup(function()
         -- Creates a Update System
@@ -12,8 +18,8 @@ describe('Engine', function()
             return {'Component1'}
         end
         function UpdateSystem:update()
-            for _, entity in pairs(self.targets) do
-                entity:get('Component1').number = entity:get('Component1').number + 5
+            for _, e in pairs(self.targets) do
+                e:get('Component1').number = e:get('Component1').number + 5
             end
         end
 
@@ -24,8 +30,8 @@ describe('Engine', function()
         end
 
         function DrawSystem:draw()
-            for _, entity in pairs(self.targets) do
-                entity:get('Component1').number = entity:get('Component1').number + 10
+            for _, e in pairs(self.targets) do
+                e:get('Component1').number = e:get('Component1').number + 10
             end
         end
 
@@ -35,8 +41,8 @@ describe('Engine', function()
             return {'Component1', 'Component2'}
         end
         function BothSystem:update()
-            for _, entity in pairs(self.targets) do
-                entity:get('Component1').number = entity:get('Component1').number + 5
+            for _, e in pairs(self.targets) do
+                e:get('Component1').number = e:get('Component1').number + 5
             end
         end
         function BothSystem:draw() end
@@ -47,16 +53,14 @@ describe('Engine', function()
             return {name1 = {'Component1'}, name2 = {'Component2'}}
         end
 
-        Component1 = class('Component1')
+        Component1 = class('Component1', Component)
         Component1.number = 1
-        Component2 = class('Component2')
+        Component2 = class('Component2', Component)
         Component2.number = 2
     end)
 
     before_each(function()
         entity = Entity()
-        entity2 = Entity()
-        entity3 = Entity()
 
         updateSystem = UpdateSystem()
         drawSystem = DrawSystem()
@@ -72,14 +76,15 @@ describe('Engine', function()
 
     it(':addSystem() adds System to systemRegistry', function()
         engine:addSystem(updateSystem)
-        assert.are.equal(engine.systemRegistry[updateSystem.__name], updateSystem)
+        assert.are.equal(engine.systemRegistry[updateSystem.class.name], updateSystem)
     end)
 
     it(':addSystem() doesn`t add same system type twice', function()
         engine:addSystem(updateSystem)
-        newUpdateSystem = UpdateSystem()
+        local newUpdateSystem = UpdateSystem()
+        engine:addSystem(newUpdateSystem)
         assert.are.equal(engine.systems['update'][1], updateSystem)
-        assert.are.equal(engine.systemRegistry[updateSystem.__name], updateSystem)
+        assert.are.equal(engine.systemRegistry[updateSystem.class.name], updateSystem)
     end)
 
     it(':addSystem() adds draw Systems', function()

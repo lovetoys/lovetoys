@@ -93,7 +93,7 @@ Load the specified components into the current environment.
 - **components** A list containing component names
 
 ```lua
-Component.load("Color", "Transform", "Drawable")
+local Color, Transform, Drawable = Component.load("Color", "Transform", "Drawable")
 -- Create a component for the color black
 Color(0, 0, 0)
 ```
@@ -365,5 +365,3 @@ Copyright &copy; 2013-2014 Arne Beer and Rafael Epplée
 This Software is published under the MIT License.
 
 For further information check `LICENSE.md`.
-
-
