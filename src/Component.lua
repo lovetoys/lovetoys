@@ -5,13 +5,13 @@ local Component = class('Component')
 Component.static.all = {}
 
 -- Register a Component to make it available to Component.load
-local function register(componentClass)
+function Component.static.register(componentClass)
   --print('Component subclassed by '..componentClass.name)
   Component.all[componentClass.name] = componentClass
 end
 
 function Component.static:subclassed(other) -- luacheck: ignore self
-  register(other)
+  Component.register(other)
 end
 
 function Component:initialize(fields, defaults, ...)
