@@ -7,13 +7,12 @@ lovetoyDebug = false
 require(folderOfThisFile .. "src/class")
 
 -- Requiring all Events
-require(folderOfThisFile .. "src/events/componentAdded")
-require(folderOfThisFile .. "src/events/componentRemoved")
+require(folderOfThisFile .. "src/events/ComponentAdded")
+require(folderOfThisFile .. "src/events/ComponentRemoved")
 
 -- Requiring the lovetoys
-require(folderOfThisFile .. "src/entity")
-require(folderOfThisFile .. "src/engine")
-require(folderOfThisFile .. "src/system")
-require(folderOfThisFile .. "src/eventManager")
-require(folderOfThisFile .. "src/component")
-
+require(folderOfThisFile .. "src/Entity")
+require(folderOfThisFile .. "src/Engine")
+require(folderOfThisFile .. "src/System")
+require(folderOfThisFile .. "src/EventManager")
+require(folderOfThisFile .. "src/Component")
