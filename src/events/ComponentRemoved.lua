@@ -1,6 +1,7 @@
+local class = require('middleclass')
 ComponentRemoved = class("ComponentRemoved")
 
-function ComponentRemoved:__init(entity, component)
+function ComponentRemoved:initialize(entity, component)
     self.entity = entity
     self.component = component
 end

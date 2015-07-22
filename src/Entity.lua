@@ -1,6 +1,7 @@
+local class = require('middleclass')
 Entity = class("Entity")
 
-function Entity:__init(parent, name)
+function Entity:initialize(parent, name)
     self.components = {}
     self.eventManager = nil
     self.alive = false
@@ -16,23 +17,25 @@ end
 -- Sets the entities component of this type to the given component.
 -- An entity can only have one Component of each type.
 function Entity:add(component)
-    if self.components[component.__name] then 
+    local name = component.class.name
+    if self.components[name] then
         if lovetoyDebug then
-            print("Trying to add Component '" .. component.__name .. "', but it's already existing. Please use Entity:set to overwrite a component in an entity.")
+            print("Trying to add Component '" .. name .. "', but it's already existing. Please use Entity:set to overwrite a component in an entity.")
         end
     else
-        self.components[component.__name] = component
+        self.components[name] = component
         if self.eventManager then
-            self.eventManager:fireEvent(ComponentAdded(self, component.__name))
+            self.eventManager:fireEvent(ComponentAdded(self, name))
         end
     end
 end
 
 function Entity:set(component)
-    if self.components[component.__name] == nil then
+    local name = component.class.name
+    if self.components[name] == nil then
         self:add(component)
     else
-        self.components[component.__name] = component
+        self.components[name] = component
     end
 end
 

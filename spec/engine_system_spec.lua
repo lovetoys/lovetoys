@@ -47,9 +47,9 @@ describe('Engine', function()
             return {name1 = {'Component1'}, name2 = {'Component2'}}
         end
 
-        Component1 = class('Component1')
+        Component1 = Component.create('Component1')
         Component1.number = 1
-        Component2 = class('Component2')
+        Component2 = Component.create('Component2')
         Component2.number = 2
     end)
 
@@ -72,14 +72,15 @@ describe('Engine', function()
 
     it(':addSystem() adds System to systemRegistry', function()
         engine:addSystem(updateSystem)
-        assert.are.equal(engine.systemRegistry[updateSystem.__name], updateSystem)
+        assert.are.equal(engine.systemRegistry[updateSystem.class.name], updateSystem)
     end)
 
     it(':addSystem() doesn`t add same system type twice', function()
         engine:addSystem(updateSystem)
-        newUpdateSystem = UpdateSystem()
+        local newUpdateSystem = UpdateSystem()
+        engine:addSystem(newUpdateSystem)
         assert.are.equal(engine.systems['update'][1], updateSystem)
-        assert.are.equal(engine.systemRegistry[updateSystem.__name], updateSystem)
+        assert.are.equal(engine.systemRegistry[updateSystem.class.name], updateSystem)
     end)
 
     it(':addSystem() adds draw Systems', function()

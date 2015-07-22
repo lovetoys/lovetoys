@@ -6,9 +6,9 @@ describe('Engine', function()
     local engine
 
     setup(function()
-        Component1 = class('Component1')
+        Component1 = Component.create('Component1')
         Component1.number = 1
-        Component2 = class('Component2')
+        Component2 = Component.create('Component2')
         Component2.number = 2
     end)
 

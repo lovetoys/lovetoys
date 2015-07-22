@@ -1,6 +1,7 @@
+local class = require('middleclass')
 ComponentAdded = class("ComponentAdded")
 
-function ComponentAdded:__init(entity, component)
+function ComponentAdded:initialize(entity, component)
     self.entity = entity
     self.component = component
 end
