@@ -6,6 +6,9 @@ lovetoyDebug = false
 -- Requiring class
 require(folderOfThisFile .. "src/class")
 
+-- Requiring util functions
+require(folderOfThisFile .. "src/util")
+
 -- Requiring all Events
 require(folderOfThisFile .. "src/events/ComponentAdded")
 require(folderOfThisFile .. "src/events/ComponentRemoved")

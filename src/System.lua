@@ -1,9 +1,3 @@
-function table.firstElement(list)
-    for index, value in pairs(list) do
-        return value
-    end
-end
-
 System = class("System")
 
 function System:__init()

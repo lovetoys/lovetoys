@@ -1,9 +1,3 @@
-function table.firstElement(list)
-    for index, value in pairs(list) do
-        return value
-    end
-end
-
 Engine = class("Engine")
 
 function Engine:__init() 
