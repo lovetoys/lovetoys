@@ -62,7 +62,7 @@ function Entity:setParent(parent)
     self:registerAsChild()
 end
 
-function Entity:getParent(parent)
+function Entity:getParent()
     return self.parent
 end
 
