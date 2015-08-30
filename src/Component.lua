@@ -1,4 +1,6 @@
 -- Collection of utilities for handling Components
+local class = require('middleclass')
+
 Component = {}
 
 Component.all = {}
@@ -10,7 +12,7 @@ function Component.create(name, fields, defaults)
 
 	if fields then
     defaults = defaults or {}
-		component.__init = function(self, ...)
+		component.initialize = function(self, ...)
       local args = {...}
 			for index, field in ipairs(fields) do
 				self[field] = args[index] or defaults[field]
@@ -25,7 +27,7 @@ end
 
 -- Register a Component to make it available to Component.load
 function Component.register(componentClass)
-	Component.all[componentClass.__name] = componentClass
+	Component.all[componentClass.name] = componentClass
 end
 
 -- Load multiple components and populate the calling functions namespace with them

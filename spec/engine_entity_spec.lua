@@ -11,8 +11,8 @@ describe('Engine', function()
         function TestSystem:requires()
             return {'Component1'}
         end
-        Component1 = class('Component1')
-        Component2 = class('Component2')
+        Component1 = Component.create('Component1')
+        Component2 = Component.create('Component2')
     end
     )
 
@@ -84,7 +84,7 @@ describe('Engine', function()
     end)
 
     it(':addEntity() handles multiple requirement lists', function()
-        function count(t)
+        local function count(t)
             local c = 0
             for _, _ in pairs(t) do
                 c = c + 1
@@ -92,9 +92,9 @@ describe('Engine', function()
             return c
         end
 
-        local Animal, Dog = class('Animal', Component), class('Dog', Component)
+        local Animal, Dog = Component.create('Animal'), Component.create('Dog')
 
-        AnimalSystem = class('AnimalSystem', System)
+        local AnimalSystem = class('AnimalSystem', System)
 
         function AnimalSystem:update() end
 
@@ -102,7 +102,7 @@ describe('Engine', function()
             return {animals = {'Animal'}, dogs = {'Dog'}}
         end
 
-        animalSystem = AnimalSystem()
+        local animalSystem = AnimalSystem()
         engine:addSystem(animalSystem)
 
         entity:add(Animal())

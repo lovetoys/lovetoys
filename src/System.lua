@@ -1,6 +1,8 @@
+local class = require('middleclass')
+
 System = class("System")
 
-function System:__init()
+function System:initialize()
     -- Liste aller Entities, die die RequiredComponents dieses Systems haben
     self.targets = {}
     self.active = true
@@ -24,7 +26,7 @@ end
 
 function System:removeEntity(entity, component)
     if table.firstElement(self.targets) then
-        if table.firstElement(self.targets).__name then
+        if table.firstElement(self.targets).class then
             self.targets[entity.id] = nil
         else
             -- Removing entities from their respective category target list.
@@ -48,9 +50,8 @@ end
 -- weghauen. Was passiert bei Component constallations in :requires()??
 function System:pickRequiredComponents(entity)
     local components = {}
-    for i, componentName in pairs(self:requires()) do
+    for _, componentName in pairs(self:requires()) do
         table.insert(components, entity:get(componentName))
     end
     return unpack(components)
 end
-
