@@ -4,7 +4,8 @@ local folderOfThisFile = (...):match("(.-)[^%/]+$")
 lovetoyDebug = false
 
 -- Requiring class
-require(folderOfThisFile .. "src/class")
+
+class = require('src/middleclass')
 
 -- Requiring util functions
 require(folderOfThisFile .. "src/util")

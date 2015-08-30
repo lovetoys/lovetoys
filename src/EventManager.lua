@@ -1,4 +1,3 @@
-local class = require('middleclass')
 EventManager = class("EventManager")
 
 function EventManager:initialize()

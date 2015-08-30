@@ -1,6 +1,4 @@
 -- Collection of utilities for handling Components
-local class = require('middleclass')
-
 Component = {}
 
 Component.all = {}

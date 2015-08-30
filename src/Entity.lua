@@ -1,4 +1,3 @@
-local class = require('middleclass')
 Entity = class("Entity")
 
 function Entity:initialize(parent, name)
@@ -78,7 +77,7 @@ function Entity:get(name)
 end
 
 function Entity:has(name)
-    return not not self.components[name] 
+    return not not self.components[name]
 end
 
 function Entity:getComponents()

@@ -1,5 +1,3 @@
-local class = require('middleclass')
-
 Engine = class("Engine")
 
 function Engine:initialize()
@@ -55,7 +53,7 @@ function Engine:addEntity(entity)
             end
         end
     end
-end 
+end
 
 function Engine:removeEntity(entity, removeChildren, newParent)
     -- Removing the Entity from all Systems and engine

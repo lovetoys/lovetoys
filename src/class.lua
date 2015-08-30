@@ -1,2 +1,0 @@
-class = require('middleclass')
-
