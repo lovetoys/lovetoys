@@ -5,7 +5,7 @@ lovetoyDebug = false
 
 -- Requiring class
 
-require(folderOfThisFile .. 'src/middleclass')
+class = require(folderOfThisFile .. 'src/middleclass')
 
 -- Requiring util functions
 require(folderOfThisFile .. "src/util")
