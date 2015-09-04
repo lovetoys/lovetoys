@@ -326,8 +326,8 @@ You can create a class as follows:
 ```lua
 Foo = class("Foo")
 
--- The constructor of a class is specified by the __init method
-function Foo:__init(parameter)
+-- The constructor of a class is specified by the initialize method
+function Foo:initialize(parameter)
     self.bar = parameter
 end
 ```

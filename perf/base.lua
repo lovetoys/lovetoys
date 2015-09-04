@@ -24,7 +24,7 @@ end
 
 local names = {}
 for k,component in pairs(components) do
-  table.insert(names, component.__name)
+  table.insert(names, component.class.name)
 end
 
 function BigSystem:requires()
