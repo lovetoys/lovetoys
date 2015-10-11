@@ -31,12 +31,15 @@ end
 -- Load multiple components and populate the calling functions namespace with them
 -- This should only be called from the top level of a file!
 function Component.load(names)
-  local env = {}
-  setmetatable(env, {__index = _G})
-  setfenv(2, env)
+	local env = {}
+	setmetatable(env, {
+		__index = _G,
+		__newindex = _G
+	})
+	setfenv(2, env)
 
-  for _, name in pairs(names) do
-    env[name] = Component.all[name]
-  end
+	for _, name in pairs(names) do
+		env[name] = Component.all[name]
+	end
 end
 

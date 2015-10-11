@@ -1,4 +1,4 @@
-require 'lovetoys'
+require('lovetoys')
 
 describe('Engine', function()
     local TestSystem, Component1, Component2
