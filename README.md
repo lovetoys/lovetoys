@@ -88,12 +88,12 @@ Metaclass that creates Component classes and provides utilities for working with
 
 #### Component.load(components)
 
-Load the specified components into the current environment.
+Load the specified components.
 
 - **components** A list containing component names
 
 ```lua
-Component.load("Color", "Transform", "Drawable")
+local Color, Transform, Drawable = Component.load("Color", "Transform", "Drawable")
 -- Create a component for the color black
 Color(0, 0, 0)
 ```
