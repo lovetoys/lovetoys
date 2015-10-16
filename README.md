@@ -157,6 +157,11 @@ This function is going to be called by the engine every draw.
 ```lua
 CustomSystem = class("CustomSystem", System)
 
+function CustomSystem:initialize(parameter)
+    System.initialize(self)
+    self.parameter = parameter
+end
+
 function CustomSystem:update(dt)
     for key, entity in pairs(self.targets) do
         local foo =  entity:get("Component1").foo
@@ -316,36 +321,6 @@ Removes a listener from this particular Event.
 - **event** (Event) - Instance of the event
 
 This function pipes the event through to every listener that is registered to the class-name of the event and triggers `listener:fireEvent(event)`.
-
-## Class
-
-We use our own small class implementation for OOP.
-
-You can create a class as follows:
-
-```lua
-Foo = class("Foo")
-
--- The constructor of a class is specified by the initialize method
-function Foo:initialize(parameter)
-    self.bar = parameter
-end
-```
-
-If you want to create a object of this class just call `Foo(parameter)` and it will return a object after calling the constructor.
-
-If you want to create a class that inherits from a superclass you have to pass a superclass:
-
-```lua
-Foo = class("Foo", Superclass)
-```
-
-All superclass constructors will now be called on new Foo instances.
-To create a new instance you now just have to call `Foo()` e.g.
-
-```lua
-NewInstance = Foo()
-```
 
 ## Testing
 
