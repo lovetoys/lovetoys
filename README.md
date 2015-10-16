@@ -1,7 +1,7 @@
-# Lovetoys
+<h1 align="center">Lövetoys</h1>
 [![Build Status](https://travis-ci.org/lovetoys/lovetoys.svg?branch=master)](https://travis-ci.org/lovetoys/lovetoys)
 
-`v0.1`
+`v0.2`
 
 Lovetoys is an Entity Component System framework for game development with lua. Originally written for the LÖVE 2D game engine it is now compatible with pretty much any game that uses lua!
 It is loosely based on [Richard Lords Introduction](http://www.richardlord.net/blog/what-is-an-entity-framework) to ECS's. If you don't have any idea what this entity component stuff is all about, click that link and give it a read! It's totally worth it!
@@ -14,19 +14,21 @@ Though we have not reached version 1.0 yet, the software is tested, used in mult
 
 The best way of installing Lovetoys is by creating a submodule and cloning it right into your git repo.
 Another way is to just download the files, especially the `src` folder, and copy them to your project folder.
-To import everything just `require('lovetoys/lovetoys')`.
+To use Lovetoys in your project, just `require('lovetoys/lovetoys')` once.
 
 For an example on how to use the lovetoys have a look at our [example](https://github.com/Lovetoys/Lovetoys-examples) repository.
 
 ### Debugging
 
-If you want debug messages, set `lovetoyDebug = true` after adding lovetoys.
+If you want debug messages, set the global variable `lovetoyDebug = true` after adding lovetoys. This will enable more detailed logging.
 
-## Entity Component System
+## API Reference
+
+Lovetoys primarily consists of a few classes that are implemented using [middleclass](https://github.com/kikito/middleclass). If you added `require('lovetosy/lovetoys')` to your project, they will be available in the global namespace. The specific classes and their usage is documented below.
 
 ### Entity
 
-The Entity is the basic object that is beeing administrated by the engine. It functions merely as a container for components.
+The Entity is the basic object that is being administrated by the engine. It basicly represents a collection of components.
 
 #### Entity(parent)
 - **parent** (Entity) - Parent entity
@@ -84,7 +86,7 @@ Returns the list that contains all components.
 
 ### Component
 
-Metaclass that creates Component classes and provides utilities for working with them.
+Collection of functions for creating and working with Component classes.
 
 #### Component.load(components)
 
@@ -130,6 +132,34 @@ All custom systems have to be derived from the `System` class. An example how to
 There are two types of Systems: "logic" and "draw" Systems. Logic systems perform logic operations, like moving a player and updating physics. Their `update` method is called by `Engine:update()`, which in turn should be called in the `update` function of your game loop.
 Draw systems are responsible for rendering your game world on screen. Their `draw` method is called by `Engine:draw()`, which is usually called in the `draw()` function of the game loop.
 
+#### An example for a custom system
+
+To implement functionality in your game, you create custom Systems. You inherit from the Lovetoys' `System` class and override some methods to specify your System's behavior.
+
+To create your own system, you use the `class` function provided by MiddleClass. The first argument is the name of your new System, the second is the Class you want to inherit from. The specific methods you can override are specified below.
+
+```lua
+local CustomSystem = class("CustomSystem", System)
+
+function CustomSystem:initialize(parameter)
+    System.initialize(self)
+    self.parameter = parameter
+end
+
+function CustomSystem:update(dt)
+    for key, entity in pairs(self.targets) do
+        local foo =  entity:get("Component1").foo
+        entity:get("Component2").bar = foo
+    end
+end
+
+function CustomSystem:requires()
+    return {"Component1", "Component2"}
+end
+
+return CustomSystem
+```
+
 #### System:requires() return {"Componentname1", "Componentname2", ...} end
 
 This function defines what kind of entities shall be managed by this System. The function has to be overwritten in every System or it won't get any entities! The strings inside the returned table define the components a entity has to contain, to be managed by the System. Those entities are accessible in `self.targets`.
@@ -152,31 +182,9 @@ This function is going to be called by the engine every tick.
 
 This function is going to be called by the engine every draw.
 
-#### An example for a custom system
-
-```lua
-CustomSystem = class("CustomSystem", System)
-
-function CustomSystem:initialize(parameter)
-    System.initialize(self)
-    self.parameter = parameter
-end
-
-function CustomSystem:update(dt)
-    for key, entity in pairs(self.targets) do
-        local foo =  entity:get("Component1").foo
-        entity:get("Component2").bar = foo
-    end
-end
-
-function CustomSystem:requires()
-    return {"Component1", "Component2"}
-end
-```
-
 ### Engine
 
-The engine is the most important part of our framework and the most frequently used interface. It contains all systems, entities, requirements and entitylists and manages them for you.
+The engine is the most important part of our framework and the most frequently used interface. It manages all entities, systems and their requirements, for you.
 
 #### Engine()
 
@@ -189,16 +197,16 @@ Returns the rootEntity entity, to get its children or add/remove components.
 #### Engine:addSystem(system, type)
 
 - **system** (System) - Instance of the system to be added.
-- **type** (String) - Should be either "draw", "logic" or unspecified
+- **type** (String) - optional; Should be either "draw", "logic" or unspecified
 
-This function registers the system in the engine. The systems' functions will be called in the order they've been added. As long as the system implements either the `update` or the `draw` function, type doesn't have to be specified.
-If a system implements both, draw and update function, you will need to specify the type and add it twice to the engine. Once to draw and once to update. Otherwise the engine doesn't know which priority the system should get.
+This function registers the system in the engine. The systems' functions will be called in the order they've been added. As long as the system implements either the `update` or the `draw` function, Lovetoys will guess the `type` parameter for you.
+If a system implements both, draw and update function, you will need to specify the `type` and add the system twice, once to draw and once to update. Otherwise Lovetoys couldn't know in what order to execute the `update` and `draw` methods.
 
 #### Engine:stop(system)
 
 - **system** (String) - the name of the system
 
-If you want a system to stop, just call this function. It's draw/update function won't be called anymore, until it's beeing started again.
+If you want a system to stop, just call this function. It's draw/update function won't be called anymore until you start it again.
 
 #### Engine:start(system)
 
@@ -212,21 +220,21 @@ Call this to start a stopped system.
 - **system** (String)
     the name of the system
 
-Toggle the specified system.
+If the system is running, stop it. If it is stopped, start it.
 
 #### Engine:addEntity(entity)
 
 - **entity** (Entity) - Instance of the Entity to be added
 
-Adds an entity to the engine and sends it to all systems that are interested in its component constellation.
+Adds an entity to the engine and registers it with all systems that are interested in its component constellation.
 
 #### Engine:removeEntity(entity, removeChildren, newParent)
 - **entity** - (Entity) - Instance of the Entity to be removed
 - **removeChildren** - (Boolean) Default is false
 - **newParent** - (Entity) - Instance of another entity, which should become the new Parent
 
-Removes the particular entity from the engine and all systems.
-Depending on `removeChildren` all Children are going to deleted recursivly as well.
+Removes the particular entity instance from the engine and all systems.
+Depending on `removeChildren` all Children are going to deleted recursively as well.
 If there is a new Parent defined, this entity becomes the new Parent of all children, otherwise they become children of `engine.rootEntity`.
 
 #### Engine:getEntitiesWithComponent(component)
@@ -249,15 +257,15 @@ Updates all draw systems.
 - **name** - (String) - Name of the component
 - **func** - (function)
 
-Every time you want to call a function on an entity as soon as it has been added to the engine you want to use Initializer.
+Every time you want to call a function on an entity as soon as it has been added to the engine you want to use an Initializer.
 Just pass the name of a componentname and a function and for every entity that contains such a component `func(entity)` will be called.
 
 #### Engine:removeInitializer(name)
 - **name** - (String) - Name of the component
 
-The initializer that is registered to this component will be deleted.
+The Initializer that is registered to this component will be deleted.
 
-#### Example
+#### Example for a löve2d main.lua file
 
 For a more detailed and commented version with collisions and some other examples check the [main.lua file of the lovetoys example game](https://github.com/lovetoys/example/blob/master/main.lua).
 
