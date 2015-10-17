@@ -13,7 +13,7 @@ function EventManager:addListener(eventName, listener, listenerFunction)
     -- Backward compability. This'll be removed in some time
     if not listenerFunction then
         for _, registeredListener in pairs(self.eventListeners[eventName]) do
-            if registeredListener[1].class == listener[1].class then
+            if registeredListener[1].name == listener[1].name then
                 if lovetoyDebug then
                     print("EventListener already existing. Aborting")
                 end
@@ -23,7 +23,7 @@ function EventManager:addListener(eventName, listener, listenerFunction)
         table.insert(self.eventListeners[eventName], listener)
     else
         for _, registeredListener in pairs(self.eventListeners[eventName]) do
-            if registeredListener[1].class == listener.class then
+            if registeredListener[1].name == listener.name then
                 if lovetoyDebug then
                     print("EventListener already existing. Aborting")
                 end
@@ -34,7 +34,7 @@ function EventManager:addListener(eventName, listener, listenerFunction)
             table.insert(self.eventListeners[eventName], {listener, listenerFunction})
         else
             if lovetoyDebug then
-                print('Eventmanager: Second parameter has to be a function! Pls check ' .. listener.class.name)
+                print('Eventmanager: Second parameter has to be a function! Pls check ' .. listener.name)
             end
         end
     end
@@ -44,7 +44,7 @@ end
 function EventManager:removeListener(eventName, listener)
     if self.eventListeners[eventName] then
         for key, registeredListener in pairs(self.eventListeners[eventName]) do
-            if registeredListener[1].class.name == listener then
+            if registeredListener[1].name == listener then
                 table.remove(self.eventListeners[eventName], key)
                 return
             end
@@ -57,7 +57,7 @@ end
 
 -- Firing an event. All registered listener will react to this event
 function EventManager:fireEvent(event)
-    local name = event.class.name
+    local name = event.name
     if self.eventListeners[name] then
         for _,listener in pairs(self.eventListeners[name]) do
             listener[2](listener[1], event)
