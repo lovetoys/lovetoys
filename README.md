@@ -1,4 +1,4 @@
-<div style="text-align: center;"><img style="margin: 0 auto;" alt="logo" src="http://cdn.rawgit.com/lovetoys/lovetoys/master/logo.svg" /></div>
+<div style="margin: 0 auto;"><img style="margin: 0 auto;" alt="logo" src="http://cdn.rawgit.com/lovetoys/lovetoys/master/logo.svg" /></div>
 <h1 align="center">Lövetoys</h1>
 [![Build Status](https://travis-ci.org/lovetoys/lovetoys.svg?branch=master)](https://travis-ci.org/lovetoys/lovetoys)
 
