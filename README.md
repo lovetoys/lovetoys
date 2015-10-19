@@ -1,5 +1,5 @@
+<div style="text-align: center;"><img style="margin: 0 auto;" alt="logo" src="http://cdn.rawgit.com/lovetoys/lovetoys/master/logo.svg" /></div>
 <h1 align="center">Lövetoys</h1>
-![logo](http://raw.githubusercontent.com/lovetoys/lovetoys/master/logo.svg)
 [![Build Status](https://travis-ci.org/lovetoys/lovetoys.svg?branch=master)](https://travis-ci.org/lovetoys/lovetoys)
 
 `v0.2`
