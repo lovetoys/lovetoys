@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://github.com/lovetoys/lovetoys">
-    <img width="200" src="http://cdn.rawgit.com/lovetoys/lovetoys/master/logo.svg" />
+    <img width="100" src="http://cdn.rawgit.com/lovetoys/lovetoys/master/logo.svg" />
   </a>
 </div>
 <h1 align="center">Lövetoys</h1>
