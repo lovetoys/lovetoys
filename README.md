@@ -348,7 +348,7 @@ We removed it from the framework. It performed too poorly and we felt it only bl
 
 * * *
 
-Copyright &copy; 2013-2014 Arne Beer and Rafael Epplée
+Copyright &copy; 2013 Arne Beer and Rafael Epplée
 
 This Software is published under the MIT License.
 
