@@ -1,12 +1,23 @@
 language: python
+sudo: false
+
+env:
+  - LUA_VERSION="luajit 2.0.4" LUA_RUNTIME=luajit
+
+before_install:
+  - wget https://raw.githubusercontent.com/mpeterv/hererocks/master/hererocks.py
+  - python hererocks.py l -r^ --$LUA_VERSION
+  - export PATH=$PATH:$PWD/l/bin
 
 install:
-  - sudo apt-get install luajit
-  - sudo apt-get install luarocks
-  - sudo luarocks install luafilesystem
-  - sudo luarocks install busted
+  - luarocks install luafilesystem
+  - luarocks install busted
 
 script: "busted"
+
+cache:
+  directories:
+    - $PWD/l
 
 notifications:
   recipients:
