@@ -23,6 +23,8 @@ To use Lovetoys in your project, just `require('lovetoys/lovetoys')` once.
 
 For an example on how to use the lovetoys have a look at our [example](https://github.com/Lovetoys/Lovetoys-examples) repository.
 
+The third way is to use Luarocks. Execute `luarocks install lovetoys` and require it with `require "lovetoys/lovetoys"`.
+
 ### Debugging
 
 If you want debug messages, set the global variable `lovetoyDebug = true` after adding lovetoys. This will enable more detailed logging.
