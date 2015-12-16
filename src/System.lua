@@ -20,6 +20,8 @@ function System:addEntity(entity, category)
     -- Otherwise they'll be added to the normal self.targets list
         self.targets[entity.id] = entity
     end
+
+    if self.onAddEntity then self:onAddEntity(entity) end
 end
 
 function System:removeEntity(entity, component)

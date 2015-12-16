@@ -102,7 +102,7 @@ Load the specified components.
 - **components** A list containing component names
 
 ```lua
-local Color, Transform, Drawable = Component.load("Color", "Transform", "Drawable")
+local Color, Transform, Drawable = Component.load({"Color", "Transform", "Drawable"})
 -- Create a component for the color black
 Color(0, 0, 0)
 ```
@@ -187,7 +187,13 @@ This function is going to be called by the engine every tick.
 
 #### System:draw()
 
-This function is going to be called by the engine every draw.
+This method is going to be called by the engine every draw.
+
+#### System:onAddEntity(entity)
+
+- **entity** (Entity) - The entity added 
+
+Overwrite this method in your system subclass. It will get called every time an entity gets added to the system.
 
 ### Engine
 
@@ -259,18 +265,6 @@ Updates all logic systems.
 #### Engine:draw()
 
 Updates all draw systems.
-
-#### Engine:addInitializer(name, func)
-- **name** - (String) - Name of the component
-- **func** - (function)
-
-Every time you want to call a function on an entity as soon as it has been added to the engine you want to use an Initializer.
-Just pass the name of a componentname and a function and for every entity that contains such a component `func(entity)` will be called.
-
-#### Engine:removeInitializer(name)
-- **name** - (String) - Name of the component
-
-The Initializer that is registered to this component will be deleted.
 
 #### Example for a löve2d main.lua file
 

@@ -7,7 +7,6 @@ function Engine:initialize()
     self.allRequirements = {}
     self.entityLists = {}
     self.eventManager = EventManager()
-    self.initializer = {}
 
     self.systems = {}
     self.systemRegistry= {}
@@ -32,13 +31,6 @@ function Engine:addEntity(entity)
         entity:setParent(self.rootEntity)
     end
     entity:registerAsChild()
-
-    -- Calling initializer
-    for component, func in pairs(self.initializer) do
-        if entity:has(component) then
-            func(entity)
-        end
-    end
 
     for _, component in pairs(entity.components) do
         local name = component.class.name
@@ -238,14 +230,6 @@ function Engine:update(dt)
     end
 end
 
-function Engine:addInitializer(name, func)
-    self.initializer[name] = func
-end
-
-function Engine:removeInitializer(name)
-    self.initializer[name] = nil
-end
-
 function Engine:draw()
     for _, system in ipairs(self.systems["draw"]) do
         if system.active then
@@ -282,11 +266,6 @@ function Engine:componentAdded(event)
         for _, system in pairs(self.allRequirements[component]) do
             self:checkRequirements(entity, system)
         end
-    end
-
-    -- Calling Initializer
-    if self.initializer[event.component] then
-        self.initializer[event.component](event.entity)
     end
 end
 

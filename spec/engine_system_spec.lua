@@ -8,6 +8,10 @@ describe('Engine', function()
     setup(function()
         -- Creates a Update System
         UpdateSystem = class('UpdateSystem', System)
+        function UpdateSystem:initialize()
+            System.initialize(self)
+            self.entitiesAdded = 0
+        end
         function UpdateSystem:requires()
             return {'Component1'}
         end
@@ -15,6 +19,10 @@ describe('Engine', function()
             for _, entity in pairs(self.targets) do
                 entity:get('Component1').number = entity:get('Component1').number + 5
             end
+        end
+
+        function UpdateSystem:onAddEntity()
+            self.entitiesAdded = self.entitiesAdded + 1
         end
 
         -- Creates a Draw System
@@ -198,5 +206,15 @@ describe('Engine', function()
         engine:toggleSystem('DrawSystem')
         engine:draw()
         assert.are.equal(entity:get('Component1').number, 31)
+    end)
+
+    it('calls UpdateSystem:onComponentAdded when a component is added to UpdateSystem', function()
+        assert.are.equal(updateSystem.entitiesAdded, 0)
+
+        entity:add(Component1())
+        engine:addSystem(updateSystem)
+        engine:addEntity(entity)
+
+        assert.are.equal(updateSystem.entitiesAdded, 1)
     end)
 end)
