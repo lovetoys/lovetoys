@@ -1,22 +1,23 @@
 -- Getting folder that contains engine
-local folderOfThisFile = (...):match("(.-)[^%/]+$")
+local folderOfThisFile = (...):match("(.-)[^%/%.]+$")
+print(..., folderOfThisFile)
 
 lovetoyDebug = false
 
 -- Requiring class
 
-class = require(folderOfThisFile .. 'src/middleclass')
+class = require(folderOfThisFile .. 'src.middleclass')
 
 -- Requiring util functions
-require(folderOfThisFile .. "src/util")
+require(folderOfThisFile .. "src.util")
 
 -- Requiring all Events
-require(folderOfThisFile .. "src/events/ComponentAdded")
-require(folderOfThisFile .. "src/events/ComponentRemoved")
+require(folderOfThisFile .. "src.events.ComponentAdded")
+require(folderOfThisFile .. "src.events.ComponentRemoved")
 
 -- Requiring the lovetoys
-require(folderOfThisFile .. "src/Entity")
-require(folderOfThisFile .. "src/Engine")
-require(folderOfThisFile .. "src/System")
-require(folderOfThisFile .. "src/EventManager")
-require(folderOfThisFile .. "src/Component")
+require(folderOfThisFile .. "src.Entity")
+require(folderOfThisFile .. "src.Engine")
+require(folderOfThisFile .. "src.System")
+require(folderOfThisFile .. "src.EventManager")
+require(folderOfThisFile .. "src.Component")

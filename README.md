@@ -19,11 +19,11 @@ Though we have not reached version 1.0 yet, the software is tested, used in mult
 
 The best way of installing Lovetoys is by creating a submodule and cloning it right into your git repo.
 Another way is to just download the files, especially the `src` folder, and copy them to your project folder.
-To use Lovetoys in your project, just `require('lovetoys/lovetoys')` once.
+The third way is to use Luarocks. Execute `luarocks install lovetoys`.
+
+To use Lovetoys in your project, just `require('lovetoys.lovetoys')` once.
 
 For an example on how to use the lovetoys have a look at our [example](https://github.com/Lovetoys/Lovetoys-examples) repository.
-
-The third way is to use Luarocks. Execute `luarocks install lovetoys` and require it with `require "lovetoys/lovetoys"`.
 
 ### Debugging
 
@@ -278,7 +278,7 @@ For a more detailed and commented version with collisions and some other example
 
 ```lua
 -- Importing lovetoys
-require("lib/lovetoys/lovetoys")
+require("lib.lovetoys.lovetoys")
 
 function love.load()
     engine = Engine()
