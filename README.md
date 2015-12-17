@@ -31,7 +31,7 @@ If you want debug messages, set the global variable `lovetoyDebug = true` after 
 
 ## API Reference
 
-Lovetoys primarily consists of a few classes that are implemented using [middleclass](https://github.com/kikito/middleclass). If you added `require('lovetosy/lovetoys')` to your project, they will be available in the global namespace. The specific classes and their usage is documented below.
+Lovetoys primarily consists of a few classes that are implemented using [middleclass](https://github.com/kikito/middleclass). If you added `require('lovetoys.lovetoys')` to your project, they will be available in the global namespace. The specific classes and their usage is documented below.
 
 ### Entity
 
