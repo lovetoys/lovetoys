@@ -4,10 +4,13 @@ install:
   - sudo apt-get update
   - sudo apt-get install luajit
   - sudo apt-get install luarocks
-  - sudo luarocks install luafilesystem
   - sudo luarocks install busted
 
-script: "busted"
+before_script:
+  - busted --version
+
+script:
+  - busted --output=TAP
 
 notifications:
   recipients:
