@@ -9,8 +9,7 @@ function Engine:initialize()
     self.eventManager = EventManager()
 
     self.systems = {}
-    self.systemRegistry= {}
-    self.systems["all"] = {}
+    self.systemRegistry = {}
     self.systems["update"] = {}
     self.systems["draw"] = {}
 
@@ -155,7 +154,6 @@ end
 function Engine:registerSystem(system)
     local name = system.class.name
     self.systemRegistry[name] = system
-    table.insert(self.systems["all"], system)
     -- Registering in case system:requires returns a table of strings
     if system:requires()[1] and type(system:requires()[1]) == "string" then
         for index, req in pairs(system:requires()) do
@@ -199,27 +197,15 @@ function Engine:registerSystem(system)
 end
 
 function Engine:stopSystem(name)
-    for _, system in pairs(self.systems["all"]) do
-        if name == system.class.name then
-            system.active = false
-        end
-    end
+    self.systemRegistry[name].active = false
 end
 
 function Engine:startSystem(name)
-    for _, system in pairs(self.systems["all"]) do
-        if name == system.class.name then
-            system.active = true
-        end
-    end
+    self.systemRegistry[name].active = true
 end
 
 function Engine:toggleSystem(name)
-    for _, system in pairs(self.systems["all"]) do
-        if name == system.class.name then
-            system.active = not system.active
-        end
-    end
+    self.systemRegistry[name].active = not self.systemRegistry[name].active
 end
 
 function Engine:update(dt)
@@ -308,4 +294,3 @@ function Engine:checkRequirements(entity, system) -- luacheck: ignore self
         system:addEntity(entity)
     end
 end
-
