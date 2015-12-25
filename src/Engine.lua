@@ -197,15 +197,27 @@ function Engine:registerSystem(system)
 end
 
 function Engine:stopSystem(name)
-    self.systemRegistry[name].active = false
+    if self.systemRegistry[name] then
+        self.systemRegistry[name].active = false
+    elseif lovetoyDebug then
+        print("Lovetoys: Trying to stop unexisting System: " .. name)
+    end
 end
 
 function Engine:startSystem(name)
-    self.systemRegistry[name].active = true
+    if self.systemRegistry[name] then
+        self.systemRegistry[name].active = true
+    elseif lovetoyDebug then
+        print("Lovetoys: Trying to start unexisting System: " .. name)
+    end
 end
 
 function Engine:toggleSystem(name)
-    self.systemRegistry[name].active = not self.systemRegistry[name].active
+    if self.systemRegistry[name] then
+        self.systemRegistry[name].active = not self.systemRegistry[name].active
+    elseif lovetoyDebug then
+        print("Lovetoys: Trying to toggle unexisting System: " .. name)
+    end
 end
 
 function Engine:update(dt)
