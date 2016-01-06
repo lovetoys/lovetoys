@@ -17,7 +17,7 @@ function System:addEntity(entity, category)
         end
         self.targets[category][entity.id] = entity
     else
-    -- Otherwise they'll be added to the normal self.targets list
+        -- Otherwise they'll be added to the normal self.targets list
         self.targets[entity.id] = entity
     end
 
