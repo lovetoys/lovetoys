@@ -27,7 +27,7 @@ script:
 
 cache:
   directories:
-    - $PWD/lua_installation
+    - $PWD/lua_installations
 
 notifications:
   recipients:
