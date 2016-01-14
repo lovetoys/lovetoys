@@ -1,16 +1,33 @@
+sudo: false
 language: python
 
+git:
+  depth: 4
+
+env:
+  - LUA_RUNTIME="luajit"
+    LUA_VERSION="2.0.3"
+  - LUA_RUNTIME="luajit"
+    LUA_VERSION="2.1"
+
+before_install:
+  - pip install hererocks
+  - hererocks lua_installations/$LUA_RUNTIME$LUA_VERSION/ --luarocks ^ --$LUA_RUNTIME $LUA_VERSION
+  - export PATH=$PATH:$PWD/lua_installations/$LUA_RUNTIME$LUA_VERSION/bin
+
 install:
-  - sudo apt-get update
-  - sudo apt-get install luajit
-  - sudo apt-get install luarocks
-  - sudo luarocks install busted
+  - luarocks make
 
 before_script:
+  - luarocks install busted
   - busted --version
 
 script:
   - busted --output=TAP
+
+cache:
+  directories:
+    - $PWD/lua_installations
 
 notifications:
   recipients:
