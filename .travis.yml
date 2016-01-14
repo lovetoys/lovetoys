@@ -5,12 +5,15 @@ git:
   depth: 4
 
 env:
-  - LUA_VERSION="luajit 2.0.3"
+  - LUA_RUNTIME="luajit"
+    LUA_VERSION="2.0.3"
+  - LUA_RUNTIME="luajit"
+    LUA_VERSION="2.1"
 
 before_install:
   - pip install hererocks
-  - hererocks l -r^ --$LUA_VERSION
-  - export PATH=$PATH:$PWD/l/bin
+  - hererocks lua_installations/$LUA_RUNTIME$LUA_VERSION/ --luarocks ^ --$LUA_RUNTIME $LUA_VERSION
+  - export PATH=$PATH:$PWD/lua_installations/$LUA_RUNTIME$LUA_VERSION/bin
 
 install:
   - luarocks make
@@ -24,7 +27,7 @@ script:
 
 cache:
   directories:
-    - $PWD/l
+    - $PWD/lua_installation
 
 notifications:
   recipients:
