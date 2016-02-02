@@ -20,14 +20,18 @@ install:
 
 before_script:
   - luarocks install busted
+  - luarocks install luacov-coveralls
   - busted --version
 
 script:
-  - busted --output=TAP
+  - busted --coverage --output=TAP
 
 cache:
   directories:
     - $PWD/lua_installations
+
+after_success:
+  - luacov-coveralls
 
 notifications:
   recipients:
