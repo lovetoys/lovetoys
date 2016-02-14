@@ -1,0 +1,36 @@
+-- @class module
+-- @name luacov.lovetoys
+return {
+
+  -- filename to store stats collected
+  statsfile = "luacov.stats.out",
+
+  -- filename to store report
+  reportfile = "luacov.report.json",
+
+  -- Run reporter on completion? (won't work for ticks)
+  runreport = false,
+
+  -- Delete stats file after reporting?
+  deletestats = false,
+
+  -- Patterns for files to include when reporting
+  -- all will be included if nothing is listed
+  -- (exclude overrules include, do not include
+  -- the .lua extension)
+  include = {
+    "/src"
+  },
+
+  -- configuration for luacov-coveralls reporter
+  coveralls = {
+
+    -- debug = true;
+
+    pathcorrect = {
+      {"^.-/share/lua/5.%d/", "src/lua/"};
+    },
+
+  },
+
+}
