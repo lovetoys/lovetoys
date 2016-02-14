@@ -18,7 +18,7 @@ Though we have not reached version 1.0 yet, the software is tested, used in mult
 ## Installation
 
 The best way of installing Lovetoys is by creating a submodule and cloning it right into your git repo.
-Another way is to just download the files, especially the `src` folder, and copy them to your project folder.
+Another way is to just download a [tarball](https://github.com/lovetoys/lovetoys/releases) and copy the files into your project folder.
 The third way is to use Luarocks. Execute `luarocks install lovetoys`.
 
 To use Lovetoys in your project, just `require('lovetoys.lovetoys')` once.
@@ -191,7 +191,7 @@ This method is going to be called by the engine every draw.
 
 #### System:onAddEntity(entity)
 
-- **entity** (Entity) - The entity added 
+- **entity** (Entity) - The entity added
 
 Overwrite this method in your system subclass. It will get called every time an entity gets added to the system.
 
@@ -349,5 +349,3 @@ Copyright &copy; 2013 Arne Beer and Rafael Epplée
 This Software is published under the MIT License.
 
 For further information check `LICENSE.md`.
-
-
