@@ -1,9 +1,6 @@
-describe('Component', function()
-    -- Reset Component.all before every test
-    before_each(function()
-        require('lovetoys')
-    end)
+require('lovetoys')
 
+describe('Component', function()
     it(':create with defaults creates a Component with default values', function()
         local c = Component.create('TestComponent',
           {'defaultField', 'emptyField'},
