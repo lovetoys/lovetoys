@@ -1,5 +1,7 @@
 .PHONY: test hooks setup arch-setup arch-pre-setup
 
+default: test
+
 setup:
 	sudo luarocks install busted
 

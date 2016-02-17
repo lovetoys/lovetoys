@@ -1,6 +1,5 @@
 -- Getting folder that contains engine
 local folderOfThisFile = (...):match("(.-)[^%/%.]+$")
-print(..., folderOfThisFile)
 
 lovetoyDebug = false
 
