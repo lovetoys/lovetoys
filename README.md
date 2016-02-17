@@ -4,12 +4,12 @@
   </a>
 </div>
 <h1 align="center">Lövetoys</h1>
-[![Build Status](https://travis-ci.org/lovetoys/lovetoys.svg?branch=master)](https://travis-ci.org/lovetoys/lovetoys) [![Coverage Status](https://coveralls.io/repos/github/lovetoys/lovetoys/badge.svg?branch=master)](https://coveralls.io/github/lovetoys/lovetoys?branch=master)
 
-`v0.2`
+`v0.2` [![Build Status](https://travis-ci.org/lovetoys/lovetoys.svg?branch=master)](https://travis-ci.org/lovetoys/lovetoys) [![Coverage Status](https://coveralls.io/repos/github/lovetoys/lovetoys/badge.svg?branch=master)](https://coveralls.io/github/lovetoys/lovetoys?branch=master)
 
-Lovetoys is an Entity Component System framework for game development with lua. Originally written for the LÖVE 2D game engine it is now compatible with pretty much any game that uses lua!
-It is loosely based on [Richard Lords Introduction](http://www.richardlord.net/blog/what-is-an-entity-framework) to ECS's. If you don't have any idea what this entity component stuff is all about, click that link and give it a read! It's totally worth it!
+
+Lovetoys is an Entity Component System framework for game development with lua. Originally written for the LÖVE 2D game engine, it is actually compatible with pretty much any game that uses lua!
+It is inspired by [Richard Lords Introduction](http://www.richardlord.net/blog/what-is-an-entity-framework) to ECS's. If you don't have any idea what this entity component stuff is all about, click that link and give it a read! It's totally worth it!
 
 Lovetoys is a full-featured game development framework, not only providing the core parts like Entity, Component and System classes but also containing a Publish-Subscribe messaging system as well as a Scene Graph, enabling you to build even complex games easily and in a structured way.
 
@@ -21,13 +21,13 @@ The best way of installing Lovetoys is by creating a submodule and cloning it ri
 Another way is to just download a [tarball](https://github.com/lovetoys/lovetoys/releases) and copy the files into your project folder.
 The third way is to use Luarocks. Execute `luarocks install lovetoys`.
 
-To use Lovetoys in your project, just `require('lovetoys.lovetoys')` once.
+To use Lovetoys in your project, just `require('lovetoys.lovetoys')` once. Lovetoys injects its classes into the global namespace for convenience (If you don't like this: Future versions of Lovetoys will allow you to turn it off).
 
 For an example on how to use the lovetoys have a look at our [example](https://github.com/Lovetoys/Lovetoys-examples) repository.
 
 ### Debugging
 
-If you want debug messages, set the global variable `lovetoyDebug = true` after adding lovetoys. This will enable more detailed logging.
+If you want debug messages, set the global variable `lovetoyDebug = true` after adding lovetoys. This will enable more verbose logging.
 
 ## API Reference
 
