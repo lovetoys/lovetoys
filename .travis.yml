@@ -15,9 +15,6 @@ before_install:
   - hererocks lua_installations/$LUA_RUNTIME$LUA_VERSION/ --luarocks ^ --$LUA_RUNTIME $LUA_VERSION
   - export PATH=$PATH:$PWD/lua_installations/$LUA_RUNTIME$LUA_VERSION/bin
 
-install:
-  - luarocks make
-
 before_script:
   - luarocks install busted
   - luarocks install luacov-coveralls
