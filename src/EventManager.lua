@@ -10,32 +10,20 @@ function EventManager:addListener(eventName, listener, listenerFunction)
     if not self.eventListeners[eventName] then
         self.eventListeners[eventName] = {}
     end
-    -- Backward compability. This'll be removed in some time
-    if not listenerFunction then
-        for _, registeredListener in pairs(self.eventListeners[eventName]) do
-            if registeredListener[1].class == listener[1].class then
-                if lovetoyDebug then
-                    print("EventListener already existing. Aborting")
-                end
-                return
-            end
-        end
-        table.insert(self.eventListeners[eventName], listener)
-    else
-        for _, registeredListener in pairs(self.eventListeners[eventName]) do
-            if registeredListener[1].class == listener.class then
-                if lovetoyDebug then
-                    print("EventListener already existing. Aborting")
-                end
-                return
-            end
-        end
-        if type(listenerFunction) == 'function' then
-            table.insert(self.eventListeners[eventName], {listener, listenerFunction})
-        else
+
+    for _, registeredListener in pairs(self.eventListeners[eventName]) do
+        if registeredListener[1].class == listener.class then
             if lovetoyDebug then
-                print('Eventmanager: Second parameter has to be a function! Pls check ' .. listener.class.name)
+                print("EventListener already existing. Aborting")
             end
+            return
+        end
+    end
+    if type(listenerFunction) == 'function' then
+        table.insert(self.eventListeners[eventName], {listener, listenerFunction})
+    else
+        if lovetoyDebug then
+            print('Eventmanager: Second parameter has to be a function! Pls check ' .. listener.class.name)
         end
     end
 end
