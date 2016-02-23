@@ -28,7 +28,6 @@ describe('System', function()
     end
     )
 
-
     it(':addEntity() adds single', function()
         testSystem:addEntity(entity)
 
@@ -51,5 +50,21 @@ describe('System', function()
 
         testSystem:removeEntity(entity)
         assert.are_not.equal(testSystem.targets[1], entity)
+    end)
+
+    it(':pickRequiredComponents() returns the requested components', function()
+        local RequireSystem = class('RequireSystem', System)
+        function RequireSystem:requires()
+            return {'Component1', 'Component2'}
+        end
+
+        local system = RequireSystem()
+        local addedComponent1 = class('Component1')()
+        entity:add(addedComponent1)
+        system:addEntity(entity)
+
+        local returnedComponent1, nonExistentComponent = system:pickRequiredComponents(entity)
+        assert.are.equal(returnedComponent1, addedComponent1)
+        assert.is_nil(nonExistentComponent)
     end)
 end)

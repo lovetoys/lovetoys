@@ -46,12 +46,19 @@ function System:removeEntity(entity, component)
     end
 end
 
--- TODO: Refactorn!!!! Entweder universal anwendbar machen oder
--- weghauen. Was passiert bei Component constallations in :requires()??
 function System:pickRequiredComponents(entity)
     local components = {}
-    for _, componentName in pairs(self:requires()) do
-        table.insert(components, entity:get(componentName))
+    local requirements = self:requires()
+
+    if not requirements[1] then
+    elseif type(requirements[1]) == "string" then
+        for _, componentName in pairs(requirements) do
+            table.insert(components, entity:get(componentName))
+        end
+    elseif type(requirements[1]) == "table" then
+        if lovetoyDebug then
+            print("Error: :pickRequiredComponents() is not supported for systems with multiple component constellations")
+        end
     end
     return unpack(components)
 end
