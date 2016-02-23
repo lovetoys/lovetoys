@@ -1,4 +1,5 @@
 require 'lovetoys'
+lovetoys.config.debug = true
 
 describe('Entity', function()
     local TestComponent, TestComponent1, TestComponent2, TestComponent3

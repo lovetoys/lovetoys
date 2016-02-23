@@ -1,4 +1,5 @@
 require 'lovetoys'
+lovetoys.config.debug = true
 
 describe('Eventmanager', function()
     local Listener, TestEvent

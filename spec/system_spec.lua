@@ -1,4 +1,5 @@
 require 'lovetoys'
+lovetoys.config.debug = true
 
 describe('System', function()
     local TestSystem
