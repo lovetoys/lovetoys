@@ -1,3 +1,5 @@
+local lovetoys = require("src.namespace")
+
 -- Collection of utilities for handling Components
 Component = {}
 

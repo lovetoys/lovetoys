@@ -18,6 +18,7 @@ dependencies = {
 build = {
   type = 'builtin',
   modules = {
+    ['lovetoys.src.namespace']                           = 'src/namespace.lua',
     ['lovetoys.lovetoys']                                = 'lovetoys.lua',
     ['lovetoys.src.Component']                           = 'src/Component.lua',
     ['lovetoys.src.Engine']                              = 'src/Engine.lua',

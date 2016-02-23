@@ -1,3 +1,4 @@
+local lovetoys = require("src.namespace")
 EventManager = class("EventManager")
 
 function EventManager:initialize()
@@ -13,7 +14,7 @@ function EventManager:addListener(eventName, listener, listenerFunction)
 
     for _, registeredListener in pairs(self.eventListeners[eventName]) do
         if registeredListener[1].class == listener.class then
-            if lovetoyDebug then
+            if lovetoys.config.debug then
                 print("EventListener already existing. Aborting")
             end
             return
@@ -22,7 +23,7 @@ function EventManager:addListener(eventName, listener, listenerFunction)
     if type(listenerFunction) == 'function' then
         table.insert(self.eventListeners[eventName], {listener, listenerFunction})
     else
-        if lovetoyDebug then
+        if lovetoys.config.debug then
             print('Eventmanager: Second parameter has to be a function! Pls check ' .. listener.class.name)
         end
     end
@@ -37,7 +38,7 @@ function EventManager:removeListener(eventName, listener)
                 return
             end
         end
-        if lovetoyDebug then
+        if lovetoys.config.debug then
             print("Listener to be deleted is not existing.")
         end
     end

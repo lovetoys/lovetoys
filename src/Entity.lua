@@ -1,3 +1,4 @@
+local lovetoys = require("src.namespace")
 Entity = class("Entity")
 
 function Entity:initialize(parent, name)
@@ -18,7 +19,7 @@ end
 function Entity:add(component)
     local name = component.class.name
     if self.components[name] then
-        if lovetoyDebug then
+        if lovetoys.config.debug then
             print("Trying to add Component '" .. name .. "', but it's already existing. Please use Entity:set to overwrite a component in an entity.")
         end
     else
@@ -49,7 +50,7 @@ function Entity:remove(name)
     if self.components[name] then
         self.components[name] = nil
     else
-        if lovetoyDebug then
+        if lovetoys.config.debug then
             print("Trying to remove unexisting component " .. name .. " from Entity. Please fix this")
         end
     end

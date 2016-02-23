@@ -1,3 +1,4 @@
+local lovetoys = require("src.namespace")
 System = class("System")
 
 function System:initialize()
@@ -56,7 +57,7 @@ function System:pickRequiredComponents(entity)
             table.insert(components, entity:get(componentName))
         end
     elseif type(requirements[1]) == "table" then
-        if lovetoyDebug then
+        if lovetoys.config.debug then
             print("Error: :pickRequiredComponents() is not supported for systems with multiple component constellations")
         end
     end

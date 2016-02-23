@@ -1,3 +1,4 @@
+local lovetoys = require("src.namespace")
 Engine = class("Engine")
 
 function Engine:initialize()
@@ -87,7 +88,7 @@ function Engine:removeEntity(entity, removeChildren, newParent)
         -- Removing entity from engine
         self.entities[entity.id] = nil
     else
-        if lovetoyDebug then
+        if lovetoys.config.debug then
             print("Trying to remove non existent entity from engine.")
             print("Entity id: " .. entity.id)
             print("Entity's components:")
@@ -102,7 +103,7 @@ function Engine:addSystem(system, typ)
     local name = system.class.name
     -- Check if system has both function without specified type
     if system.draw and system.update and not typ then
-        if lovetoyDebug then
+        if lovetoys.config.debug then
             print("Lovetoys: Trying to add " .. name .. ", which has an update and a draw function, without specifying typ. Aborting")
         end
         return
@@ -113,7 +114,7 @@ function Engine:addSystem(system, typ)
         -- This triggers if the system doesn't have update and draw and it's already existing.
         elseif not (system.update and system.draw) then
             if self.systemRegistry[name] then
-                if lovetoyDebug then
+                if lovetoys.config.debug then
                     print("Lovetoys: " .. name .. " already exists. Aborting")
                 end
                 return
@@ -124,7 +125,7 @@ function Engine:addSystem(system, typ)
         if system.draw and (not typ or typ == "draw") then
             for _, registeredSystem in pairs(self.systems["draw"]) do
                 if registeredSystem.class.name == name then
-                    if lovetoyDebug then
+                    if lovetoys.config.debug then
                         print("Lovetoys: " .. name .. " already exists. Aborting")
                     end
                     return
@@ -135,7 +136,7 @@ function Engine:addSystem(system, typ)
             elseif system.update and (not typ or typ == "update") then
                 for _, registeredSystem in pairs(self.systems["update"]) do
                     if registeredSystem.class.name == name then
-                        if lovetoyDebug then
+                        if lovetoys.config.debug then
                             print("Lovetoys: " .. name .. " already exists. Aborting")
                         end
                         return
@@ -199,7 +200,7 @@ function Engine:addSystem(system, typ)
         function Engine:stopSystem(name)
             if self.systemRegistry[name] then
                 self.systemRegistry[name].active = false
-                elseif lovetoyDebug then
+                elseif lovetoys.config.debug then
                     print("Lovetoys: Trying to stop unexisting System: " .. name)
                 end
             end
@@ -207,7 +208,7 @@ function Engine:addSystem(system, typ)
             function Engine:startSystem(name)
                 if self.systemRegistry[name] then
                     self.systemRegistry[name].active = true
-                    elseif lovetoyDebug then
+                    elseif lovetoys.config.debug then
                         print("Lovetoys: Trying to start unexisting System: " .. name)
                     end
                 end
@@ -215,7 +216,7 @@ function Engine:addSystem(system, typ)
                 function Engine:toggleSystem(name)
                     if self.systemRegistry[name] then
                         self.systemRegistry[name].active = not self.systemRegistry[name].active
-                        elseif lovetoyDebug then
+                        elseif lovetoys.config.debug then
                             print("Lovetoys: Trying to toggle unexisting System: " .. name)
                         end
                     end
