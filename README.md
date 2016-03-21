@@ -3,27 +3,27 @@
     <img width="150" src="http://cdn.rawgit.com/lovetoys/lovetoys/bc73d45634b1220746d1afd618fb1372e42fc096/logo_small.svg" />
   </a>
 </div>
-<h1 align="center">Lövetoys</h1>
+<h1 align="center">lövetoys</h1>
 
 `v0.2` [![Build Status](https://travis-ci.org/lovetoys/lovetoys.svg?branch=master)](https://travis-ci.org/lovetoys/lovetoys) [![Coverage Status](https://coveralls.io/repos/github/lovetoys/lovetoys/badge.svg?branch=master)](https://coveralls.io/github/lovetoys/lovetoys?branch=master)
 
 
-Lovetoys is an Entity Component System framework for game development with lua. Originally written for the LÖVE 2D game engine, it is actually compatible with pretty much any game that uses lua!
+lovetoys is an Entity Component System framework for game development with lua. Originally written for the LÖVE 2D game engine, it is actually compatible with pretty much any game that uses lua!
 It is inspired by [Richard Lords Introduction](http://www.richardlord.net/blog/what-is-an-entity-framework) to ECS's. If you don't have any idea what this entity component stuff is all about, click that link and give it a read! It's totally worth it!
 
-Lovetoys is a full-featured game development framework, not only providing the core parts like Entity, Component and System classes but also containing a Publish-Subscribe messaging system as well as a Scene Graph, enabling you to build even complex games easily and in a structured way.
+lovetoys is a full-featured game development framework, not only providing the core parts like Entity, Component and System classes but also containing a Publish-Subscribe messaging system as well as a Scene Graph, enabling you to build even complex games easily and in a structured way.
 
 Though we have not reached version 1.0 yet, the software is tested, used in multiple games and definitely stable. If you find any bugs please create an issue and report them. Or just create a pull request :).
 
 ## Installation
 
-The best way of installing Lovetoys is by creating a submodule and cloning it right into your git repo.
+The best way of installing lovetoys is by creating a submodule and cloning it right into your git repo.
 Another way is to just download a [tarball](https://github.com/lovetoys/lovetoys/releases) and copy the files into your project folder.
 The third way is to use Luarocks. Execute `luarocks install lovetoys`.
 
-To use Lovetoys in your project, just `require('lovetoys.lovetoys')` once. Lovetoys injects its classes into the global namespace for convenience (If you don't like this: Future versions of Lovetoys will allow you to turn it off).
+To use lovetoys in your project, just `require('lovetoys.lovetoys')` once. lovetoys injects its classes into the global namespace for convenience (If you don't like this: Future versions of lovetoys will allow you to turn it off).
 
-For an example on how to use the lovetoys have a look at our [example](https://github.com/Lovetoys/Lovetoys-examples) repository.
+For an example on how to use the lovetoys have a look at our [example](https://github.com/lovetoys/lovetoys-examples) repository.
 
 ### Debugging
 
@@ -31,7 +31,7 @@ If you want debug messages, set the global variable `lovetoyDebug = true` after 
 
 ## API Reference
 
-Lovetoys primarily consists of a few classes that are implemented using [middleclass](https://github.com/kikito/middleclass). If you added `require('lovetoys.lovetoys')` to your project, they will be available in the global namespace. The specific classes and their usage is documented below.
+lovetoys primarily consists of a few classes that are implemented using [middleclass](https://github.com/kikito/middleclass). If you added `require('lovetoys.lovetoys')` to your project, they will be available in the global namespace. The specific classes and their usage is documented below.
 
 ### Entity
 
@@ -141,7 +141,7 @@ Draw systems are responsible for rendering your game world on screen. Their `dra
 
 #### An example for a custom system
 
-To implement functionality in your game, you create custom Systems. You inherit from the Lovetoys' `System` class and override some methods to specify your System's behavior.
+To implement functionality in your game, you create custom Systems. You inherit from the `System` class and override some methods to specify your System's behavior.
 
 To create your own system, you use the `class` function provided by MiddleClass. The first argument is the name of your new System, the second is the Class you want to inherit from. The specific methods you can override are specified below.
 
@@ -212,8 +212,8 @@ Returns the rootEntity entity, to get its children or add/remove components.
 - **system** (System) - Instance of the system to be added.
 - **type** (String) - optional; Should be either "draw", "logic" or unspecified
 
-This function registers the system in the engine. The systems' functions will be called in the order they've been added. As long as the system implements either the `update` or the `draw` function, Lovetoys will guess the `type` parameter for you.
-If a system implements both, draw and update function, you will need to specify the `type` and add the system twice, once to draw and once to update. Otherwise Lovetoys couldn't know in what order to execute the `update` and `draw` methods.
+This function registers the system in the engine. The systems' functions will be called in the order they've been added. As long as the system implements either the `update` or the `draw` function, lovetoys will guess the `type` parameter for you.
+If a system implements both, draw and update function, you will need to specify the `type` and add the system twice, once to draw and once to update. Otherwise lovetoys couldn't know in what order to execute the `update` and `draw` methods.
 
 #### Engine:stop(system)
 
@@ -339,7 +339,7 @@ To run the suite, install busted and simply execute `busted` in the lovetoys dir
 
 ## CollisionManager
 
-`CollisionManager` was a class that helped with integrating a physics engine with the Lovetoys.
+`CollisionManager` was a class that helped with integrating a physics engine with the lovetoys.
 We removed it from the framework. It performed too poorly and we felt it only bloated the framework while not being needed in many cases.
 
 * * *
