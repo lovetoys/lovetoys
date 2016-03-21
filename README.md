@@ -344,7 +344,7 @@ We removed it from the framework. It performed too poorly and we felt it only bl
 
 * * *
 
-Copyright &copy; 2016 Arne Beer (@Nukesor) and Rafael Epplée (@raffomania)
+Copyright &copy; 2016 Arne Beer ([@Nukesor](https://github.com/Nukesor)) and Rafael Epplée ([@raffomania](https://github.com/raffomania))
 
 This Software is published under the MIT License.
 
