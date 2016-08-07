@@ -21,17 +21,41 @@ The best way of installing lovetoys is by creating a submodule and cloning it ri
 Another way is to just download a [tarball](https://github.com/lovetoys/lovetoys/releases) and copy the files into your project folder.
 The third way is to use Luarocks. Execute `luarocks install lovetoys`.
 
-To use lovetoys in your project, just `require('lovetoys.lovetoys')` once. lovetoys injects its classes into the global namespace for convenience (If you don't like this: Future versions of lovetoys will allow you to turn it off).
+To use lovetoys with the default options, use the line `require('lovetoys.lovetoys')()`.
 
 For an example on how to use the lovetoys have a look at our [example](https://github.com/lovetoys/lovetoys-examples) repository.
 
-### Debugging
+### Configuration
+You can configure lovetoys by passing a configuration table to its factory function like so:
 
-If you want debug messages, set the global variable `lovetoyDebug = true` after adding lovetoys. This will enable more verbose logging.
+```lua
+require('lovetoys.lovetoys')({
+    -- options here
+})
+```
+
+For example, if you want debug output, pass the option `debug = true`:
+
+```lua
+require('lovetoys.lovetoys')({
+    debug = true
+})
+```
+
+| Name | Type | Default | Meaning |
+| --- | --- | --- | --- |
+| debug | boolean | false | Makes lovetoys print warnings and notifications to stdout. |
+| globals | boolean | false | If true, lovetoys will make all its classes available via the global namespace. |
 
 ## API Reference
 
-lovetoys primarily consists of a few classes that are implemented using [middleclass](https://github.com/kikito/middleclass). If you added `require('lovetoys.lovetoys')` to your project, they will be available in the global namespace. The specific classes and their usage is documented below.
+lovetoys primarily consists of a few classes that are implemented using [middleclass](https://github.com/kikito/middleclass). By default, they are available via the lovetoys object returned from the factory function:
+
+```lua
+local lovetoys = require('lovetoys')()
+-- Create a new entity
+local entity = lovetoys.Entity()
+```
 
 ### Entity
 
