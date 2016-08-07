@@ -12,9 +12,6 @@ function System:addEntity(entity, category)
     -- If there are multiple requirement lists, the added entities will
     -- be added to their respetive list.
     if category then
-        if not self.targets[category] then
-            self.targets[category] = {}
-        end
         self.targets[category][entity.id] = entity
     else
         -- Otherwise they'll be added to the normal self.targets list

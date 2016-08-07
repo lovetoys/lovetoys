@@ -181,6 +181,7 @@ function Engine:registerSystem(system)
                     table.insert(self.allRequirements[req], system)
                 end
             end
+            -- Create tables for multiple requirements in the system's target directory
             system.targets[index] = {}
         end
     end

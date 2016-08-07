@@ -11,6 +11,13 @@ describe('Engine', function()
         function TestSystem:requires()
             return {'Component1'}
         end
+
+        -- Creates a System with multiple requirements
+        MultiSystem = lovetoys.class('MultiSystem', System)
+        function MultiSystem:requires()
+            return {name1 = {'Component1'}, name2 = {'Component1', 'Component2'}}
+        end
+
         Component1 = Component.create('Component1')
         Component2 = Component.create('Component2')
     end
@@ -24,6 +31,7 @@ describe('Engine', function()
 
         testSystem = TestSystem()
         engine = Engine()
+        multiSystem = MultiSystem()
     end
     )
 
@@ -198,7 +206,7 @@ describe('Engine', function()
         assert.are_not.equal(testSystem.targets[1], entity)
     end)
 
-    it('Entity:remove() removes entity from system, after removing component', function()
+    it('Entity:remove() removes entity from single system target list, after removing component', function()
         entity:add(Component1())
         engine:addEntity(entity)
         engine:addSystem(testSystem)
@@ -208,8 +216,20 @@ describe('Engine', function()
         assert.are_not.equal(testSystem.targets[1], entity)
     end)
 
-    it(':getRootEntity() get`s rootEntity', function()
-        assert.are.equal(engine:getRootEntity(), engine.rootEntity)
+    it('Entity:remove() removes entity from system, after removing component', function()
+        entity:add(Component1())
+        entity:add(Component2())
+        engine:addEntity(entity)
+        engine:addSystem(multiSystem)
+        assert.are.equal(multiSystem.targets['name1'][1], entity)
+        assert.are.equal(multiSystem.targets['name2'][1], entity)
+
+        entity:remove('Component2')
+        assert.are.equal(multiSystem.targets['name1'][1], entity)
+        assert.True(#multiSystem.targets['name2'] == 0)
     end)
 
+    it(':getRootEntity() gets rootEntity', function()
+        assert.are.equal(engine:getRootEntity(), engine.rootEntity)
+    end)
 end)
