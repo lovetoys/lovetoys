@@ -18,8 +18,13 @@ describe('Entity', function()
     function()
         entity = Entity()
         entity.id = 1
+        entity1 = Entity()
+        entity1.id = 2
         parent = Entity()
         testComponent = TestComponent()
+        testComponent1 = TestComponent1()
+        testComponent2 = TestComponent2()
+        testComponent3 = TestComponent3()
     end
     )
 
@@ -44,6 +49,19 @@ describe('Entity', function()
         assert.are.equal(entity:get(testComponent.class.name), testComponent)
     end)
 
+    it(':getComponents() gets all components of an entity', function()
+        entity:add(testComponent)
+        entity:add(testComponent1)
+        components = entity:getComponents()
+
+        local count = 0
+        for _, __ in pairs(components) do
+            count = count + 1
+        end
+
+        assert.True(count == 2)
+    end)
+
     it(':has() shows if it has a Component', function()
         entity:add(testComponent)
         assert.is_true(entity:has(testComponent.class.name))
@@ -60,7 +78,6 @@ describe('Entity', function()
     end)
 
     it(':addMultiple() adds Multiple Components at once', function()
-        local testComponent1, testComponent2, testComponent3 = TestComponent1(), TestComponent2(), TestComponent3()
         local componentList = {testComponent1, testComponent2, testComponent3}
         entity:addMultiple(componentList)
         assert.are.equal(entity.components[testComponent1.class.name], testComponent1)
@@ -68,14 +85,21 @@ describe('Entity', function()
         assert.are.equal(entity.components[testComponent3.class.name], testComponent3)
     end)
 
+    it('Constructor with parrent adds a Parent', function()
+        entity = Entity(parent)
+        assert.are.equal(entity.parent, parent)
+    end)
+
     it(':setParent() adds a Parent', function()
         entity:setParent(parent)
         assert.are.equal(entity.parent, parent)
     end)
+
     it(':getParent() gets a Parent', function()
         entity:setParent(parent)
         assert.are.equal(entity:getParent(), parent)
     end)
+
     it(':registerAsChild() registers as a Child', function()
         entity:setParent(parent)
         assert.are.equal(entity:getParent().children[entity.id], entity)
