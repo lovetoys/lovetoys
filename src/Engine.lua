@@ -182,6 +182,7 @@ function Engine:registerSystem(system)
                     table.insert(self.allRequirements[req], system)
                 end
             end
+            -- Create tables for multiple requirements in the system's target directory
             system.targets[index] = {}
         end
     end
@@ -228,16 +229,18 @@ function Engine:draw()
 end
 
 function Engine:componentRemoved(event)
+    -- In case a single component gets removed from an entity, we inform
+    -- all systems that this entity lost this specific component.
     local entity = event.entity
     local component = event.component
 
-    -- Removing Entity from Entitylists
+    -- Removing Entity from Entity lists
     self.entityLists[component][entity.id] = nil
 
-    -- Removing Entity from old systems
+    -- Removing Entity from systems
     if self.allRequirements[component] then
         for _, system in pairs(self.allRequirements[component]) do
-            system:removeEntity(entity, component)
+            system:componentRemoved(entity, component)
         end
     end
 end
