@@ -7,13 +7,13 @@ describe('Eventmanager', function()
     setup(
     function()
         -- Test Listener
-        Listener = class('Listener')
+        Listener = lovetoys.class('Listener')
         Listener.number = 0
         function Listener:test(event)
             self.number = event.number
         end
         -- Test Event
-        TestEvent = class('TestEvent')
+        TestEvent = lovetoys.class('TestEvent')
         TestEvent.number = 12
     end
     )

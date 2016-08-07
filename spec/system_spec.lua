@@ -7,7 +7,7 @@ describe('System', function()
 
     setup(
     function()
-        TestSystem = class('TestSystem', System)
+        TestSystem = lovetoys.class('TestSystem', System)
         function TestSystem:requires()
             return {ComponentType1 = {'Component1'}, ComponentType2 = {'Component'}}
         end
@@ -53,13 +53,13 @@ describe('System', function()
     end)
 
     it(':pickRequiredComponents() returns the requested components', function()
-        local RequireSystem = class('RequireSystem', System)
+        local RequireSystem = lovetoys.class('RequireSystem', System)
         function RequireSystem:requires()
             return {'Component1', 'Component2'}
         end
 
         local system = RequireSystem()
-        local addedComponent1 = class('Component1')()
+        local addedComponent1 = lovetoys.class('Component1')()
         entity:add(addedComponent1)
         system:addEntity(entity)
 

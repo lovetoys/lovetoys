@@ -1,13 +1,8 @@
-lovetoys = require('src.namespace')
-if not lovetoys.util then lovetoys.util = {} end
+local util = {}
 
-lovetoys.util.firstElement = function (list)
+function util.firstElement(list)
     local _, value = next(list)
     return value
 end
 
-lovetoys.debug = function (message)
-    if lovetoys.config.debug then
-        print(message)
-    end
-end
+return util

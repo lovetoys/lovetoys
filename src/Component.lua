@@ -1,14 +1,12 @@
-local lovetoys = require("src.namespace")
-
 -- Collection of utilities for handling Components
-Component = {}
+local Component = {}
 
 Component.all = {}
 
 -- Create a Component class with the specified name and fields
 -- which will automatically get a constructor accepting the fields as arguments
 function Component.create(name, fields, defaults)
-    local component = class(name)
+    local component = require('src.namespace').class(name)
 
     if fields then
         defaults = defaults or {}
@@ -41,3 +39,4 @@ function Component.load(names)
     return unpack(components)
 end
 
+return Component

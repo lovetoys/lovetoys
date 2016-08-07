@@ -13,9 +13,9 @@ describe('Component', function()
 
     it(':load returns the specified components', function()
         local c1 = Component.create('TestComponent1')
-        local c2 = class('TestComponent2')
+        local c2 = lovetoys.class('TestComponent2')
         Component.register(c2)
-        local c3 = class('TestComponent3')
+        local c3 = lovetoys.class('TestComponent3')
 
         local loaded1, loaded2, loaded3 = Component.load({
             'TestComponent1', 'TestComponent2', 'TestComponent3'

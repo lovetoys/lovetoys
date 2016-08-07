@@ -7,7 +7,7 @@ describe('Engine', function()
 
     setup(function()
         -- Creates a Update System
-        UpdateSystem = class('UpdateSystem', System)
+        UpdateSystem = lovetoys.class('UpdateSystem', System)
         function UpdateSystem:initialize()
             System.initialize(self)
             self.entitiesAdded = 0
@@ -26,7 +26,7 @@ describe('Engine', function()
         end
 
         -- Creates a Draw System
-        DrawSystem = class('DrawSystem', System)
+        DrawSystem = lovetoys.class('DrawSystem', System)
         function DrawSystem:requires()
             return {'Component1'}
         end
@@ -38,7 +38,7 @@ describe('Engine', function()
         end
 
         -- Creates a system with update and draw function
-        BothSystem = class('BothSystem', System)
+        BothSystem = lovetoys.class('BothSystem', System)
         function BothSystem:requires()
             return {'Component1', 'Component2'}
         end
@@ -50,7 +50,7 @@ describe('Engine', function()
         function BothSystem:draw() end
 
         -- Creates a System with multiple requirements
-        MultiSystem = class('MultiSystem', System)
+        MultiSystem = lovetoys.class('MultiSystem', System)
         function MultiSystem:requires()
             return {name1 = {'Component1'}, name2 = {'Component2'}}
         end

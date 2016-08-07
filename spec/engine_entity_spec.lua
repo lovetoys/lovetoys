@@ -7,7 +7,7 @@ describe('Engine', function()
 
     setup(
     function()
-        TestSystem = class('TestSystem', System)
+        TestSystem = lovetoys.class('TestSystem', System)
         function TestSystem:requires()
             return {'Component1'}
         end
@@ -94,7 +94,7 @@ describe('Engine', function()
 
         local Animal, Dog = Component.create('Animal'), Component.create('Dog')
 
-        local AnimalSystem = class('AnimalSystem', System)
+        local AnimalSystem = lovetoys.class('AnimalSystem', System)
 
         function AnimalSystem:update() end
 

@@ -1,5 +1,4 @@
-local lovetoys = require("src.namespace")
-Engine = class("Engine")
+local Engine = require('src.namespace').class("Engine")
 
 function Engine:initialize()
     self.entities = {}
@@ -297,3 +296,5 @@ function Engine:checkRequirements(entity, system) -- luacheck: ignore self
         system:addEntity(entity)
     end
 end
+
+return Engine
