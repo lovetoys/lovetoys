@@ -2,7 +2,7 @@
 
 - Replace Engine:addInitializer() and Engine:removeInitializer with System:onAddEntity().
 - Add rockspec
-- **Breaking Change**: require('lovetoys') now returns a factory function that accepts an optional configuration object. See README for configuration details
+- **Breaking Change**: New mandatory `initialize` function used to specify configuration
 - **Breaking Change**: lovetoys doesn't use globals by default anymore. See the README on how to re-enable the old behavior
 
 ## 0.2

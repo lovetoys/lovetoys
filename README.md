@@ -21,15 +21,21 @@ The best way of installing lovetoys is by creating a submodule and cloning it ri
 Another way is to just download a [tarball](https://github.com/lovetoys/lovetoys/releases) and copy the files into your project folder.
 The third way is to use Luarocks. Execute `luarocks install lovetoys`.
 
-To use lovetoys with the default options, use the line `require('lovetoys.lovetoys')()`.
+To use lovetoys with the default options, use the following:
+
+```lua
+local lovetoys = require('lovetoys.lovetoys')
+lovetoys.initialize()
+```
 
 For an example on how to use the lovetoys have a look at our [example](https://github.com/lovetoys/lovetoys-examples) repository.
 
 ### Configuration
-You can configure lovetoys by passing a configuration table to its factory function like so:
+After requiring, configure lovetoys by passing a configuration table to the `initialize` function like so:
 
 ```lua
-require('lovetoys.lovetoys')({
+local lovetoys = require('lovetoys.lovetoys')
+lovetoys.initialize({
     -- options here
 })
 ```
@@ -37,7 +43,8 @@ require('lovetoys.lovetoys')({
 For example, if you want debug output, pass the option `debug = true`:
 
 ```lua
-require('lovetoys.lovetoys')({
+local lovetoys = require('lovetoys.lovetoys')
+lovetoys.initialize({
     debug = true
 })
 ```
@@ -46,6 +53,8 @@ require('lovetoys.lovetoys')({
 | --- | --- | --- | --- |
 | debug | boolean | false | Makes lovetoys print warnings and notifications to stdout. |
 | globals | boolean | false | If true, lovetoys will make all its classes available via the global namespace. |
+
+Once you've called `initialize`, the configuration will be the same every time you `require('lovetoys.lovetoys')`.
 
 ## API Reference
 
