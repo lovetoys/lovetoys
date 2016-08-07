@@ -11,6 +11,14 @@ local classes = {
 }
 
 describe('Configuration', function()
+    after_each(
+    function()
+        local lovetoys = require('lovetoys')
+        lovetoys.config = {}
+        lovetoys.initialized = false
+    end
+    )
+
     it('injects classes into the global namespace if globals = true is passed', function()
         local env = {}
         setmetatable(_G, {
@@ -33,7 +41,7 @@ describe('Configuration', function()
 
     it('doesnt modify the global table by default', function()
         local lovetoys = require('lovetoys')
-        lovetoys.initialize()
+        lovetoys.initialize({})
 
         for _, entry in ipairs(classes) do
             assert.is_nil(_G[entry])
