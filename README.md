@@ -58,10 +58,10 @@ Once you've called `initialize`, the configuration will be the same every time y
 
 ## API Reference
 
-lovetoys primarily consists of a few classes that are implemented using [middleclass](https://github.com/kikito/middleclass). By default, they are available via the lovetoys object returned from the factory function:
+lovetoys primarily consists of a few classes that are implemented using [middleclass](https://github.com/kikito/middleclass). By default, they are available via the lovetoys object:
 
 ```lua
-local lovetoys = require('lovetoys')()
+local lovetoys = require('lovetoys')
 -- Create a new entity
 local entity = lovetoys.Entity()
 ```
