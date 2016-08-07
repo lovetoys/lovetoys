@@ -28,25 +28,26 @@ local function populateNamespace(ns)
     ns.Component = require(folderOfThisFile .. "src.Component")
 end
 
-function lovetoys.setConfig(opts)
-    for name, val in pairs(opts) do
-        lovetoys.config[name] = val
-    end
+function lovetoys.initialize(opts)
+    if not lovetoys.initialized then
+        lovetoys.config = {
+            debug = false,
+            globals = false
+        }
 
-    populateNamespace(lovetoys)
+        for name, val in pairs(opts) do
+            lovetoys.config[name] = val
+        end
 
-    if lovetoys.config.globals then
-        populateNamespace(_G)
+        populateNamespace(lovetoys)
+
+        if lovetoys.config.globals then
+            populateNamespace(_G)
+        end
+        lovetoys.initialized = true
+    else
+        print('Lovetoys is already initialized.')
     end
 end
 
-return function(opts)
-    lovetoys.config = {
-        debug = false,
-        globals = false
-    }
-
-    lovetoys.setConfig(opts or {})
-
-    return lovetoys
-end
+return lovetoys

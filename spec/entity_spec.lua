@@ -1,4 +1,5 @@
-local lovetoys = require('lovetoys')({ globals = true})
+local lovetoys = require('lovetoys')
+lovetoys.initialize({ globals = true })
 
 describe('Entity', function()
     local TestComponent, TestComponent1, TestComponent2, TestComponent3

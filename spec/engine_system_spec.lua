@@ -1,4 +1,5 @@
-local lovetoys = require('lovetoys')({ globals = true})
+local lovetoys = require('lovetoys')
+lovetoys.initialize({ globals = true })
 
 describe('Engine', function()
     local UpdateSystem, DrawSystem, MultiSystem, Component1, Component2
