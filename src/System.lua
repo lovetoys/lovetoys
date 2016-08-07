@@ -25,21 +25,38 @@ function System:addEntity(entity, category)
 end
 
 function System:removeEntity(entity, component)
-    if lovetoys.util.firstElement(self.targets) then
-        if lovetoys.util.firstElement(self.targets).class then
+    -- Get the first element and check .class.name == 'Entity'
+    -- In case it is an Entity, we know that this System doesn't have multiple
+    -- Requirements. Otherwise we remove the Entity from each category.
+    local firstElement = lovetoys.util.firstElement(self.targets)
+    if firstElement then
+        if firstElement.class and firstElement.class.name == 'Entity' then
             self.targets[entity.id] = nil
         else
             -- Removing entities from their respective category target list.
             for index, _ in pairs(self.targets) do
-                if component then
-                    for _, req in pairs(self:requires()[index]) do
-                        if req == component then
-                            self.targets[index][entity.id] = nil
-                            break
-                        end
+                self.targets[index][entity.id] = nil
+            end
+        end
+    end
+end
+
+function System:componentRemoved(entity, component)
+    -- Get the first element and check .class.name == 'Entity'.
+    -- In case a System has multiple requirements we need to check for
+    -- each requirement category if the entity has to be removed.
+    local firstElement = lovetoys.util.firstElement(self.targets)
+    if firstElement then
+        if firstElement.class and firstElement.class.name == 'Entity' then
+            self.targets[entity.id] = nil
+        else
+            -- Removing entities from their respective category target list.
+            for index, _ in pairs(self.targets) do
+                for _, req in pairs(self:requires()[index]) do
+                    if req == component then
+                        self.targets[index][entity.id] = nil
+                        break
                     end
-                else
-                    self.targets[index][entity.id] = nil
                 end
             end
         end
