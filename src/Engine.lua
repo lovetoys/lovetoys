@@ -88,13 +88,11 @@ function Engine:removeEntity(entity, removeChildren, newParent)
         -- Removing entity from engine
         self.entities[entity.id] = nil
     else
-        if lovetoys.config.debug then
-            print("Trying to remove non existent entity from engine.")
-            print("Entity id: " .. entity.id)
-            print("Entity's components:")
-            for index, component in pairs(entity.components) do
-                print(index, component)
-            end
+        lovetoys.debug("Trying to remove non existent entity from engine.")
+        lovetoys.debug("Entity id: " .. entity.id)
+        lovetoys.debug("Entity's components:")
+        for index, component in pairs(entity.components) do
+            lovetoys.debug(index, component)
         end
     end
 end
@@ -103,9 +101,7 @@ function Engine:addSystem(system, typ)
     local name = system.class.name
     -- Check if system has both function without specified type
     if system.draw and system.update and not typ then
-        if lovetoys.config.debug then
-            print("Lovetoys: Trying to add " .. name .. ", which has an update and a draw function, without specifying typ. Aborting")
-        end
+        lovetoys.debug("Lovetoys: Trying to add " .. name .. ", which has an update and a draw function, without specifying typ. Aborting")
         return
     end
     -- Adding System to engine system reference table
@@ -114,9 +110,7 @@ function Engine:addSystem(system, typ)
         -- This triggers if the system doesn't have update and draw and it's already existing.
     elseif not (system.update and system.draw) then
         if self.systemRegistry[name] then
-            if lovetoys.config.debug then
-                print("Lovetoys: " .. name .. " already exists. Aborting")
-            end
+            lovetoys.debug("Lovetoys: " .. name .. " already exists. Aborting")
             return
         end
     end
@@ -125,9 +119,7 @@ function Engine:addSystem(system, typ)
     if system.draw and (not typ or typ == "draw") then
         for _, registeredSystem in pairs(self.systems["draw"]) do
             if registeredSystem.class.name == name then
-                if lovetoys.config.debug then
-                    print("Lovetoys: " .. name .. " already exists. Aborting")
-                end
+                lovetoys.debug("Lovetoys: " .. name .. " already exists. Aborting")
                 return
             end
         end
@@ -136,9 +128,7 @@ function Engine:addSystem(system, typ)
     elseif system.update and (not typ or typ == "update") then
         for _, registeredSystem in pairs(self.systems["update"]) do
             if registeredSystem.class.name == name then
-                if lovetoys.config.debug then
-                    print("Lovetoys: " .. name .. " already exists. Aborting")
-                end
+                lovetoys.debug("Lovetoys: " .. name .. " already exists. Aborting")
                 return
             end
         end
@@ -170,7 +160,7 @@ function Engine:registerSystem(system)
     end
 
     -- Registering in case its a table of tables which contain strings
-    if table.firstElement(system:requires()) and type(table.firstElement(system:requires())) == "table" then
+    if lovetoys.util.firstElement(system:requires()) and type(lovetoys.util.firstElement(system:requires())) == "table" then
         for index, componentList in pairs(system:requires()) do
             -- Registering at singleRequirements
             local component = componentList[1]
@@ -200,24 +190,24 @@ end
 function Engine:stopSystem(name)
     if self.systemRegistry[name] then
         self.systemRegistry[name].active = false
-    elseif lovetoys.config.debug then
-        print("Lovetoys: Trying to stop unexisting System: " .. name)
+    else
+        lovetoys.debug("Lovetoys: Trying to stop not existing System: " .. name)
     end
 end
 
 function Engine:startSystem(name)
     if self.systemRegistry[name] then
         self.systemRegistry[name].active = true
-    elseif lovetoys.config.debug then
-        print("Lovetoys: Trying to start unexisting System: " .. name)
+    else
+        lovetoys.debug("Lovetoys: Trying to start not existing System: " .. name)
     end
 end
 
 function Engine:toggleSystem(name)
     if self.systemRegistry[name] then
         self.systemRegistry[name].active = not self.systemRegistry[name].active
-    elseif lovetoys.config.debug then
-        print("Lovetoys: Trying to toggle unexisting System: " .. name)
+    else
+        lovetoys.debug("Lovetoys: Trying to toggle not existing System: " .. name)
     end
 end
 

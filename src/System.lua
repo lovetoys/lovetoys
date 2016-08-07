@@ -26,8 +26,8 @@ function System:addEntity(entity, category)
 end
 
 function System:removeEntity(entity, component)
-    if table.firstElement(self.targets) then
-        if table.firstElement(self.targets).class then
+    if lovetoys.util.firstElement(self.targets) then
+        if lovetoys.util.firstElement(self.targets).class then
             self.targets[entity.id] = nil
         else
             -- Removing entities from their respective category target list.
@@ -57,9 +57,7 @@ function System:pickRequiredComponents(entity)
             table.insert(components, entity:get(componentName))
         end
     elseif type(requirements[1]) == "table" then
-        if lovetoys.config.debug then
-            print("Error: :pickRequiredComponents() is not supported for systems with multiple component constellations")
-        end
+        lovetoys.debug("Error: :pickRequiredComponents() is not supported for systems with multiple component constellations")
     end
     return unpack(components)
 end

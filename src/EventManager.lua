@@ -14,18 +14,14 @@ function EventManager:addListener(eventName, listener, listenerFunction)
 
     for _, registeredListener in pairs(self.eventListeners[eventName]) do
         if registeredListener[1].class == listener.class then
-            if lovetoys.config.debug then
-                print("EventListener already existing. Aborting")
-            end
+            lovetoys.debug("EventListener already existing. Aborting")
             return
         end
     end
     if type(listenerFunction) == 'function' then
         table.insert(self.eventListeners[eventName], {listener, listenerFunction})
     else
-        if lovetoys.config.debug then
-            print('Eventmanager: Second parameter has to be a function! Pls check ' .. listener.class.name)
-        end
+        lovetoys.debug('Eventmanager: Second parameter has to be a function! Pls check ' .. listener.class.name)
     end
 end
 
@@ -38,9 +34,7 @@ function EventManager:removeListener(eventName, listener)
                 return
             end
         end
-        if lovetoys.config.debug then
-            print("Listener to be deleted is not existing.")
-        end
+        lovetoys.debug("Listener to be deleted is not existing.")
     end
 end
 
