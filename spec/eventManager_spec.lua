@@ -1,4 +1,4 @@
-require('lovetoys')()
+local lovetoys = require('lovetoys')({ globals = true})
 
 describe('Eventmanager', function()
     local Listener, TestEvent

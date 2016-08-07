@@ -1,8 +1,8 @@
-require('lovetoys')()
+local lovetoys = require('lovetoys')({ globals = true })
 
 describe('Component', function()
     it(':create with defaults creates a Component with default values', function()
-        local c = Component.create('TestComponent',
+        local c = lovetoys.Component.create('TestComponent',
           {'defaultField', 'emptyField'},
           {defaultField = 'defaultValue'})
 

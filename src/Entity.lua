@@ -1,4 +1,5 @@
-local Entity = require('src.namespace').class("Entity")
+local lovetoys = require('src.namespace')
+local Entity = lovetoys.class("Entity")
 
 function Entity:initialize(parent, name)
     self.components = {}

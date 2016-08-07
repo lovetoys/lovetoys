@@ -1,4 +1,4 @@
-require('lovetoys')()
+local lovetoys = require('lovetoys')({ globals = true})
 
 describe('Engine', function()
     local TestSystem, Component1, Component2

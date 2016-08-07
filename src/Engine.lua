@@ -1,4 +1,5 @@
-local Engine = require('src.namespace').class("Engine")
+local lovetoys = require('src.namespace')
+local Engine = lovetoys.class("Engine")
 
 function Engine:initialize()
     self.entities = {}

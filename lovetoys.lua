@@ -1,7 +1,7 @@
 -- Getting folder that contains engine
 local folderOfThisFile = (...):match("(.-)[^%/%.]+$")
 
-lovetoys = require('src.namespace')
+local lovetoys = require('src.namespace')
 
 function lovetoys.debug(message)
     if lovetoys.config.debug then
@@ -34,7 +34,7 @@ function lovetoys.setConfig(opts)
     end
 
     populateNamespace(lovetoys)
-    
+
     if lovetoys.config.globals then
         populateNamespace(_G)
     end
@@ -43,8 +43,10 @@ end
 return function(opts)
     lovetoys.config = {
         debug = false,
-        globals = true
+        globals = false
     }
 
     lovetoys.setConfig(opts or {})
+
+    return lovetoys
 end

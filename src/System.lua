@@ -1,4 +1,5 @@
-local System = require('src.namespace').class("System")
+local lovetoys = require('src.namespace')
+local System = lovetoys.class("System")
 
 function System:initialize()
     -- Liste aller Entities, die die RequiredComponents dieses Systems haben

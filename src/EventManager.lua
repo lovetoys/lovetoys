@@ -1,4 +1,5 @@
-local EventManager = require('src.namespace').class("EventManager")
+local lovetoys = require('src.namespace')
+local EventManager = lovetoys.class("EventManager")
 
 function EventManager:initialize()
     self.eventListeners = {}
