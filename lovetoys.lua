@@ -29,6 +29,7 @@ local function populateNamespace(ns)
 end
 
 function lovetoys.initialize(opts)
+    if opts == nil then opts = {} end
     if not lovetoys.initialized then
         lovetoys.config = {
             debug = false,
