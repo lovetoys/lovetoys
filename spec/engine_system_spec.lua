@@ -1,5 +1,4 @@
-require 'lovetoys'
-lovetoys.config.debug = true
+require('lovetoys')()
 
 describe('Engine', function()
     local UpdateSystem, DrawSystem, MultiSystem, Component1, Component2

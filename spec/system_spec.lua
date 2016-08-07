@@ -1,5 +1,4 @@
-require 'lovetoys'
-lovetoys.config.debug = true
+require('lovetoys')()
 
 describe('System', function()
     local TestSystem

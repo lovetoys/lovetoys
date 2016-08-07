@@ -3,24 +3,35 @@ local folderOfThisFile = (...):match("(.-)[^%/%.]+$")
 
 lovetoys = require('src.namespace')
 
-lovetoys.config = {
-    debug = false
-}
+function lovetoys.setConfig(opts)
+    for name, val in pairs(opts) do
+        lovetoys.config[name] = val
+    end
+end
 
--- Requiring class
+return function(opts)
+    lovetoys.config = {
+        debug = false,
+        globals = true
+    }
 
-class = require(folderOfThisFile .. 'lib.middleclass')
+    lovetoys.setConfig(opts or {})
 
--- Requiring util functions
-require(folderOfThisFile .. "src.util")
+    -- Requiring class
+    class = require(folderOfThisFile .. 'lib.middleclass')
 
--- Requiring all Events
-require(folderOfThisFile .. "src.events.ComponentAdded")
-require(folderOfThisFile .. "src.events.ComponentRemoved")
+    -- Requiring util functions
+    require(folderOfThisFile .. "src.util")
 
--- Requiring the lovetoys
-require(folderOfThisFile .. "src.Entity")
-require(folderOfThisFile .. "src.Engine")
-require(folderOfThisFile .. "src.System")
-require(folderOfThisFile .. "src.EventManager")
-require(folderOfThisFile .. "src.Component")
+    -- Requiring all Events
+    require(folderOfThisFile .. "src.events.ComponentAdded")
+    require(folderOfThisFile .. "src.events.ComponentRemoved")
+
+    -- Requiring the lovetoys
+    require(folderOfThisFile .. "src.Entity")
+    require(folderOfThisFile .. "src.Engine")
+    require(folderOfThisFile .. "src.System")
+    require(folderOfThisFile .. "src.EventManager")
+    require(folderOfThisFile .. "src.Component")
+
+end

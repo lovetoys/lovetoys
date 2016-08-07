@@ -1,5 +1,4 @@
-require('lovetoys')
-lovetoys.config.debug = true
+require('lovetoys')()
 
 describe('Component', function()
     it(':create with defaults creates a Component with default values', function()

@@ -1,4 +1,4 @@
-require('lovetoys')
+require('lovetoys')()
 local luatrace = require('luatrace.profile')
 
 luatrace.tron()

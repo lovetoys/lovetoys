@@ -1,5 +1,4 @@
-require 'lovetoys'
-lovetoys.config.debug = true
+require('lovetoys')()
 
 describe('Entity', function()
     local TestComponent, TestComponent1, TestComponent2, TestComponent3

@@ -1,5 +1,4 @@
-require 'lovetoys'
-lovetoys.config.debug = true
+require('lovetoys')()
 
 describe('Eventmanager', function()
     local Listener, TestEvent
