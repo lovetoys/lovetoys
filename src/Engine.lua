@@ -112,198 +112,198 @@ function Engine:addSystem(system, typ)
     if not (self.systemRegistry[name]) then
         self:registerSystem(system)
         -- This triggers if the system doesn't have update and draw and it's already existing.
-        elseif not (system.update and system.draw) then
-            if self.systemRegistry[name] then
+    elseif not (system.update and system.draw) then
+        if self.systemRegistry[name] then
+            if lovetoys.config.debug then
+                print("Lovetoys: " .. name .. " already exists. Aborting")
+            end
+            return
+        end
+    end
+
+    -- Adding System to draw table
+    if system.draw and (not typ or typ == "draw") then
+        for _, registeredSystem in pairs(self.systems["draw"]) do
+            if registeredSystem.class.name == name then
                 if lovetoys.config.debug then
                     print("Lovetoys: " .. name .. " already exists. Aborting")
                 end
                 return
             end
         end
-
-        -- Adding System to draw table
-        if system.draw and (not typ or typ == "draw") then
-            for _, registeredSystem in pairs(self.systems["draw"]) do
-                if registeredSystem.class.name == name then
-                    if lovetoys.config.debug then
-                        print("Lovetoys: " .. name .. " already exists. Aborting")
-                    end
-                    return
+        table.insert(self.systems["draw"], system)
+        -- Adding System to update table
+    elseif system.update and (not typ or typ == "update") then
+        for _, registeredSystem in pairs(self.systems["update"]) do
+            if registeredSystem.class.name == name then
+                if lovetoys.config.debug then
+                    print("Lovetoys: " .. name .. " already exists. Aborting")
                 end
+                return
             end
-            table.insert(self.systems["draw"], system)
-            -- Adding System to update table
-            elseif system.update and (not typ or typ == "update") then
-                for _, registeredSystem in pairs(self.systems["update"]) do
-                    if registeredSystem.class.name == name then
-                        if lovetoys.config.debug then
-                            print("Lovetoys: " .. name .. " already exists. Aborting")
-                        end
-                        return
-                    end
-                end
-                table.insert(self.systems["update"], system)
-            end
-
-            -- Checks if some of the already existing entities match the required components.
-            for _, entity in pairs(self.entities) do
-                self:checkRequirements(entity, system)
-            end
-            return system
         end
+        table.insert(self.systems["update"], system)
+    end
 
-        function Engine:registerSystem(system)
-            local name = system.class.name
-            self.systemRegistry[name] = system
-            -- Registering in case system:requires returns a table of strings
-            if system:requires()[1] and type(system:requires()[1]) == "string" then
-                for index, req in pairs(system:requires()) do
-                    -- Registering at singleRequirements
-                    if index == 1 then
-                        self.singleRequirements[req] = self.singleRequirements[req] or {}
-                        table.insert(self.singleRequirements[req], system)
+    -- Checks if some of the already existing entities match the required components.
+    for _, entity in pairs(self.entities) do
+        self:checkRequirements(entity, system)
+    end
+    return system
+end
+
+function Engine:registerSystem(system)
+    local name = system.class.name
+    self.systemRegistry[name] = system
+    -- Registering in case system:requires returns a table of strings
+    if system:requires()[1] and type(system:requires()[1]) == "string" then
+        for index, req in pairs(system:requires()) do
+            -- Registering at singleRequirements
+            if index == 1 then
+                self.singleRequirements[req] = self.singleRequirements[req] or {}
+                table.insert(self.singleRequirements[req], system)
+            end
+            -- Registering at allRequirements
+            self.allRequirements[req] = self.allRequirements[req] or {}
+            table.insert(self.allRequirements[req], system)
+        end
+    end
+
+    -- Registering in case its a table of tables which contain strings
+    if table.firstElement(system:requires()) and type(table.firstElement(system:requires())) == "table" then
+        for index, componentList in pairs(system:requires()) do
+            -- Registering at singleRequirements
+            local component = componentList[1]
+            self.singleRequirements[component] = self.singleRequirements[component] or {}
+            table.insert(self.singleRequirements[component], system)
+
+            -- Registering at allRequirements
+            for _, req in pairs(componentList) do
+                self.allRequirements[req] = self.allRequirements[req] or {}
+                -- Check if this List already contains the System
+                local contained = false
+                for _, registeredSystem in pairs(self.allRequirements[req]) do
+                    if registeredSystem == system then
+                        contained = true
+                        break
                     end
-                    -- Registering at allRequirements
-                    self.allRequirements[req] = self.allRequirements[req] or {}
+                end
+                if not contained then
                     table.insert(self.allRequirements[req], system)
                 end
             end
+            system.targets[index] = {}
+        end
+    end
+end
 
-            -- Registering in case its a table of tables which contain strings
-            if table.firstElement(system:requires()) and type(table.firstElement(system:requires())) == "table" then
-                for index, componentList in pairs(system:requires()) do
-                    -- Registering at singleRequirements
-                    local component = componentList[1]
-                    self.singleRequirements[component] = self.singleRequirements[component] or {}
-                    table.insert(self.singleRequirements[component], system)
+function Engine:stopSystem(name)
+    if self.systemRegistry[name] then
+        self.systemRegistry[name].active = false
+    elseif lovetoys.config.debug then
+        print("Lovetoys: Trying to stop unexisting System: " .. name)
+    end
+end
 
-                    -- Registering at allRequirements
-                    for _, req in pairs(componentList) do
-                        self.allRequirements[req] = self.allRequirements[req] or {}
-                        -- Check if this List already contains the System
-                        local contained = false
-                        for _, registeredSystem in pairs(self.allRequirements[req]) do
-                            if registeredSystem == system then
-                                contained = true
-                                break
-                            end
-                        end
-                        if not contained then
-                            table.insert(self.allRequirements[req], system)
-                        end
-                    end
-                    system.targets[index] = {}
+function Engine:startSystem(name)
+    if self.systemRegistry[name] then
+        self.systemRegistry[name].active = true
+    elseif lovetoys.config.debug then
+        print("Lovetoys: Trying to start unexisting System: " .. name)
+    end
+end
+
+function Engine:toggleSystem(name)
+    if self.systemRegistry[name] then
+        self.systemRegistry[name].active = not self.systemRegistry[name].active
+    elseif lovetoys.config.debug then
+        print("Lovetoys: Trying to toggle unexisting System: " .. name)
+    end
+end
+
+function Engine:update(dt)
+    for _, system in ipairs(self.systems["update"]) do
+        if system.active then
+            system:update(dt)
+        end
+    end
+end
+
+function Engine:draw()
+    for _, system in ipairs(self.systems["draw"]) do
+        if system.active then
+            system:draw()
+        end
+    end
+end
+
+function Engine:componentRemoved(event)
+    local entity = event.entity
+    local component = event.component
+
+    -- Removing Entity from Entitylists
+    self.entityLists[component][entity.id] = nil
+
+    -- Removing Entity from old systems
+    if self.allRequirements[component] then
+        for _, system in pairs(self.allRequirements[component]) do
+            system:removeEntity(entity, component)
+        end
+    end
+end
+
+function Engine:componentAdded(event)
+    local entity = event.entity
+    local component = event.component
+
+    -- Adding the Entity to Entitylist
+    if not self.entityLists[component] then self.entityLists[component] = {} end
+    self.entityLists[component][entity.id] = entity
+
+    -- Adding the Entity to the requiring systems
+    if self.allRequirements[component] then
+        for _, system in pairs(self.allRequirements[component]) do
+            self:checkRequirements(entity, system)
+        end
+    end
+end
+
+function Engine:getRootEntity()
+    if self.rootEntity ~= nil then
+        return self.rootEntity
+    end
+end
+
+-- Returns an Entitylist for a specific component. If the Entitylist doesn't exist yet it'll be created and returned.
+function Engine:getEntitiesWithComponent(component)
+    if not self.entityLists[component] then self.entityLists[component] = {} end
+    return self.entityLists[component]
+end
+
+function Engine:checkRequirements(entity, system) -- luacheck: ignore self
+    local meetsrequirements = true
+    local category = nil
+    for index, req in pairs(system:requires()) do
+        if type(req) == "string" then
+            if not entity.components[req] then
+                meetsrequirements = false
+                break
+            end
+        elseif type(req) == "table" then
+            meetsrequirements = true
+            for _, req2 in pairs(req) do
+                if not entity.components[req2] then
+                    meetsrequirements = false
+                    break
                 end
+            end
+            if meetsrequirements == true then
+                category = index
+                system:addEntity(entity, category)
             end
         end
-
-        function Engine:stopSystem(name)
-            if self.systemRegistry[name] then
-                self.systemRegistry[name].active = false
-                elseif lovetoys.config.debug then
-                    print("Lovetoys: Trying to stop unexisting System: " .. name)
-                end
-            end
-
-            function Engine:startSystem(name)
-                if self.systemRegistry[name] then
-                    self.systemRegistry[name].active = true
-                    elseif lovetoys.config.debug then
-                        print("Lovetoys: Trying to start unexisting System: " .. name)
-                    end
-                end
-
-                function Engine:toggleSystem(name)
-                    if self.systemRegistry[name] then
-                        self.systemRegistry[name].active = not self.systemRegistry[name].active
-                        elseif lovetoys.config.debug then
-                            print("Lovetoys: Trying to toggle unexisting System: " .. name)
-                        end
-                    end
-
-                    function Engine:update(dt)
-                        for _, system in ipairs(self.systems["update"]) do
-                            if system.active then
-                                system:update(dt)
-                            end
-                        end
-                    end
-
-                    function Engine:draw()
-                        for _, system in ipairs(self.systems["draw"]) do
-                            if system.active then
-                                system:draw()
-                            end
-                        end
-                    end
-
-                    function Engine:componentRemoved(event)
-                        local entity = event.entity
-                        local component = event.component
-
-                        -- Removing Entity from Entitylists
-                        self.entityLists[component][entity.id] = nil
-
-                        -- Removing Entity from old systems
-                        if self.allRequirements[component] then
-                            for _, system in pairs(self.allRequirements[component]) do
-                                system:removeEntity(entity, component)
-                            end
-                        end
-                    end
-
-                    function Engine:componentAdded(event)
-                        local entity = event.entity
-                        local component = event.component
-
-                        -- Adding the Entity to Entitylist
-                        if not self.entityLists[component] then self.entityLists[component] = {} end
-                        self.entityLists[component][entity.id] = entity
-
-                        -- Adding the Entity to the requiring systems
-                        if self.allRequirements[component] then
-                            for _, system in pairs(self.allRequirements[component]) do
-                                self:checkRequirements(entity, system)
-                            end
-                        end
-                    end
-
-                    function Engine:getRootEntity()
-                        if self.rootEntity ~= nil then
-                            return self.rootEntity
-                        end
-                    end
-
-                    -- Returns an Entitylist for a specific component. If the Entitylist doesn't exist yet it'll be created and returned.
-                    function Engine:getEntitiesWithComponent(component)
-                        if not self.entityLists[component] then self.entityLists[component] = {} end
-                        return self.entityLists[component]
-                    end
-
-                    function Engine:checkRequirements(entity, system) -- luacheck: ignore self
-                        local meetsrequirements = true
-                        local category = nil
-                        for index, req in pairs(system:requires()) do
-                            if type(req) == "string" then
-                                if not entity.components[req] then
-                                    meetsrequirements = false
-                                    break
-                                end
-                                elseif type(req) == "table" then
-                                    meetsrequirements = true
-                                    for _, req2 in pairs(req) do
-                                        if not entity.components[req2] then
-                                            meetsrequirements = false
-                                            break
-                                        end
-                                    end
-                                    if meetsrequirements == true then
-                                        category = index
-                                        system:addEntity(entity, category)
-                                    end
-                                end
-                            end
-                            if meetsrequirements == true and category == nil then
-                                system:addEntity(entity)
-                            end
-                        end
+    end
+    if meetsrequirements == true and category == nil then
+        system:addEntity(entity)
+    end
+end
