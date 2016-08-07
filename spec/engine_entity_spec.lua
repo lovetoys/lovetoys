@@ -229,6 +229,20 @@ describe('Engine', function()
         assert.True(#multiSystem.targets['name2'] == 0)
     end)
 
+    it('Entity:remove() removes entity from system with multiple requirements', function()
+        entity:add(Component1())
+        entity:add(Component2())
+        engine:addEntity(entity)
+        engine:addSystem(multiSystem)
+        assert.are.equal(multiSystem.targets['name1'][1], entity)
+        assert.are.equal(multiSystem.targets['name2'][1], entity)
+
+        engine:removeEntity(entity)
+        assert.True(#multiSystem.targets['name1'] == 0)
+        assert.True(#multiSystem.targets['name2'] == 0)
+    end)
+
+
     it(':getRootEntity() gets rootEntity', function()
         assert.are.equal(engine:getRootEntity(), engine.rootEntity)
     end)
