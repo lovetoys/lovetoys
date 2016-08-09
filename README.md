@@ -52,7 +52,7 @@ lovetoys.initialize({
 | Name | Type | Default | Meaning |
 | --- | --- | --- | --- |
 | debug | boolean | false | Makes lovetoys print warnings and notifications to stdout. |
-| globals | boolean | false | If true, lovetoys will make all its classes available via the global namespace. |
+| globals | boolean | false | If true, lovetoys will make all its classes available via the global namespace. (e.g. Entity instead of lovetoys.Entity) |
 
 Once you've called `initialize`, the configuration will be the same every time you `require('lovetoys.lovetoys')`.
 
@@ -62,8 +62,14 @@ lovetoys primarily consists of a few classes that are implemented using [middlec
 
 ```lua
 local lovetoys = require('lovetoys')
--- Create a new entity
+-- Create a new instances
 local entity = lovetoys.Entity()
+local system = lovetoys.System()
+local engine = lovetoys.Engine()
+local component = lovetoys.Component()
+local eventManager = lovetoys.EventManager()
+-- Middleclass version we are using
+local class = lovetoys.class ()
 ```
 
 ### Entity
