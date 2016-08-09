@@ -1,7 +1,7 @@
--- Getting folder that contains engine
+-- Getting folder that contains our src
 local folderOfThisFile = (...):match("(.-)[^%/%.]+$")
 
-local lovetoys = require('src.namespace')
+local lovetoys = require(folderOfThisFile .. 'src.namespace')
 
 function lovetoys.debug(message)
     if lovetoys.config.debug then

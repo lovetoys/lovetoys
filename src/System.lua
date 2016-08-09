@@ -1,4 +1,7 @@
-local lovetoys = require('src.namespace')
+-- Getting folder that contains our src
+local folderOfThisFile = (...):match("(.-)[^%/%.]+$")
+
+local lovetoys = require(folderOfThisFile .. 'namespace')
 local System = lovetoys.class("System")
 
 function System:initialize()
