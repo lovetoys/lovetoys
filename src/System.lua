@@ -70,7 +70,7 @@ function System:pickRequiredComponents(entity)
             table.insert(components, entity:get(componentName))
         end
     elseif type(lovetoys.util.firstElement(requirements)) == "table" then
-        lovetoys.debug("Error: :pickRequiredComponents() is not supported for systems with multiple component constellations")
+        lovetoys.debug("System: :pickRequiredComponents() is not supported for systems with multiple component constellations")
         return nil
     end
     return unpack(components)

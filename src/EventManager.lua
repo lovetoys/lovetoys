@@ -18,7 +18,7 @@ function EventManager:addListener(eventName, listener, listenerFunction)
 
     for _, registeredListener in pairs(self.eventListeners[eventName]) do
         if registeredListener[1].class == listener.class then
-            lovetoys.debug("EventListener already existing. Aborting")
+            lovetoys.debug("Eventmanager: EventListener already existing. Aborting")
             return
         end
     end
@@ -41,9 +41,9 @@ function EventManager:removeListener(eventName, listener)
                 return
             end
         end
-        lovetoys.debug(string.format("Listener %s to be deleted on Event %s  is not existing.", listener.class.name, eventName))
+        lovetoys.debug(string.format("Eventmanager: Listener %s to be deleted on Event %s  is not existing.", listener.class.name, eventName))
     end
-    lovetoys.debug(string.format("Event %s listener should be removed from is not existing ", eventName))
+    lovetoys.debug(string.format("Eventmanager: Event %s listener should be removed from is not existing ", eventName))
 end
 
 -- Firing an event. All registered listener will react to this event

@@ -209,7 +209,7 @@ describe('Engine', function()
         assert.are_not.equal(testSystem.targets[1], entity)
     end)
 
-    it(':removeEntity() removes from System', function()
+    it(':removeEntity() unregistered entity from Engine', function()
         -- Mock lovetoys debug function
         local debug_spy = spy.on(lovetoys, 'debug')
 
@@ -220,9 +220,14 @@ describe('Engine', function()
 
         -- Assert that the debug function hast been called
         assert.spy(debug_spy).was_called()
+        lovetoys.debug:clear()
+
+        entity.id = 1
+        engine:removeEntity(entity)
+        assert.spy(debug_spy).was_called()
+
         lovetoys.debug:revert()
     end)
-
 
     it('Entity:remove() removes entity from single system target list, after removing component', function()
         entity:add(Component1())
