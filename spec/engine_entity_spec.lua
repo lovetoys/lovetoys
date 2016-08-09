@@ -137,6 +137,7 @@ describe('Engine', function()
         assert.are.equal(count(animalSystem.targets.animals), 2)
         assert.are.equal(count(animalSystem.targets.dogs), 1)
     end)
+
     it(':removeEntity() removes a single', function()
         engine:addEntity(entity)
         assert.are.equal(engine.rootEntity.children[1], entity)
@@ -206,6 +207,21 @@ describe('Engine', function()
         engine:removeEntity(entity)
         assert.are_not.equal(testSystem.targets[1], entity)
     end)
+
+    it(':removeEntity() removes from System', function()
+        -- Mock function
+        local debug_spy = spy.on(lovetoys, 'debug')
+
+        -- Add Component to entity and remove entity from engine
+        -- before it's registered to the engine.
+        entity:add(Component1())
+        engine:removeEntity(entity)
+
+        -- Assert that the debug function hast been called
+        assert.spy(debug_spy).was_called()
+        lovetoys.debug:revert()
+    end)
+
 
     it('Entity:remove() removes entity from single system target list, after removing component', function()
         entity:add(Component1())

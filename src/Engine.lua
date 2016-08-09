@@ -48,20 +48,21 @@ function Engine:addEntity(entity)
 end
 
 function Engine:removeEntity(entity, removeChildren, newParent)
-    -- Removing the Entity from all Systems and engine
-    for _, component in pairs(entity.components) do
-        local name = component.class.name
-        if self.singleRequirements[name] then
-            for _, system in pairs(self.singleRequirements[name]) do
-                system:removeEntity(entity)
+    if self.entities[entity.id] then
+        -- Removing the Entity from all Systems and engine
+        for _, component in pairs(entity.components) do
+            local name = component.class.name
+            if self.singleRequirements[name] then
+                for _, system in pairs(self.singleRequirements[name]) do
+                    system:removeEntity(entity)
+                end
             end
         end
-    end
-    -- Deleting the Entity from the specific entity lists
-    for _, component in pairs(entity.components) do
-        self.entityLists[component.class.name][entity.id] = nil
-    end
-    if self.entities[entity.id] then
+        -- Deleting the Entity from the specific entity lists
+        for _, component in pairs(entity.components) do
+            self.entityLists[component.class.name][entity.id] = nil
+        end
+
         -- If removeChild is defined, all children become deleted recursively
         if removeChildren then
             for _, child in pairs(entity.children) do
@@ -89,7 +90,11 @@ function Engine:removeEntity(entity, removeChildren, newParent)
         self.entities[entity.id] = nil
     else
         lovetoys.debug("Trying to remove non existent entity from engine.")
-        lovetoys.debug("Entity id: " .. entity.id)
+        if entity.id then
+            lovetoys.debug("Entity id: " .. entity.id)
+        else
+            lovetoys.debug("Entity has not been added to any engine yet. (No entity.id)")
+        end
         lovetoys.debug("Entity's components:")
         for index, component in pairs(entity.components) do
             lovetoys.debug(index, component)
