@@ -209,6 +209,28 @@ describe('Engine', function()
         assert.are.equal(entity:get('Component1').number, 31)
     end)
 
+    it('Calling system status functions on not existing systems throws debug message.', function()
+        -- Mock lovetoys debug function
+        local debug_spy = spy.on(lovetoys, 'debug')
+
+        engine:startSystem('weirdstufflol')
+        -- Assert that the debug function has been called
+        -- and clear spy call history
+        assert.spy(debug_spy).was_called()
+        lovetoys.debug:clear()
+
+        engine:toggleSystem('weirdstufflol')
+        assert.spy(debug_spy).was_called()
+        lovetoys.debug:clear()
+
+        engine:stopSystem('weirdstufflol')
+        assert.spy(debug_spy).was_called()
+        lovetoys.debug:clear()
+
+        lovetoys.debug:revert()
+    end)
+
+
     it('calls UpdateSystem:onComponentAdded when a component is added to UpdateSystem', function()
         assert.are.equal(updateSystem.entitiesAdded, 0)
 
