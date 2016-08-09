@@ -209,7 +209,7 @@ describe('Engine', function()
     end)
 
     it(':removeEntity() removes from System', function()
-        -- Mock function
+        -- Mock lovetoys debug function
         local debug_spy = spy.on(lovetoys, 'debug')
 
         -- Add Component to entity and remove entity from engine

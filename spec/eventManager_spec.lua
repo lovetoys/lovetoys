@@ -44,6 +44,32 @@ describe('Eventmanager', function()
         assert.are_not.equal(eventManager.eventListeners['TestEvent'][1][1].number, 5)
     end)
 
+    it('addListener() without function throws debug message', function()
+        -- Mock lovetoys debug function
+        local debug_spy = spy.on(lovetoys, 'debug')
+
+        eventManager:addListener('TestEvent', listener, 'lol')
+
+        -- Assert that the debug function hast been called
+        assert.spy(debug_spy).was_called()
+        lovetoys.debug:revert()
+    end)
+
+    it('addListener() without listener.class.name on listener throws debug message', function()
+        -- Mock lovetoys debug function
+        local debug_spy = spy.on(lovetoys, 'debug')
+
+        eventManager:addListener('TestEvent', {class={}}, listener.test)
+
+        -- Assert that the debug function hast been called
+        assert.spy(debug_spy).was_called()
+        lovetoys.debug:clear()
+
+        eventManager:addListener('TestEvent', {}, listener.test)
+        assert.spy(debug_spy).was_called()
+        lovetoys.debug:revert()
+    end)
+
     it('removeListener() removes Listener', function()
         eventManager:addListener('TestEvent', listener, listener.test)
         assert.are.equal(type(eventManager.eventListeners['TestEvent']), 'table')
@@ -52,6 +78,25 @@ describe('Eventmanager', function()
         eventManager:removeListener('TestEvent', listener.class.name)
         assert.are.equal(eventManager.eventListeners['TestEvent'][1], nil )
     end)
+
+    it('removeListener() on unregistered listener throws debug message', function()
+        -- Mock lovetoys debug function
+        local debug_spy = spy.on(lovetoys, 'debug')
+
+        eventManager:removeListener('TestEvent', listener)
+
+        -- Assert that the debug function hast been called
+        assert.spy(debug_spy).was_called()
+        lovetoys.debug:clear()
+
+        eventManager:addListener('TestEvent', listener, listener.test)
+        eventManager:removeListener('TestEvent', listener)
+        eventManager:removeListener('TestEvent', listener)
+        assert.spy(debug_spy).was_called()
+
+        lovetoys.debug:revert()
+    end)
+
 
     it('fireEvent() listener Function is beeing called', function()
         eventManager:addListener('TestEvent', listener, listener.test)

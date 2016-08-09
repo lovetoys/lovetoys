@@ -12,6 +12,10 @@ function EventManager:addListener(eventName, listener, listenerFunction)
         self.eventListeners[eventName] = {}
     end
 
+    if not listener.class or (listener.class and not listener.class.name) then
+        lovetoys.debug('Eventmanager: The listener has to implement a listener.class.name field.')
+    end
+
     for _, registeredListener in pairs(self.eventListeners[eventName]) do
         if registeredListener[1].class == listener.class then
             lovetoys.debug("EventListener already existing. Aborting")
@@ -21,7 +25,10 @@ function EventManager:addListener(eventName, listener, listenerFunction)
     if type(listenerFunction) == 'function' then
         table.insert(self.eventListeners[eventName], {listener, listenerFunction})
     else
-        lovetoys.debug('Eventmanager: Second parameter has to be a function! Pls check ' .. listener.class.name)
+        lovetoys.debug('Eventmanager: Third parameter has to be a function! Please check listener for ' .. eventName)
+        if listener.class and listener.class.name then
+            lovetoys.debug('Eventmanager: Listener class name: ' .. listener.class.name)
+        end
     end
 end
 
@@ -34,8 +41,9 @@ function EventManager:removeListener(eventName, listener)
                 return
             end
         end
-        lovetoys.debug("Listener to be deleted is not existing.")
+        lovetoys.debug(string.format("Listener %s to be deleted on Event %s  is not existing.", listener.class.name, eventName))
     end
+    lovetoys.debug(string.format("Event %s listener should be removed from is not existing ", eventName))
 end
 
 -- Firing an event. All registered listener will react to this event
