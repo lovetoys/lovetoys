@@ -65,13 +65,13 @@ function System:pickRequiredComponents(entity)
     local components = {}
     local requirements = self:requires()
 
-    if not requirements[1] then
-    elseif type(requirements[1]) == "string" then
+    if type(lovetoys.util.firstElement(requirements)) == "string" then
         for _, componentName in pairs(requirements) do
             table.insert(components, entity:get(componentName))
         end
-    elseif type(requirements[1]) == "table" then
+    elseif type(lovetoys.util.firstElement(requirements)) == "table" then
         lovetoys.debug("Error: :pickRequiredComponents() is not supported for systems with multiple component constellations")
+        return nil
     end
     return unpack(components)
 end

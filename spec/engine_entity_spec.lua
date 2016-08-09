@@ -2,9 +2,10 @@ local lovetoys = require('lovetoys')
 lovetoys.initialize({ globals = true })
 
 describe('Engine', function()
-    local TestSystem, Component1, Component2
+    local TestSystem, MultiSystem
+    local Component1, Component2
     local entity, entity2, entity3
-    local testSystem, engine
+    local testSystem, multiSystem, engine
 
     setup(
     function()
