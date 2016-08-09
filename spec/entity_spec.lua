@@ -1,5 +1,5 @@
 local lovetoys = require('lovetoys')
-lovetoys.initialize({ globals = true })
+lovetoys.initialize({ globals = true, debugging = true })
 
 describe('Entity', function()
     local TestComponent, TestComponent1, TestComponent2, TestComponent3
@@ -43,6 +43,18 @@ describe('Entity', function()
         testComponent.int = 13
         entity:add(testComponent)
         assert.are_not.equal(entity.components[testComponent.class.name].int, 13)
+    end)
+
+    it(':remove() removes a Component', function()
+        entity:add(testComponent)
+        entity:remove('TestComponent')
+    end)
+
+    it(':remove() prints debug message if Component does not exist', function()
+        local debug_spy = spy.on(lovetoys, 'debug')
+        entity:remove('TestComponent')
+        assert.spy(debug_spy).was_called()
+        lovetoys.debug:revert()
     end)
 
     it(':get() gets a Component', function()
