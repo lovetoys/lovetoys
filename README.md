@@ -5,7 +5,8 @@
 </div>
 <h1 align="center">lövetoys</h1>
 
-`v0.3` [![Build Status](https://travis-ci.org/lovetoys/lovetoys.svg?branch=master)](https://travis-ci.org/lovetoys/lovetoys) [![Coverage Status](https://coveralls.io/repos/github/lovetoys/lovetoys/badge.svg?branch=master)](https://coveralls.io/github/lovetoys/lovetoys?branch=master)
+[![GitHub release](https://img.shields.io/github/release/lovetoys/lovetoys.svg?maxAge=2592000)](https://github.com/lovetoys/lovetoys/releases/latest)
+[![Build Status](https://travis-ci.org/lovetoys/lovetoys.svg?branch=master)](https://travis-ci.org/lovetoys/lovetoys) [![Coverage Status](https://coveralls.io/repos/github/lovetoys/lovetoys/badge.svg?branch=master)](https://coveralls.io/github/lovetoys/lovetoys?branch=master)
 
 
 lovetoys is an Entity Component System framework for game development with lua. Originally written for the LÖVE 2D game engine, it is actually compatible with pretty much any game that uses lua!
