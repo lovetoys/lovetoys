@@ -6,11 +6,11 @@ local Engine = lovetoys.class("Engine")
 
 function Engine:initialize()
     self.entities = {}
-    self.rootEntity = Entity()
+    self.rootEntity = lovetoys.Entity()
     self.singleRequirements = {}
     self.allRequirements = {}
     self.entityLists = {}
-    self.eventManager = EventManager()
+    self.eventManager = lovetoys.EventManager()
 
     self.systems = {}
     self.systemRegistry = {}
