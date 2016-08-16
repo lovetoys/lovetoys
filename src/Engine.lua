@@ -30,12 +30,12 @@ function Engine:addEntity(entity)
     self.entities[entity.id] = entity
 
     -- If a rootEntity entity is defined and the entity doesn't have a parent yet, the rootEntity entity becomes the entity's parent
-    if entity.parent == nil then
+    if entity:getParent() == nil then
         entity:setParent(self.rootEntity)
     end
     entity:registerAsChild()
 
-    for _, component in pairs(entity.components) do
+    for _, component in pairs(entity:getComponents()) do
         local name = component.class.name
         -- Adding Entity to specific Entitylist
         if not self.entityLists[name] then self.entityLists[name] = {} end
@@ -53,7 +53,7 @@ end
 function Engine:removeEntity(entity, removeChildren, newParent)
     if self.entities[entity.id] then
         -- Removing the Entity from all Systems and engine
-        for _, component in pairs(entity.components) do
+        for _, component in pairs(entity:getComponents()) do
             local name = component.class.name
             if self.singleRequirements[name] then
                 for _, system in pairs(self.singleRequirements[name]) do
@@ -62,18 +62,18 @@ function Engine:removeEntity(entity, removeChildren, newParent)
             end
         end
         -- Deleting the Entity from the specific entity lists
-        for _, component in pairs(entity.components) do
+        for _, component in pairs(entity:getComponents()) do
             self.entityLists[component.class.name][entity.id] = nil
         end
 
         -- If removeChild is defined, all children become deleted recursively
         if removeChildren then
-            for _, child in pairs(entity.children) do
+            for _, child in pairs(entity:getChildren()) do
                 self:removeEntity(child, true)
             end
         else
             -- If a new Parent is defined, this Entity will be set as the new Parent
-            for _, child in pairs(entity.children) do
+            for _, child in pairs(entity:getChildren()) do
                 if newParent then
                     child:setParent(newParent)
                 else
@@ -84,8 +84,9 @@ function Engine:removeEntity(entity, removeChildren, newParent)
             end
         end
         -- Removing Reference to entity from parent
-        for _, _ in pairs(entity.parent.children) do
-            entity.parent.children[entity.id] = nil
+        local parent = entity:getParent()
+        for _, _ in pairs(parent.children) do
+            parent.children[entity.id] = nil
         end
         -- Setting status of entity to dead. This is for other systems, which still got a hard reference on this
         self.entities[entity.id].alive = false
@@ -99,7 +100,7 @@ function Engine:removeEntity(entity, removeChildren, newParent)
             lovetoys.debug("Engine: Entity has not been added to any engine yet. (No entity.id)")
         end
         lovetoys.debug("Engine: Entity's components:")
-        for index, component in pairs(entity.components) do
+        for index, component in pairs(entity:getComponents()) do
             lovetoys.debug(index, component)
         end
     end
@@ -286,14 +287,14 @@ function Engine:checkRequirements(entity, system) -- luacheck: ignore self
     local category = nil
     for index, req in pairs(system:requires()) do
         if type(req) == "string" then
-            if not entity.components[req] then
+            if not entity:has(req) then
                 meetsrequirements = false
                 break
             end
         elseif type(req) == "table" then
             meetsrequirements = true
             for _, req2 in pairs(req) do
-                if not entity.components[req2] then
+                if not entity:has(req2) then
                     meetsrequirements = false
                     break
                 end
