@@ -85,8 +85,8 @@ function Engine:removeEntity(entity, removeChildren, newParent)
         end
         -- Removing Reference to entity from parent
         local parent = entity:getParent()
-        for _, _ in pairs(parent.children) do
-            parent.children[entity.id] = nil
+        for _, _ in pairs(parent:getChildren()) do
+            parent:getChildren()[entity.id] = nil
         end
         -- Setting status of entity to dead. This is for other systems, which still got a hard reference on this
         self.entities[entity.id].alive = false
@@ -192,14 +192,14 @@ function Engine:registerSystem(system)
                 end
             end
             -- Create tables for multiple requirements in the system's target directory
-            system.targets[index] = {}
+            system:getTargets()[index] = {}
         end
     end
 end
 
 function Engine:stopSystem(name)
     if self.systemRegistry[name] then
-        self.systemRegistry[name].active = false
+        self.systemRegistry[name]:setActive(false)
     else
         lovetoys.debug("Engine: Trying to stop not existing System: " .. name)
     end
@@ -207,7 +207,7 @@ end
 
 function Engine:startSystem(name)
     if self.systemRegistry[name] then
-        self.systemRegistry[name].active = true
+        self.systemRegistry[name]:setActive(true)
     else
         lovetoys.debug("Engine: Trying to start not existing System: " .. name)
     end
@@ -215,7 +215,7 @@ end
 
 function Engine:toggleSystem(name)
     if self.systemRegistry[name] then
-        self.systemRegistry[name].active = not self.systemRegistry[name].active
+        self.systemRegistry[name]:toggleActive()
     else
         lovetoys.debug("Engine: Trying to toggle not existing System: " .. name)
     end
@@ -223,7 +223,7 @@ end
 
 function Engine:update(dt)
     for _, system in ipairs(self.systems["update"]) do
-        if system.active then
+        if system:isActive() then
             system:update(dt)
         end
     end
@@ -231,7 +231,7 @@ end
 
 function Engine:draw()
     for _, system in ipairs(self.systems["draw"]) do
-        if system.active then
+        if system:isActive() then
             system:draw()
         end
     end
