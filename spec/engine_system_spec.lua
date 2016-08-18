@@ -240,4 +240,12 @@ describe('Engine', function()
 
         assert.are.equal(updateSystem.entitiesAdded, 1)
     end)
+
+    it(':addSystem(system, "derp") fails', function()
+        local debug_spy = spy.on(lovetoys, 'debug')
+
+        engine:addSystem(drawSystem, 'derp')
+
+        assert.spy(debug_spy).was_called()
+    end)
 end)

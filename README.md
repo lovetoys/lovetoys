@@ -249,8 +249,8 @@ Returns the rootEntity entity, to get its children or add/remove components.
 
 #### Engine:addSystem(system, type)
 
-- **system** (System) - Instance of the system to be added.
-- **type** (String) - optional; Should be either "draw", "logic" or unspecified
+- **system** (System) - Instance of the system to be added
+- **type** (String) - optional; Should be either "draw" or "update"
 
 This function registers the system in the engine. The systems' functions will be called in the order they've been added. As long as the system implements either the `update` or the `draw` function, lovetoys will guess the `type` parameter for you.
 If a system implements both, draw and update function, you will need to specify the `type` and add the system twice, once to draw and once to update. Otherwise lovetoys couldn't know in what order to execute the `update` and `draw` methods.
