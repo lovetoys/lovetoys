@@ -120,6 +120,12 @@ function Engine:addSystem(system, type)
         return
     end
 
+    -- Check if the user is accidentally adding two instances instead of one
+    if self.systemRegistry[name] and self.systemRegistry[name] ~= system then
+        lovetoys.debug("Engine: Trying to add two different instances of the same system. Aborting.")
+        return
+    end
+
     -- Adding System to engine system reference table
     if not (self.systemRegistry[name]) then
         self:registerSystem(system)
@@ -161,7 +167,7 @@ end
 function Engine:registerSystem(system)
     local name = system.class.name
     self.systemRegistry[name] = system
-    -- Registering in case system:requires returns a table of strings
+    -- case: system:requires() returns a table of strings
     if system:requires()[1] and type(system:requires()[1]) == "string" then
         for index, req in pairs(system:requires()) do
             -- Registering at singleRequirements
@@ -175,7 +181,7 @@ function Engine:registerSystem(system)
         end
     end
 
-    -- Registering in case its a table of tables which contain strings
+    -- case: system:requires() returns a table of tables which contain strings
     if lovetoys.util.firstElement(system:requires()) and type(lovetoys.util.firstElement(system:requires())) == "table" then
         for index, componentList in pairs(system:requires()) do
             -- Registering at singleRequirements

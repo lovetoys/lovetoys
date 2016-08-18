@@ -245,7 +245,25 @@ describe('Engine', function()
         local debug_spy = spy.on(lovetoys, 'debug')
 
         engine:addSystem(drawSystem, 'derp')
+        assert.is_nil(engine.systemRegistry['DrawSystem'])
 
         assert.spy(debug_spy).was_called()
+        lovetoys.debug:revert()
+    end)
+
+    it('refuses to add two instances of the same system', function()
+        local debug_spy = spy.on(lovetoys, 'debug')
+
+        engine:addSystem(DrawSystem())
+        engine:addSystem(DrawSystem())
+
+        assert.spy(debug_spy).was_called()
+        lovetoys.debug:clear()
+
+        engine:addSystem(BothSystem(), 'update')
+        engine:addSystem(BothSystem(), 'draw')
+
+        assert.spy(debug_spy).was_called()
+        lovetoys.debug:revert()
     end)
 end)
