@@ -81,7 +81,7 @@ function Entity:get(name)
 end
 
 function Entity:has(name)
-    return not not self.components[name]
+    return not not self:get(name)
 end
 
 function Entity:getComponents()
