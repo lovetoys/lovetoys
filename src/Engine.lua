@@ -84,9 +84,9 @@ function Engine:removeEntity(entity, removeChildren, newParent)
             end
         end
         -- Removing Reference to entity from parent
-        local parent = entity:getParent()
-        for _, _ in pairs(parent:getChildren()) do
-            parent:getChildren()[entity.id] = nil
+        local siblings = entity:getParent():getChildren()
+        for _, _ in pairs(siblings) do
+            siblings[entity.id] = nil
         end
         -- Setting status of entity to dead. This is for other systems, which still got a hard reference on this
         self.entities[entity.id].alive = false
