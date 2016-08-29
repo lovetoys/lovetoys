@@ -19,8 +19,8 @@ end
 
 -- Sets the entities component of this type to the given component.
 -- An entity can only have one Component of each type.
-function Entity:add(component)
-    local name = component.class.name
+function Entity:add(component, name)
+    if not name then name = component.class.name end
     if self.components[name] then
         lovetoys.debug("Entity: Trying to add Component '" .. name .. "', but it's already existing. Please use Entity:set to overwrite a component in an entity.")
     else
@@ -31,8 +31,8 @@ function Entity:add(component)
     end
 end
 
-function Entity:set(component)
-    local name = component.class.name
+function Entity:set(component, name)
+    if not name then name = component.class.name end
     if self.components[name] == nil then
         self:add(component)
     else
@@ -41,7 +41,7 @@ function Entity:set(component)
 end
 
 function Entity:addMultiple(componentList)
-    for _, component in  pairs(componentList) do
+    for _, component in pairs(componentList) do
         self:add(component)
     end
 end
