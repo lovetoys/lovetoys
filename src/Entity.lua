@@ -34,7 +34,7 @@ end
 function Entity:set(component, name)
     if not name then name = component.class.name end
     if self.components[name] == nil then
-        self:add(component)
+        self:add(component, name)
     else
         self.components[name] = component
     end
