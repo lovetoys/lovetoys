@@ -35,8 +35,7 @@ function Engine:addEntity(entity)
     end
     entity:registerAsChild()
 
-    for _, component in pairs(entity.components) do
-        local name = component.class.name
+    for name, component in pairs(entity.components) do
         -- Adding Entity to specific Entitylist
         if not self.entityLists[name] then self.entityLists[name] = {} end
         self.entityLists[name][entity.id] = entity
@@ -53,8 +52,7 @@ end
 function Engine:removeEntity(entity, removeChildren, newParent)
     if self.entities[entity.id] then
         -- Removing the Entity from all Systems and engine
-        for _, component in pairs(entity.components) do
-            local name = component.class.name
+        for name, component in pairs(entity.components) do
             if self.singleRequirements[name] then
                 for _, system in pairs(self.singleRequirements[name]) do
                     system:removeEntity(entity)
@@ -62,8 +60,8 @@ function Engine:removeEntity(entity, removeChildren, newParent)
             end
         end
         -- Deleting the Entity from the specific entity lists
-        for _, component in pairs(entity.components) do
-            self.entityLists[component.class.name][entity.id] = nil
+        for name, component in pairs(entity.components) do
+            self.entityLists[name][entity.id] = nil
         end
 
         -- If removeChild is defined, all children become deleted recursively
