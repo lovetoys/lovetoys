@@ -106,17 +106,31 @@ function Engine:removeEntity(entity, removeChildren, newParent)
     end
 end
 
-function Engine:addSystem(system, typ)
+function Engine:addSystem(system, type)
     local name = system.class.name
-    -- Check if system has both function without specified type
-    if system.draw and system.update and not typ then
+
+    -- Check if the specified type is correct
+    if type ~= nil and type ~= "draw" and type ~= "update" then
+        lovetoys.debug("Engine: Trying to add System " .. name .. "with invalid type " .. type .. ". Aborting")
+        return
+    end
+
+    -- Check if a type should be specified
+    if system.draw and system.update and not type then
         lovetoys.debug("Engine: Trying to add System " .. name .. ", which has an update and a draw function, without specifying type. Aborting")
         return
     end
+
+    -- Check if the user is accidentally adding two instances instead of one
+    if self.systemRegistry[name] and self.systemRegistry[name] ~= system then
+        lovetoys.debug("Engine: Trying to add two different instances of the same system. Aborting.")
+        return
+    end
+
     -- Adding System to engine system reference table
     if not (self.systemRegistry[name]) then
         self:registerSystem(system)
-        -- This triggers if the system doesn't have update and draw and it's already existing.
+    -- This triggers if the system doesn't have update and draw and it's already existing.
     elseif not (system.update and system.draw) then
         if self.systemRegistry[name] then
             lovetoys.debug("Engine: System " .. name .. " already exists. Aborting")
@@ -125,7 +139,7 @@ function Engine:addSystem(system, typ)
     end
 
     -- Adding System to draw table
-    if system.draw and (not typ or typ == "draw") then
+    if system.draw and (not type or type == "draw") then
         for _, registeredSystem in pairs(self.systems["draw"]) do
             if registeredSystem.class.name == name then
                 lovetoys.debug("Engine: System " .. name .. " already exists. Aborting")
@@ -133,8 +147,8 @@ function Engine:addSystem(system, typ)
             end
         end
         table.insert(self.systems["draw"], system)
-        -- Adding System to update table
-    elseif system.update and (not typ or typ == "update") then
+    -- Adding System to update table
+    elseif system.update and (not type or type == "update") then
         for _, registeredSystem in pairs(self.systems["update"]) do
             if registeredSystem.class.name == name then
                 lovetoys.debug("Engine: System " .. name .. " already exists. Aborting")
@@ -154,7 +168,7 @@ end
 function Engine:registerSystem(system)
     local name = system.class.name
     self.systemRegistry[name] = system
-    -- Registering in case system:requires returns a table of strings
+    -- case: system:requires() returns a table of strings
     if system:requires()[1] and type(system:requires()[1]) == "string" then
         for index, req in pairs(system:requires()) do
             -- Registering at singleRequirements
@@ -168,7 +182,7 @@ function Engine:registerSystem(system)
         end
     end
 
-    -- Registering in case its a table of tables which contain strings
+    -- case: system:requires() returns a table of tables which contain strings
     if lovetoys.util.firstElement(system:requires()) and type(lovetoys.util.firstElement(system:requires())) == "table" then
         for index, componentList in pairs(system:requires()) do
             -- Registering at singleRequirements
