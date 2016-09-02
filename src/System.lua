@@ -20,8 +20,7 @@ function System:setActive(isActive)
 end
 
 function System:toggleActive()
-    self.active = not self.active
-    return self.active
+    return self:setActive(not self:isActive())
 end
 
 function System:isActive() return self.active end
