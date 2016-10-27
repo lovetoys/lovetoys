@@ -26,31 +26,30 @@ function System:addEntity(entity, category)
 end
 
 function System:removeEntity(entity, component)
-    -- Get the first element and check .class.name == 'Entity'
+    -- Get the first element and check if it's a component name
     -- In case it is an Entity, we know that this System doesn't have multiple
     -- Requirements. Otherwise we remove the Entity from each category.
-    local firstElement = lovetoys.util.firstElement(self.targets)
-    if firstElement then
-        if firstElement.class and firstElement.class.name == 'Entity' then
-            self.targets[entity.id] = nil
-        else
+    local firstIndex, _ = next(self.targets)
+    if firstIndex then
+        if type(firstIndex) == "string" then
             -- Removing entities from their respective category target list.
             for index, _ in pairs(self.targets) do
                 self.targets[index][entity.id] = nil
             end
+        else
+            self.targets[entity.id] = nil
         end
     end
+
 end
 
 function System:componentRemoved(entity, component)
-    -- Get the first element and check .class.name == 'Entity'.
+    -- Get the first element and check if it's a component name
     -- In case a System has multiple requirements we need to check for
     -- each requirement category if the entity has to be removed.
-    local firstElement = lovetoys.util.firstElement(self.targets)
-    if firstElement then
-        if firstElement.class and firstElement.class.name == 'Entity' then
-            self.targets[entity.id] = nil
-        else
+    local firstIndex, _ = next(self.targets)
+    if firstIndex then
+        if type(firstIndex) == "string" then
             -- Removing entities from their respective category target list.
             for index, _ in pairs(self.targets) do
                 for _, req in pairs(self:requires()[index]) do
@@ -60,6 +59,8 @@ function System:componentRemoved(entity, component)
                     end
                 end
             end
+        else
+            self.targets[entity.id] = nil
         end
     end
 end
