@@ -15,13 +15,17 @@ function EventManager:addListener(eventName, listener, listenerFunction)
         self.eventListeners[eventName] = {}
     end
 
+
+
+
     if not listener.class or (listener.class and not listener.class.name) then
         lovetoys.debug('Eventmanager: The listener has to implement a listener.class.name field.')
     end
 
     for _, registeredListener in pairs(self.eventListeners[eventName]) do
         if registeredListener[1].class == listener.class then
-            lovetoys.debug("Eventmanager: EventListener already existing. Aborting")
+            lovetoys.debug(
+                string.format("Eventmanager: EventListener for {} already exists.", eventName))
             return
         end
     end

@@ -7,7 +7,7 @@ for i in string.gmatch(folderOfThisFile, '.[^.]*') do
 end
 table.remove(path, #path)
 table.remove(path, #path)
-folderOfThisFile = table.concat(path, ".")
+folderOfThisFile = table.concat(path)
 
 local ComponentAdded = require(folderOfThisFile .. '.namespace').class("ComponentAdded")
 
