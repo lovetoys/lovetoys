@@ -348,10 +348,6 @@ You can find the tests in the `spec` folder. They are defined using the [busted]
 
 To run the suite, install busted and simply execute `busted` in the lovetoys directory.
 
-## Deprecated features
-`CollisionManager` was a class that helped with integrating a physics engine with the lovetoys.
-We removed it from the framework. It performed too poorly and we felt it only bloated the framework while not being needed in many cases.
-
 * * *
 
 Copyright &copy; 2016 Arne Beer ([@Nukesor](https://github.com/Nukesor)) and Rafael Epplée ([@raffomania](https://github.com/raffomania))
