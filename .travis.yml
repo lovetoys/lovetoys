@@ -23,6 +23,9 @@ before_script:
 script:
   - busted --coverage --output=TAP
 
+before_cache:
+  - luarocks remove --force lovetoys
+
 cache:
   directories:
     - $PWD/lua_installations
