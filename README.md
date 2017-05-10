@@ -42,6 +42,7 @@ lovetoys.initialize({
 ```
 
 The following table lists all available options:
+
 | Name | Type | Default | Meaning |
 | --- | --- | --- | --- |
 | debug | boolean | false | Makes lovetoys print warnings and notifications to stdout. |
