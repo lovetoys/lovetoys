@@ -243,12 +243,12 @@ This function registers the system in the engine. The systems' functions will be
 
 **Note:** If a system implements both `draw` and `update` functions, you will need to specify the `type` and add the system twice, once to draw and once to update. Otherwise lovetoys couldn't know in what order to execute the `update` and `draw` methods.
 
-#### Engine:stop(system)
+#### Engine:stopSystem(system)
 - **system** (String) - the name of the system
 
 If you want a system to stop, just call this function. It's draw/update function won't be called anymore until you start it again.
 
-#### Engine:start(system)
+#### Engine:startSystem(system)
 - **system** (String)
     the name of the system
 
