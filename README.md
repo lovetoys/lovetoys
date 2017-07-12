@@ -279,6 +279,12 @@ If there is a new Parent defined, this entity becomes the new Parent of all chil
 
 Returns a list with all entities that contain this particular component.
 
+#### Engine:getSystemCount()
+(Number) Returns the count of existing systems.
+
+#### Engine:getEntityCount(component)
+- **component** (Number) - Returns the count of entities that contain this particular component.
+
 #### Engine:update(dt)
 - **dt** (Number) - Time since the last update, in seconds
 
