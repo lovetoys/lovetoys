@@ -59,7 +59,7 @@ function Entity:remove(name)
 end
 
 -- Removes all components from the entity.
-function Entity:clearComponents()
+function Entity:removeAll()
     self.components = {}
 end
 

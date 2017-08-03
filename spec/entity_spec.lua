@@ -49,14 +49,14 @@ describe('Entity', function()
         entity:add(testComponent)
         entity:remove('TestComponent')
     end)
-	
-	it(':clearComponents() removes all Components', function()
+
+    it(':removeAll() removes all Components', function()
         entity:add(testComponent)
-		entity:add(testComponent1)
-        entity:clearComponents()
-		components = entity:getComponents()
-		
-		local count = 0
+        entity:add(testComponent1)
+        entity:removeAll()
+        components = entity:getComponents()
+
+        local count = 0
         for _, __ in pairs(components) do
             count = count + 1
         end

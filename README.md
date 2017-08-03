@@ -105,7 +105,7 @@ Adds the component to this particular entity. If there already exists a componen
 
 Removes a component from this particular entity.
 
-#### Entity:clearComponents()
+#### Entity:removeAll()
 
 Removes all components from this particular entity.
 
