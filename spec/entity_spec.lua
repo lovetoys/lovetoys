@@ -50,6 +50,19 @@ describe('Entity', function()
         entity:remove('TestComponent')
     end)
 
+    it(':removeAll() removes all Components', function()
+        entity:add(testComponent)
+        entity:add(testComponent1)
+        entity:removeAll()
+        components = entity:getComponents()
+
+        local count = 0
+        for _, __ in pairs(components) do
+            count = count + 1
+        end
+        assert.True(count == 0)
+    end)
+
     it(':remove() prints debug message if Component does not exist', function()
         local debug_spy = spy.on(lovetoys, 'debug')
         entity:remove('TestComponent')
