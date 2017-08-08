@@ -295,17 +295,6 @@ function Engine:getEntitiesWithComponent(component)
     return self.entityLists[component]
 end
 
--- Returns a count of existing systems added to Engine
-function Engine:getSystemCount()
-    local count = 0
-    if self.systemRegistry then
-        for _, system in pairs(self.systemRegistry) do
-            count = count + 1
-        end
-    end
-    return count
-end
-
 -- Returns a count of existing Entities with a given component
 function Engine:getEntityCount(component)
     local count = 0
