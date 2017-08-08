@@ -92,7 +92,15 @@ describe('Engine', function()
         entity:add(Component1())
         assert.are.equal(testSystem.targets[1], entity)
     end)
-
+  
+    it(':getEntityCount() gets count of entities with Component, after Component is added to entities', function()
+        entity:add(Component1())
+        entity2:add(Component1())
+        engine:addEntity(entity)
+        engine:addEntity(entity2)
+        assert.are.equal(engine:getEntityCount('Component1'), 2)
+    end)
+  
     it(':addEntity() handles multiple requirement lists', function()
         local function count(t)
             local c = 0

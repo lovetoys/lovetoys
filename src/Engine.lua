@@ -295,6 +295,17 @@ function Engine:getEntitiesWithComponent(component)
     return self.entityLists[component]
 end
 
+-- Returns a count of existing Entities with a given component
+function Engine:getEntityCount(component)
+    local count = 0
+    if self.entityLists[component] then
+        for _, system in pairs(self.entityLists[component]) do
+            count = count + 1
+        end
+    end      
+    return count    
+end
+
 function Engine:checkRequirements(entity, system) -- luacheck: ignore self
     local meetsrequirements = true
     local category = nil
