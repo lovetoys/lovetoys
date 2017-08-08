@@ -58,11 +58,6 @@ function Entity:remove(name)
     end
 end
 
--- Removes all components from the entity.
-function Entity:removeAll()
-    self.components = {}
-end
-
 function Entity:setParent(parent)
     if self.parent then self.parent.children[self.id] = nil end
     self.parent = parent
