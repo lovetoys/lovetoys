@@ -47,6 +47,7 @@ The following table lists all available options:
 | --- | --- | --- | --- |
 | debug | boolean | false | Makes lovetoys print warnings and notifications to stdout. |
 | globals | boolean | false | If true, lovetoys will make all its classes available via the global namespace. (e.g. Entity instead of lovetoys.Entity) |
+| middleclassPath | string | nil | Path to user's copy of middleclass |
 
 **Note:** Once you've called `initialize`, the configuration will be the same every time you `require('lovetoys.lovetoys')`.
 
