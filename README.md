@@ -60,8 +60,6 @@ local lovetoys = require('lovetoys')
 local entity = lovetoys.Entity()
 local system = lovetoys.System()
 local engine = lovetoys.Engine()
-local component = lovetoys.Component()
-local eventManager = lovetoys.EventManager()
 -- the middleclass `class` object
 local class = lovetoys.class ()
 ```
@@ -140,12 +138,12 @@ The `Component.create()` function can automatically generate simple component cl
 #### Component.register(path)
 - **path** A path in a format accepted by require()
 
-Register the component for loading it conveniently with Component.load.
+Register the component for loading it conveniently with Component.load. Registered components are stored in a local table which stays the same across different `require()`s.
 
 #### Component.load(components)
 - **components** A list containing component names
 
-Load the specified components.
+Load the specified components, sparing you lots of calls to `require()`.
 
 ```lua
 local Color, Transform, Drawable = Component.load({"Color", "Transform", "Drawable"})
@@ -157,7 +155,7 @@ Color(0, 0, 0)
 - **fields** (Table) - A list of Strings specifying the property names of the new component. The constructor of the component class will accept each of these properties as arguments, in the order they appear in the `fields` list.
 - **defaults** (Table) - Key value pairs where each pair describes the default value for the property named like the pairs key.
 
-Create a new component class.
+Create a new component class. This will also call `Component.register` for you.
 
 ```lua
 -- Create a Color component with the default color set to blue
