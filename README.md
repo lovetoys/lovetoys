@@ -62,15 +62,15 @@ local lovetoys = require('lovetoys.lovetoys')
 lovetoys.initialize({globals = true, debug = true})
 
 function love.load()
-	-- Define a component class.
-	local position = Component.create("position", {"x", "y"}, {x = 0, y = 0})
+    -- Define a component class.
+    local position = Component.create("position", {"x", "y"}, {x = 0, y = 0})
 
-	-- Create and initialize a new entity.
-	-- Note we can access Entity() in the global
-	-- namespace since we used globals = true in 
-	-- the lovetoys initialization.
-	local player = Entity()
-	player:initialize()
+    -- Create and initialize a new entity.
+    -- Note we can access Entity() in the global
+    -- namespace since we used globals = true in 
+    -- the lovetoys initialization.
+    local player = Entity()
+    player:initialize()
 
 	-- Add a position component. We are passing custom defaults for x and y.
     player:add(position(150, 25))
@@ -91,23 +91,23 @@ function love.load()
 
     -- Finally, we setup an engine.
     engine = Engine()
-	engine:addEntity(player)
+    engine:addEntity(player)
 
-	-- This will be a 'draw' system, so the
-	-- engine will call its draw method.
-	-- If you omit the type argument, the
-	-- default 'update' will be used.
-	engine:addSystem(DrawSystem(), "draw")
+    -- This will be a 'draw' system, so the
+    -- engine will call its draw method.
+    -- If you omit the type argument, the
+    -- default 'update' will be used.
+    engine:addSystem(DrawSystem(), "draw")
 end
 
 function love.update(dt)
-	-- Will run each system with type == 'update'
-	engine:update(dt)
+    -- Will run each system with type == 'update'
+    engine:update(dt)
 end
 
 function love.draw()
-	-- Will invoke the draw() method on each system with type == 'draw'
-	engine:draw()
+    -- Will invoke the draw() method on each system with type == 'draw'
+    engine:draw()
 end
 ```
 
