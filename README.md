@@ -50,6 +50,67 @@ The following table lists all available options:
 
 **Note:** Once you've called `initialize`, the configuration will be the same every time you `require('lovetoys.lovetoys')`.
 
+## Quickstart
+```lua
+-- Include the library.
+local lovetoys = require('lovetoys.lovetoys')
+
+-- Initialize:
+-- debug = true will enable library console logs
+-- globals = true will register lovetoys classes in the global namespace
+-- so you can access i.e. Entity() in addition to lovetoys.Entity()
+lovetoys.initialize({globals = true, debug = true})
+
+function love.load()
+	-- Define a component class.
+	local position = Component.create("position", {"x", "y"}, {x = 0, y = 0})
+
+	-- Create and initialize a new entity.
+	-- Note we can access Entity() in the global
+	-- namespace since we used globals = true in 
+	-- the lovetoys initialization.
+	local player = Entity()
+	player:initialize()
+
+	-- Add a position component. We are passing custom defaults for x and y.
+    player:add(position(150, 25))
+
+    -- Create a system class as lovetoys.System subclass.
+    local DrawSystem = class("DrawSystem", System)
+
+    -- Define this system requirements.
+    function DrawSystem:requires()
+        return {"position"}
+    end
+
+    function DrawSystem:draw()
+        for _, entity in pairs(self.targets) do
+            love.graphics.rectangle("fill", entity:get("position").x, entity:get("position").y, 10, 10)
+        end
+    end
+
+    -- Finally, we setup an engine.
+    engine = Engine()
+	engine:addEntity(player)
+
+	-- This will be a 'draw' system, so the
+	-- engine will call its draw method.
+	-- If you omit the type argument, the
+	-- default 'update' will be used.
+	engine:addSystem(DrawSystem(), "draw")
+end
+
+function love.update(dt)
+	-- Will run each system with type == 'update'
+	engine:update(dt)
+end
+
+function love.draw()
+	-- Will invoke the draw() method on each system with type == 'draw'
+	engine:draw()
+end
+```
+
 ## API Reference
 
 lovetoys primarily consists of a few classes that are implemented using [middleclass](https://github.com/kikito/middleclass). By default, they are available via the lovetoys object:
