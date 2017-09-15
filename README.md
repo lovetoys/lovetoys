@@ -63,7 +63,8 @@ lovetoys.initialize({globals = true, debug = true})
 
 function love.load()
     -- Define a component class.
-    local position = Component.create("position", {"x", "y"}, {x = 0, y = 0})
+    local Position = Component.create("position", {"x", "y"}, {x = 0, y = 0})
+    local Velocity = Component.create("velocity", {"vx", "vy"})
 
     -- Create and initialize a new entity.
     -- Note we can access Entity() in the global
@@ -72,10 +73,28 @@ function love.load()
     local player = Entity()
     player:initialize()
 
-	-- Add a position component. We are passing custom defaults for x and y.
-    player:add(position(150, 25))
-
+    -- Add position and velocity components. We are passing custom default values.
+    player:add(Position(150, 25))
+    player:add(Velocity(100, 100))
+    
     -- Create a system class as lovetoys.System subclass.
+    local MoveSystem = class("MoveSystem", System)
+
+    -- Define this system requirements.
+    function MoveSystem:requires()
+        return {"position", "velocity"}
+    end
+
+    function MoveSystem:update(dt)
+        for _, entity in pairs(self.targets) do
+            local position = entity:get("position")
+            local velocity = entity:get("velocity")
+            position.x = position.x + velocity.vx * dt
+            position.y = position.y + velocity.vy * dt
+        end
+    end
+
+    -- Create a draw system.
     local DrawSystem = class("DrawSystem", System)
 
     -- Define this system requirements.
@@ -93,10 +112,12 @@ function love.load()
     engine = Engine()
     engine:addEntity(player)
 
+    -- Let's add the MoveSystem to the engine. Its update() 
+    -- method will be invoked within any engine:update() call.
+    engine:addSystem(MoveSystem())
+    
     -- This will be a 'draw' system, so the
     -- engine will call its draw method.
-    -- If you omit the type argument, the
-    -- default 'update' will be used.
     engine:addSystem(DrawSystem(), "draw")
 end
 
