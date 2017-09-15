@@ -188,8 +188,28 @@ function Engine:addSystem(system, systemType)
     return system
 end
 
+-- Register a System to the Engine. This is done once or twice for each System,
+-- depending if it has either a draw or update method or both of them.
+
+-- There are a few things happening in this function:
+--
+-- First the system is added to the global System registry
+-- Next we add the System to several requirement lists:
+-- `singleRequirements`: This is a list where Component names are mapped to lists of Systems.
+--      Each system exists only *once* or *max the number of multiple requirement categories* in this collection.
+--      During registration we take the first Component name of every requirement list
+--      and add the system to this specific list e.g.:
+--          table.insert(singleRequirement['first'], system)
+--      This list is really useful to check requirements only once per system during entity addition instead of n times.
+-- `allRequirements`: This is a list where Component names are mapped to lists of systems.
+--      In here we can find every System that requires a specific Component.
+--      We need this to notify Systems in case an Entity has Components added or removed.
+--
 function Engine:registerSystem(system)
+    -- Shortcut variables
     local name = system.class.name
+    local firstElement = lovetoys.util.firstElement
+
     self.systemRegistry[name] = system
     -- case: system:requires() returns a table of strings
     if system:requires()[1] and type(system:requires()[1]) == "string" then
@@ -206,7 +226,7 @@ function Engine:registerSystem(system)
     end
 
     -- case: system:requires() returns a table of tables which contain strings
-    if lovetoys.util.firstElement(system:requires()) and type(lovetoys.util.firstElement(system:requires())) == "table" then
+    if firstElement(system:requires()) and type(firstElement(system:requires())) == "table" then
         for index, componentList in pairs(system:requires()) do
             -- Registering at singleRequirements
             local component = componentList[1]
@@ -313,7 +333,7 @@ function Engine:getRootEntity()
     end
 end
 
--- Returns an Entitylist for a specific component. If the Entitylist doesn't exist yet it'll be created and returned.
+-- Returns an list with all Entity owning a specific component. If the Entity list doesn't exist yet it'll be created and returned.
 function Engine:getEntitiesWithComponent(component)
     if not self.entityLists[component] then self.entityLists[component] = {} end
     return self.entityLists[component]
