@@ -48,7 +48,7 @@ The following table lists all available options:
 | debug | boolean | false | Makes lovetoys print warnings and notifications to stdout. |
 | globals | boolean | false | If true, lovetoys will make all its classes available via the global namespace. (e.g. Entity instead of lovetoys.Entity) |
 
-**Note:** Once you've called `initialize`, the configuration will be the same every time you `require('lovetoys.lovetoys')`.
+> :warning: Once you've called `initialize`, the configuration will be the same every time you `require('lovetoys.lovetoys')`.
 
 ## API Reference
 
@@ -72,7 +72,7 @@ The Entity is the basic building block of your game. You can loosely think of it
 
 This function returns a new instance of an entity. If you specify a parent entity, you can later access it via the `.parent` property. Also, the parent entity will get a reference to its newly created child, accessible by its `.children` table.
 
-**Note:** If you add an entity without a parent to the engine, the engine will set the root entity as its parent.
+> :warning: If you add an entity without a parent to the engine, the engine will set the root entity as its parent.
 
 #### Entity:setParent(parent)
 - **parent** (Entity) - Parent entity
@@ -239,7 +239,7 @@ Returns the root entity. Modify it to your needs!
 
 This function registers the system in the engine. The systems' functions will be called in the order they've been added. As long as the system implements either the `update` or the `draw` function, lovetoys will guess the `type` parameter for you.
 
-**Note:** If a system implements both `draw` and `update` functions, you will need to specify the `type` and add the system twice, once to draw and once to update. Otherwise lovetoys couldn't know in what order to execute the `update` and `draw` methods.
+> :warning: If a system implements both `draw` and `update` functions, you will need to specify the `type` and add the system twice, once to draw and once to update. Otherwise lovetoys couldn't know in what order to execute the `update` and `draw` methods.
 
 #### Engine:stopSystem(system)
 - **system** (String) - the name of the system
