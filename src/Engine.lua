@@ -126,6 +126,29 @@ function Engine:addSystem(system, type)
         return
     end
 
+    -- Assert that system:excludes returns the same structure as system:requires or an empty list.
+    requires = system:requires()
+    excludes = system:excludes()
+    firstElement = lovetoys.utils.firstElement
+    one_is_table = type(firstElement(requires)) == "table" or type(firstElement(excludes)) == "table"
+    both_are_table = type(firstElement(requires)) == "table" and type(firstElement(excludes)) == "table"
+    if one_is_table then
+        -- Check if the system has excludes.
+        if lovetoys.utils.listLength(excludes) > 0 then
+            -- One of both, `excludes` or `requires`, returns a list, the other doesn't.
+            if not both_are_table then
+                lovetoys.debug("System: " .. name .. " has different list structures for :requires() and :excludes().")
+                return
+            end
+            -- Check if the keys for both categories match. We only need to check from requires to excludes, as this is what matters.
+            for category, _ in requires do
+                if not exclude[category] then
+                    lovetoys.debug("System: " .. name .. " has different category names for :requires() and :excludes().")
+                end
+            return
+        end
+    end
+
     -- Adding System to engine system reference table
     if not (self.systemRegistry[name]) then
         self:registerSystem(system)
@@ -299,23 +322,62 @@ end
 function Engine:getEntityCount(component)
     local count = 0
     if self.entityLists[component] then
-        for _, system in pairs(self.entityLists[component]) do
-            count = count + 1
-        end
-    end      
-    return count    
+        count = lovetoys.util.listLength(self.entityLists[component])
+    end
+    return count
 end
 
+-- This function check, if an Entity satisfies all requirements of a specific system
 function Engine:checkRequirements(entity, system) -- luacheck: ignore self
+    -- Do a quick lookup, if the Entity already is in the system.
+    -- This is a log(n) lookup and should prevent multiple n*log(m)
+    -- runs of the same Entity on the same system.
+    --Overall performance should be better
+    if system.targets[entity.id] then
+        return
+
     local meetsrequirements = true
     local category = nil
-    for index, req in pairs(system:requires()) do
-        if type(req) == "string" then
-            if not entity.components[req] then
-                meetsrequirements = false
-                break
-            end
+
+    -- Variables to allow checking of the exclude logic with multiple requirement categories
+    -- The blacklist decides if the entity is excluded for a specific category.
+    -- The has_exclusions variable is needed to check if there are any excludes at all.
+    --     If that's the case we can skip the blacklist lookup.
+    local excluded_table_blacklist = {}
+    local has_exclusions = lovetoys.util.listLength(system:excludes())
+
+    -- Check for excludes
+    for index, exclude in pairs(system:excludes()) do
+        -- Normal case: system:excludes() returns a list of Component name strings.
+        if type(exclude) == "string" then
+            -- The Entity contains an excluded component. Early return.
+            if entity.components[exclude] then return end
+
+        -- The requirements of the System are split into multiple
+        -- target categories. The system:excludes function needs to return
+        -- a list with the same structure as system:requires.
         elseif type(req) == "table" then
+            for _, nested_exclude in pairs(exclude) do
+                if not entity.components[nested_exclude] then
+                    excluded_table_blacklist[index] = true
+                    break
+                end
+            end
+            excluded_table_blacklist[index] = false
+
+
+    -- This is the actual requirement check
+    for index, req in pairs(system:requires()) do
+        -- Normal case: system:requires() returns a list of Component name strings.
+        if type(req) == "string" then
+            -- Requirement is not fulfilled, perform early return
+            if not entity.components[req] then return end
+
+        -- The requirements of the System are split into multiple
+        -- target categories. Each category is handled separately.
+        elseif type(req) == "table" then
+            -- Check if the entity is blacklisted for this category
+            if has_exclusions > 0 and excluded_table_blacklist[index] then break end
             meetsrequirements = true
             for _, req2 in pairs(req) do
                 if not entity.components[req2] then

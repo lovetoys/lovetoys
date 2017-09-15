@@ -12,6 +12,8 @@ end
 
 function System:requires() return {} end
 
+function System:excludes() return {} end
+
 function System:addEntity(entity, category)
     -- If there are multiple requirement lists, the added entities will
     -- be added to their respetive list.
