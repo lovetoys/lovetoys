@@ -105,17 +105,17 @@ function Engine:removeEntity(entity, removeChildren, newParent)
     end
 end
 
-function Engine:addSystem(system, type)
+function Engine:addSystem(system, systemType)
     local name = system.class.name
 
     -- Check if the specified type is correct
-    if type ~= nil and type ~= "draw" and type ~= "update" then
-        lovetoys.debug("Engine: Trying to add System " .. name .. "with invalid type " .. type .. ". Aborting")
+    if systemType ~= nil and systemType ~= "draw" and systemType ~= "update" then
+        lovetoys.debug("Engine: Trying to add System " .. name .. "with invalid type " .. systemType .. ". Aborting")
         return
     end
 
     -- Check if a type should be specified
-    if system.draw and system.update and not type then
+    if system.draw and system.update and not systemType then
         lovetoys.debug("Engine: Trying to add System " .. name .. ", which has an update and a draw function, without specifying type. Aborting")
         return
     end
@@ -129,12 +129,12 @@ function Engine:addSystem(system, type)
     -- Assert that system:excludes returns the same structure as system:requires or an empty list.
     requires = system:requires()
     excludes = system:excludes()
-    firstElement = lovetoys.utils.firstElement
+    firstElement = lovetoys.util.firstElement
     one_is_table = type(firstElement(requires)) == "table" or type(firstElement(excludes)) == "table"
     both_are_table = type(firstElement(requires)) == "table" and type(firstElement(excludes)) == "table"
     if one_is_table then
         -- Check if the system has excludes.
-        if lovetoys.utils.listLength(excludes) > 0 then
+        if lovetoys.util.listLength(excludes) > 0 then
             -- One of both, `excludes` or `requires`, returns a list, the other doesn't.
             if not both_are_table then
                 lovetoys.debug("System: " .. name .. " has different list structures for :requires() and :excludes().")
@@ -144,8 +144,9 @@ function Engine:addSystem(system, type)
             for category, _ in requires do
                 if not exclude[category] then
                     lovetoys.debug("System: " .. name .. " has different category names for :requires() and :excludes().")
+                    return
                 end
-            return
+            end
         end
     end
 
@@ -161,7 +162,7 @@ function Engine:addSystem(system, type)
     end
 
     -- Adding System to draw table
-    if system.draw and (not type or type == "draw") then
+    if system.draw and (not systemType or systemType == "draw") then
         for _, registeredSystem in pairs(self.systems["draw"]) do
             if registeredSystem.class.name == name then
                 lovetoys.debug("Engine: System " .. name .. " already exists. Aborting")
@@ -170,7 +171,7 @@ function Engine:addSystem(system, type)
         end
         table.insert(self.systems["draw"], system)
     -- Adding System to update table
-    elseif system.update and (not type or type == "update") then
+    elseif system.update and (not systemType or systemType == "update") then
         for _, registeredSystem in pairs(self.systems["update"]) do
             if registeredSystem.class.name == name then
                 lovetoys.debug("Engine: System " .. name .. " already exists. Aborting")
@@ -333,10 +334,10 @@ function Engine:checkRequirements(entity, system) -- luacheck: ignore self
     -- This is a log(n) lookup and should prevent multiple n*log(m)
     -- runs of the same Entity on the same system.
     --Overall performance should be better
-    if system.targets[entity.id] then
-        return
+    if system.targets[entity.id] then return end
 
-    local meetsrequirements = true
+
+    local meetsRequirements = true
     local category = nil
 
     -- Variables to allow checking of the exclude logic with multiple requirement categories
@@ -364,6 +365,8 @@ function Engine:checkRequirements(entity, system) -- luacheck: ignore self
                 end
             end
             excluded_table_blacklist[index] = false
+        end
+    end
 
 
     -- This is the actual requirement check
@@ -378,20 +381,22 @@ function Engine:checkRequirements(entity, system) -- luacheck: ignore self
         elseif type(req) == "table" then
             -- Check if the entity is blacklisted for this category
             if has_exclusions > 0 and excluded_table_blacklist[index] then break end
-            meetsrequirements = true
+
+            -- Check if the requirements are satisfied for this category
+            meetsRequirements = true
             for _, req2 in pairs(req) do
                 if not entity.components[req2] then
-                    meetsrequirements = false
+                    meetsRequirements = false
                     break
                 end
             end
-            if meetsrequirements == true then
+            if meetsRequirements == true then
                 category = index
                 system:addEntity(entity, category)
             end
         end
     end
-    if meetsrequirements == true and category == nil then
+    if meetsRequirements == true and category == nil then
         system:addEntity(entity)
     end
 end
