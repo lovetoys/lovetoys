@@ -40,7 +40,8 @@ function System:removeEntity(entity, component)
             self.targets[entity.id] = nil
         end
     end
-
+    
+    if self.onRemoveEntity then self:onRemoveEntity(entity) end
 end
 
 function System:componentRemoved(entity, component)
@@ -54,13 +55,13 @@ function System:componentRemoved(entity, component)
             for index, _ in pairs(self.targets) do
                 for _, req in pairs(self:requires()[index]) do
                     if req == component then
-                        self.targets[index][entity.id] = nil
+                        self:removeEntity(entity, component)
                         break
                     end
                 end
             end
         else
-            self.targets[entity.id] = nil
+            self:removeEntity(entity, component)
         end
     end
 end
