@@ -22,7 +22,7 @@ function System:addEntity(entity, category)
         self.targets[entity.id] = entity
     end
 
-    if self.onAddEntity then self:onAddEntity(entity) end
+    if self.onAddEntity then self:onAddEntity(entity, category) end
 end
 
 function System:removeEntity(entity, component)
@@ -35,13 +35,14 @@ function System:removeEntity(entity, component)
             -- Removing entities from their respective category target list.
             for index, _ in pairs(self.targets) do
                 self.targets[index][entity.id] = nil
+                if self.onRemoveEntity then self:onRemoveEntity(entity, index) end
             end
         else
             self.targets[entity.id] = nil
+            if self.onRemoveEntity then self:onRemoveEntity(entity) end
         end
     end
-    
-    if self.onRemoveEntity then self:onRemoveEntity(entity) end
+
 end
 
 function System:componentRemoved(entity, component)
@@ -55,15 +56,18 @@ function System:componentRemoved(entity, component)
             for index, _ in pairs(self.targets) do
                 for _, req in pairs(self:requires()[index]) do
                     if req == component then
-                        self:removeEntity(entity, component)
+                        self.targets[index][entity.id] = nil
+                        if self.onRemoveEntity then self:onRemoveEntity(entity, index) end
                         break
                     end
                 end
             end
         else
             self:removeEntity(entity, component)
+            if self.onRemoveEntity then self:onRemoveEntity(entity) end
         end
     end
+
 end
 
 function System:pickRequiredComponents(entity)
