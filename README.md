@@ -63,11 +63,11 @@ local lovetoys = require('lovetoys.lovetoys')
 lovetoys.initialize({globals = true, debug = true})
 
 function love.load()
-    -- Define a component class.
+    -- Define a Component class.
     local Position = Component.create("position", {"x", "y"}, {x = 0, y = 0})
     local Velocity = Component.create("velocity", {"vx", "vy"})
 
-    -- Create and initialize a new entity.
+    -- Create and initialize a new Entity.
     -- Note we can access Entity() in the global
     -- namespace since we used globals = true in 
     -- the lovetoys initialization.
@@ -78,10 +78,10 @@ function love.load()
     player:add(Position(150, 25))
     player:add(Velocity(100, 100))
     
-    -- Create a system class as lovetoys.System subclass.
+    -- Create a System class as lovetoys.System subclass.
     local MoveSystem = class("MoveSystem", System)
 
-    -- Define this system requirements.
+    -- Define this System's requirements.
     function MoveSystem:requires()
         return {"position", "velocity"}
     end
@@ -95,10 +95,10 @@ function love.load()
         end
     end
 
-    -- Create a draw system.
+    -- Create a draw System.
     local DrawSystem = class("DrawSystem", System)
 
-    -- Define this system requirements.
+    -- Define this System requirements.
     function DrawSystem:requires()
         return {"position"}
     end
@@ -109,16 +109,16 @@ function love.load()
         end
     end
 
-    -- Finally, we setup an engine.
+    -- Finally, we setup an Engine.
     engine = Engine()
     engine:addEntity(player)
 
-    -- Let's add the MoveSystem to the engine. Its update() 
-    -- method will be invoked within any engine:update() call.
+    -- Let's add the MoveSystem to the Engine. Its update() 
+    -- method will be invoked within any Engine:update() call.
     engine:addSystem(MoveSystem())
     
-    -- This will be a 'draw' system, so the
-    -- engine will call its draw method.
+    -- This will be a 'draw' System, so the
+    -- Engine will call its draw method.
     engine:addSystem(DrawSystem(), "draw")
 end
 

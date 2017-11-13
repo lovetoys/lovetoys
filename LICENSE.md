@@ -1,6 +1,6 @@
 The MIT License (MIT)
 
-Copyright (c) 2013-2014 Arne Beer and Rafael Epplee
+Copyright (c) 2013-2017 Arne Beer and Rafael Epplee
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
