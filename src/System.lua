@@ -14,7 +14,7 @@ function System:requires() return {} end
 
 function System:addEntity(entity, category)
     -- If there are multiple requirement lists, the added entities will
-    -- be added to their respetive list.
+    -- be added to their respective list.
     if category then
         self.targets[category][entity.id] = entity
     else
