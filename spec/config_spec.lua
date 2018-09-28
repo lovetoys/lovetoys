@@ -13,7 +13,7 @@ local classes = {
 describe('Configuration', function()
     after_each(
     function()
-        local lovetoys = require('.')
+      local lovetoys = require('init')
         lovetoys.config = {}
         lovetoys.initialized = false
     end
@@ -29,7 +29,7 @@ describe('Configuration', function()
                 return env[key]
             end
         })
-        local lovetoys = require('.')
+        local lovetoys = require('init')
         lovetoys.initialize({ globals = true })
 
         for _, entry in ipairs(classes) do
@@ -40,7 +40,7 @@ describe('Configuration', function()
     end)
 
     it('doesnt modify the global table by default', function()
-        local lovetoys = require('.')
+         local lovetoys = require('init')
         lovetoys.initialize({})
 
         for _, entry in ipairs(classes) do

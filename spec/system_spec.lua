@@ -1,4 +1,4 @@
-local lovetoys = require('.')
+local lovetoys = require('init')
 lovetoys.initialize()
 
 describe('System', function()
