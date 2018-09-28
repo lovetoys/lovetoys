@@ -8,6 +8,19 @@ function System:initialize()
     -- Liste aller Entities, die die RequiredComponents dieses Systems haben
     self.targets = {}
     self.active = true
+    self.hasGroups = nil
+    for group, req in pairs(self:requires()) do
+        local requirementIsGroup = type(req) == "table"
+        if self.hasGroups ~= nil then
+            assert(self.hasGroups == requirementIsGroup, "System " .. self.class.name .. " has mixed requirements in requires()")
+        else
+            self.hasGroups = requirementIsGroup
+        end
+
+        if requirementIsGroup then
+            self.targets[group] = {}
+        end
+    end
 end
 
 function System:requires() return {} end
@@ -25,45 +38,46 @@ function System:addEntity(entity, category)
     if self.onAddEntity then self:onAddEntity(entity, category) end
 end
 
-function System:removeEntity(entity, component)
-    -- Get the first element and check if it's a component name
-    -- In case it is an Entity, we know that this System doesn't have multiple
-    -- Requirements. Otherwise we remove the Entity from each category.
+function System:removeEntity(entity, group)
+    if group and self.targets[group][entity.id] then
+        self.targets[group][entity.id] = nil
+        if self.onRemoveEntity then self:onRemoveEntity(entity, group) end
+        return
+    end
+
     local firstGroup, _ = next(self.targets)
     if firstGroup then
-        if type(firstGroup) == "string" then
+        if self.hasGroups then
             -- Removing entities from their respective category target list.
             for group, _ in pairs(self.targets) do
-                self.targets[group][entity.id] = nil
-                if self.onRemoveEntity then self:onRemoveEntity(entity, group) end
+                if self.targets[group][entity.id] then
+                    self.targets[group][entity.id] = nil
+                    if self.onRemoveEntity then self:onRemoveEntity(entity, group) end
+                end
             end
         else
-            self.targets[entity.id] = nil
-            if self.onRemoveEntity then self:onRemoveEntity(entity) end
+            if self.targets[entity.id] then
+                self.targets[entity.id] = nil
+                if self.onRemoveEntity then self:onRemoveEntity(entity) end
+            end
         end
     end
 end
 
 function System:componentRemoved(entity, component)
-    -- Get the first element and check if it's a component name
-    -- In case a System has multiple requirements we need to check for
-    -- each requirement category if the entity has to be removed.
-    local firstGroup, _ = next(self.targets)
-    if firstGroup then
-        if type(firstGroup) == "string" then
-            -- Removing entities from their respective category target list.
-            for group, _ in pairs(self.targets) do
-                for _, req in pairs(self:requires()[group]) do
-                    if req == component then
-                        self.targets[group][entity.id] = nil
-                        if self.onRemoveEntity then self:onRemoveEntity(entity, group) end
-                        break
-                    end
+    if self.hasGroups then
+        -- Removing entities from their respective category target list.
+        for group, requirements in pairs(self:requires()) do
+            for _, req in pairs(requirements) do
+                if req == component then
+                    self:removeEntity(entity, group)
+                    -- stop checking requirements for this group
+                    break
                 end
             end
-        else
-            self:removeEntity(entity, component)
         end
+    else
+        self:removeEntity(entity)
     end
 end
 

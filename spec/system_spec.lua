@@ -52,15 +52,14 @@ describe('System', function()
     end)
 
     it(':removeEntity() removes single', function()
-        multiSystem:addEntity(entity)
-        assert.are.equal(multiSystem.targets[1], entity)
+        multiSystem:addEntity(entity, 'ComponentType1')
+        assert.are.equal(multiSystem.targets['ComponentType1'][1], entity)
 
         multiSystem:removeEntity(entity)
-        assert.are_not.equal(multiSystem.targets[1], entity)
+        assert.is_equal(#multiSystem.targets['ComponentType1'], 0)
     end)
 
     it(':pickRequiredComponents() returns the requested components', function()
-
         local addedComponent1 = lovetoys.class('Component1')()
         entity:add(addedComponent1)
         requireSystem:addEntity(entity)
@@ -85,5 +84,13 @@ describe('System', function()
         -- Check for called debug message
         assert.spy(debug_spy).was_called()
         lovetoys.debug:revert()
+    end)
+
+    it(':initialize() shouldnt allow mixed requirements in requires()', function()
+         local IllDefinedSystem = lovetoys.class('IllDefinedSystem', System)
+         function IllDefinedSystem:requires()
+             return {'ComponentA', GroupA = {'ComponentB'}}
+         end
+         assert.has_error(IllDefinedSystem)
     end)
 end)

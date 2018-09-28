@@ -51,7 +51,7 @@ function Entity:remove(name)
     if self.components[name] then
         self.components[name] = nil
     else
-        lovetoys.debug("Entity: Trying to remove unexisting component " .. name .. " from Entity. Please fix this")
+        lovetoys.debug("Entity: Trying to remove non-existent component " .. name .. " from Entity. Please fix this")
     end
     if self.eventManager then
         self.eventManager:fireEvent(ComponentRemoved(self, name))
