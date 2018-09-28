@@ -1,3 +1,10 @@
+## 0.4
+- Add System:onRemoveEntity callback
+- Add middleclassPath configuration option
+- Add Engine:getEntityCount()
+- Improve documentation
+- Fix some bugs
+
 ## 0.3
 
 - Replace Engine:addInitializer() and Engine:removeInitializer with System:onAddEntity().
