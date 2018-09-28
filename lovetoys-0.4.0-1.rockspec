@@ -1,7 +1,7 @@
 package = 'lovetoys'
-version = '0.4.0'
+version = '0.4.0-1'
 source = {
-  url = "git://github.com/Lovetoys/lovetoys",
+  url = "git://github.com/lovetoys/lovetoys",
   branch = "master"
 }
 description = {

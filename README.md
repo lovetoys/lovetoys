@@ -20,7 +20,7 @@ Though we have not reached version 1.0 yet, the software is well-tested, used in
 
 The recommended way of installing lovetoys is by creating a submodule and cloning it right into your git repo.
 Another way is to just download a [tarball](https://github.com/lovetoys/lovetoys/releases) and copy the files into your project folder.
-The third way is to use Luarocks. In your shell, use `luarocks install lovetoys`.
+We also provide a luarocks package. To use this with LÖVE, check out [loverocks](https://github.com/Alloyed/loverocks).
 
 To require lovetoys and initialize it with the default options, use the following:
 
