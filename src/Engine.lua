@@ -6,6 +6,7 @@ local Engine = lovetoys.class("Engine")
 
 function Engine:initialize()
     self.entities = {}
+    -- Root Entity of the entity tree
     self.rootEntity = lovetoys.Entity()
     self.singleRequirements = {}
     self.allRequirements = {}
@@ -183,7 +184,7 @@ function Engine:registerSystem(system)
 
     -- case: system:requires() returns a table of tables which contain strings
     if lovetoys.util.firstElement(system:requires()) and type(lovetoys.util.firstElement(system:requires())) == "table" then
-        for index, componentList in pairs(system:requires()) do
+        for group, componentList in pairs(system:requires()) do
             -- Registering at singleRequirements
             local component = componentList[1]
             self.singleRequirements[component] = self.singleRequirements[component] or {}
@@ -205,7 +206,7 @@ function Engine:registerSystem(system)
                 end
             end
             -- Create tables for multiple requirements in the system's target directory
-            system.targets[index] = {}
+            system.targets[group] = {}
         end
     end
 end
@@ -309,7 +310,7 @@ end
 function Engine:checkRequirements(entity, system) -- luacheck: ignore self
     local meetsrequirements = true
     local category = nil
-    for index, req in pairs(system:requires()) do
+    for group, req in pairs(system:requires()) do
         if type(req) == "string" then
             if not entity.components[req] then
                 meetsrequirements = false
@@ -324,7 +325,7 @@ function Engine:checkRequirements(entity, system) -- luacheck: ignore self
                 end
             end
             if meetsrequirements == true then
-                category = index
+                category = group
                 system:addEntity(entity, category)
             end
         end

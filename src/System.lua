@@ -29,45 +29,42 @@ function System:removeEntity(entity, component)
     -- Get the first element and check if it's a component name
     -- In case it is an Entity, we know that this System doesn't have multiple
     -- Requirements. Otherwise we remove the Entity from each category.
-    local firstIndex, _ = next(self.targets)
-    if firstIndex then
-        if type(firstIndex) == "string" then
+    local firstGroup, _ = next(self.targets)
+    if firstGroup then
+        if type(firstGroup) == "string" then
             -- Removing entities from their respective category target list.
-            for index, _ in pairs(self.targets) do
-                self.targets[index][entity.id] = nil
-                if self.onRemoveEntity then self:onRemoveEntity(entity, index) end
+            for group, _ in pairs(self.targets) do
+                self.targets[group][entity.id] = nil
+                if self.onRemoveEntity then self:onRemoveEntity(entity, group) end
             end
         else
             self.targets[entity.id] = nil
             if self.onRemoveEntity then self:onRemoveEntity(entity) end
         end
     end
-
 end
 
 function System:componentRemoved(entity, component)
     -- Get the first element and check if it's a component name
     -- In case a System has multiple requirements we need to check for
     -- each requirement category if the entity has to be removed.
-    local firstIndex, _ = next(self.targets)
-    if firstIndex then
-        if type(firstIndex) == "string" then
+    local firstGroup, _ = next(self.targets)
+    if firstGroup then
+        if type(firstGroup) == "string" then
             -- Removing entities from their respective category target list.
-            for index, _ in pairs(self.targets) do
-                for _, req in pairs(self:requires()[index]) do
+            for group, _ in pairs(self.targets) do
+                for _, req in pairs(self:requires()[group]) do
                     if req == component then
-                        self.targets[index][entity.id] = nil
-                        if self.onRemoveEntity then self:onRemoveEntity(entity, index) end
+                        self.targets[group][entity.id] = nil
+                        if self.onRemoveEntity then self:onRemoveEntity(entity, group) end
                         break
                     end
                 end
             end
         else
             self:removeEntity(entity, component)
-            if self.onRemoveEntity then self:onRemoveEntity(entity) end
         end
     end
-
 end
 
 function System:pickRequiredComponents(entity)

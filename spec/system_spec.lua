@@ -86,5 +86,4 @@ describe('System', function()
         assert.spy(debug_spy).was_called()
         lovetoys.debug:revert()
     end)
-
 end)
