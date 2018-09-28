@@ -25,6 +25,10 @@ end
 
 function System:requires() return {} end
 
+function System:onAddEntity(entity, group) end
+
+function System:onRemoveEntity(entity, group) end
+
 function System:addEntity(entity, category)
     -- If there are multiple requirement lists, the added entities will
     -- be added to their respetive list.
@@ -35,13 +39,13 @@ function System:addEntity(entity, category)
         self.targets[entity.id] = entity
     end
 
-    if self.onAddEntity then self:onAddEntity(entity, category) end
+    self:onAddEntity(entity, category)
 end
 
 function System:removeEntity(entity, group)
     if group and self.targets[group][entity.id] then
         self.targets[group][entity.id] = nil
-        if self.onRemoveEntity then self:onRemoveEntity(entity, group) end
+        self:onRemoveEntity(entity, group)
         return
     end
 
@@ -52,13 +56,13 @@ function System:removeEntity(entity, group)
             for group, _ in pairs(self.targets) do
                 if self.targets[group][entity.id] then
                     self.targets[group][entity.id] = nil
-                    if self.onRemoveEntity then self:onRemoveEntity(entity, group) end
+                    self:onRemoveEntity(entity, group)
                 end
             end
         else
             if self.targets[entity.id] then
                 self.targets[entity.id] = nil
-                if self.onRemoveEntity then self:onRemoveEntity(entity) end
+                self:onRemoveEntity(entity)
             end
         end
     end

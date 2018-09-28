@@ -219,10 +219,12 @@ This function is going to be called by the engine every tick.
 #### System:draw()
 This method is going to be called by the engine every draw.
 
-#### System:onAddEntity(entity)
+#### System:onAddEntity(entity, group)
 - **entity** (Entity) - The entity added
+- **group** (String) - The group the entity was added to
 
-Overwrite this method in your system if you want to react when new entities are added to it.
+Overwrite this method in your system if you want to react when new entities are added to it. 
+Override this method if you want to react to the addition of entities. This will get called once for each group the entity gets added to. If you return no groups from `System:requires()`, `group` will be `nil` and the callback will only get called once.
 
 #### System:onRemoveEntity(entity, group)
 - **entity** (Entity) - The entity that was removed
