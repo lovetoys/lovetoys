@@ -131,10 +131,6 @@ describe('Engine', function()
         engine:addEntity(entity)
         engine:addEntity(entity2)
 
-        -- Check for removal from a specific target list
-        -- This is needed if a single Component is removed from an entity
-        testSystem:removeEntity(entity, 'ComponentType2')
-
         assert.are.equal(count(animalSystem.targets.animals), 2)
         assert.are.equal(count(animalSystem.targets.dogs), 1)
 
