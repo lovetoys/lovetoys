@@ -1,5 +1,5 @@
 local lovetoys = require('lovetoys')
-lovetoys.initialize({ globals = true })
+lovetoys.initialize({ globals = false })
 
 describe('Engine', function()
     local TestSystem, MultiSystem
@@ -9,30 +9,30 @@ describe('Engine', function()
 
     setup(
     function()
-        TestSystem = lovetoys.class('TestSystem', System)
+        TestSystem = lovetoys.class('TestSystem', lovetoys.System)
         function TestSystem:requires()
             return {'Component1'}
         end
 
         -- Creates a System with multiple requirements
-        MultiSystem = lovetoys.class('MultiSystem', System)
+        MultiSystem = lovetoys.class('MultiSystem', lovetoys.System)
         function MultiSystem:requires()
             return {name1 = {'Component1'}, name2 = {'Component1', 'Component2'}}
         end
 
-        Component1 = Component.create('Component1')
-        Component2 = Component.create('Component2')
+        Component1 = lovetoys.Component.create('Component1')
+        Component2 = lovetoys.Component.create('Component2')
     end
     )
 
     before_each(
     function()
-        entity = Entity()
-        entity2 = Entity()
-        entity3 = Entity()
+        entity = lovetoys.Entity()
+        entity2 = lovetoys.Entity()
+        entity3 = lovetoys.Entity()
 
         testSystem = TestSystem()
-        engine = Engine()
+        engine = lovetoys.Engine()
         multiSystem = MultiSystem()
     end
     )
@@ -92,7 +92,7 @@ describe('Engine', function()
         entity:add(Component1())
         assert.are.equal(testSystem.targets[1], entity)
     end)
-  
+
     it(':getEntityCount() gets count of entities with Component, after Component is added to entities', function()
         entity:add(Component1())
         entity2:add(Component1())
@@ -100,7 +100,7 @@ describe('Engine', function()
         engine:addEntity(entity2)
         assert.are.equal(engine:getEntityCount('Component1'), 2)
     end)
-  
+
     it(':addEntity() handles multiple requirement lists', function()
         local function count(t)
             local c = 0
@@ -110,9 +110,9 @@ describe('Engine', function()
             return c
         end
 
-        local Animal, Dog = Component.create('Animal'), Component.create('Dog')
+        local Animal, Dog = lovetoys.Component.create('Animal'), lovetoys.Component.create('Dog')
 
-        local AnimalSystem = lovetoys.class('AnimalSystem', System)
+        local AnimalSystem = lovetoys.class('AnimalSystem', lovetoys.System)
 
         function AnimalSystem:update() end
 

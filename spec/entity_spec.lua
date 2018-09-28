@@ -1,27 +1,27 @@
 local lovetoys = require('lovetoys')
-lovetoys.initialize({ globals = true, debugging = true })
+lovetoys.initialize({ globals = false, debugging = true })
 
 describe('Entity', function()
     local TestComponent, TestComponent1, TestComponent2, TestComponent3
-    local entity, entity1, entity2, parent
-    local testSystem, engine
+    local entity, entity1, parent
+    local testSystem
 
     setup(
     function()
-        TestComponent = Component.create('TestComponent')
-        TestComponent1 = Component.create('TestComponent1')
-        TestComponent2 = Component.create('TestComponent2')
-        TestComponent3 = Component.create('TestComponent3')
+        TestComponent = lovetoys.Component.create('TestComponent')
+        TestComponent1 = lovetoys.Component.create('TestComponent1')
+        TestComponent2 = lovetoys.Component.create('TestComponent2')
+        TestComponent3 = lovetoys.Component.create('TestComponent3')
     end
     )
 
     before_each(
     function()
-        entity = Entity()
+        entity = lovetoys.Entity()
         entity.id = 1
-        entity1 = Entity()
+        entity1 = lovetoys.Entity()
         entity1.id = 2
-        parent = Entity()
+        parent = lovetoys.Entity()
         testComponent = TestComponent()
         testComponent1 = TestComponent1()
         testComponent2 = TestComponent2()
@@ -99,7 +99,7 @@ describe('Entity', function()
     end)
 
     it('Constructor with parrent adds a Parent', function()
-        entity = Entity(parent)
+        entity = lovetoys.Entity(parent)
         assert.are.equal(entity.parent, parent)
     end)
 

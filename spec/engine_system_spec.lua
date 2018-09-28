@@ -1,5 +1,5 @@
 local lovetoys = require('lovetoys')
-lovetoys.initialize({ globals = true })
+lovetoys.initialize({ globals = false })
 
 describe('Engine', function()
     local UpdateSystem, DrawSystem, MultiSystem, Component1, Component2
@@ -8,9 +8,9 @@ describe('Engine', function()
 
     setup(function()
         -- Creates a Update System
-        UpdateSystem = lovetoys.class('UpdateSystem', System)
+        UpdateSystem = lovetoys.class('UpdateSystem', lovetoys.System)
         function UpdateSystem:initialize()
-            System.initialize(self)
+            lovetoys.System.initialize(self)
             self.entitiesAdded = 0
         end
         function UpdateSystem:requires()
@@ -27,7 +27,7 @@ describe('Engine', function()
         end
 
         -- Creates a Draw System
-        DrawSystem = lovetoys.class('DrawSystem', System)
+        DrawSystem = lovetoys.class('DrawSystem', lovetoys.System)
         function DrawSystem:requires()
             return {'Component1'}
         end
@@ -39,7 +39,7 @@ describe('Engine', function()
         end
 
         -- Creates a system with update and draw function
-        BothSystem = lovetoys.class('BothSystem', System)
+        BothSystem = lovetoys.class('BothSystem', lovetoys.System)
         function BothSystem:requires()
             return {'Component1', 'Component2'}
         end
@@ -51,27 +51,27 @@ describe('Engine', function()
         function BothSystem:draw() end
 
         -- Creates a System with multiple requirements
-        MultiSystem = lovetoys.class('MultiSystem', System)
+        MultiSystem = lovetoys.class('MultiSystem', lovetoys.System)
         function MultiSystem:requires()
             return {name1 = {'Component1'}, name2 = {'Component2'}}
         end
 
-        Component1 = Component.create('Component1')
+        Component1 = lovetoys.Component.create('Component1')
         Component1.number = 1
-        Component2 = Component.create('Component2')
+        Component2 = lovetoys.Component.create('Component2')
         Component2.number = 2
     end)
 
     before_each(function()
-        entity = Entity()
-        entity2 = Entity()
-        entity3 = Entity()
+        entity = lovetoys.Entity()
+        entity2 = lovetoys.Entity()
+        entity3 = lovetoys.Entity()
 
         updateSystem = UpdateSystem()
         drawSystem = DrawSystem()
         bothSystem = BothSystem()
         multiSystem2 = MultiSystem()
-        engine = Engine()
+        engine = lovetoys.Engine()
     end)
 
     it(':addSystem() adds update Systems', function()

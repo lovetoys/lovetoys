@@ -1,5 +1,5 @@
 local lovetoys = require('lovetoys')
-lovetoys.initialize({ globals = true })
+lovetoys.initialize({ globals = false })
 
 describe('Eventmanager', function()
     local Listener, TestEvent
@@ -21,7 +21,7 @@ describe('Eventmanager', function()
 
     before_each(
     function()
-        eventManager = EventManager()
+        eventManager = lovetoys.EventManager()
         listener = Listener()
         testEvent = TestEvent()
     end

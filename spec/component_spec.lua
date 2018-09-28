@@ -1,5 +1,5 @@
 local lovetoys = require('lovetoys')
-lovetoys.initialize({ globals = true })
+lovetoys.initialize({ globals = false })
 
 describe('Component', function()
     it(':create with defaults creates a Component with default values', function()
@@ -13,12 +13,12 @@ describe('Component', function()
     end)
 
     it(':load returns the specified components', function()
-        local c1 = Component.create('TestComponent1')
+        local c1 = lovetoys.Component.create('TestComponent1')
         local c2 = lovetoys.class('TestComponent2')
-        Component.register(c2)
+        lovetoys.Component.register(c2)
         local c3 = lovetoys.class('TestComponent3')
 
-        local loaded1, loaded2, loaded3 = Component.load({
+        local loaded1, loaded2, loaded3 = lovetoys.Component.load({
             'TestComponent1', 'TestComponent2', 'TestComponent3'
         })
 

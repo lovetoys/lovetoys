@@ -1,5 +1,5 @@
 local lovetoys = require('lovetoys')
-lovetoys.initialize({ globals = true })
+lovetoys.initialize({ globals = false })
 
 describe('System', function()
     local MultiSystem, RequireSystem
@@ -8,12 +8,12 @@ describe('System', function()
 
     setup(
       function()
-          MultiSystem = lovetoys.class('MultiSystem', System)
+          MultiSystem = lovetoys.class('MultiSystem', lovetoys.System)
           function MultiSystem:requires()
               return {ComponentType1 = {'Component1'}, ComponentType2 = {'Component'}}
           end
 
-          RequireSystem = lovetoys.class('RequireSystem', System)
+          RequireSystem = lovetoys.class('RequireSystem', lovetoys.System)
           function RequireSystem:requires()
               return {'Component1', 'Component2'}
           end
@@ -22,16 +22,16 @@ describe('System', function()
 
     before_each(
       function()
-          entity = Entity()
+          entity = lovetoys.Entity()
           entity.id = 1
-          entity1 = Entity()
+          entity1 = lovetoys.Entity()
           entity1.id = 1
-          entity2 = Entity()
+          entity2 = lovetoys.Entity()
           entity2.id = 2
 
           multiSystem = MultiSystem()
           requireSystem = RequireSystem()
-          engine = Engine()
+          engine = lovetoys.Engine()
       end
     )
 
@@ -87,7 +87,7 @@ describe('System', function()
     end)
 
     it(':initialize() shouldnt allow mixed requirements in requires()', function()
-         local IllDefinedSystem = lovetoys.class('IllDefinedSystem', System)
+         local IllDefinedSystem = lovetoys.class('IllDefinedSystem', lovetoys.System)
          function IllDefinedSystem:requires()
              return {'ComponentA', GroupA = {'ComponentB'}}
          end
