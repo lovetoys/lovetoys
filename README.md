@@ -202,14 +202,14 @@ return CustomSystem
 ```
 
 #### System:requires() return {"Componentname1", "Componentname2", ...} end
-This function defines what kind of entities shall be managed by this System. The function has to be overwritten in every System or it won't get any entities! The strings inside the returned table define the components a entity has to contain, to be managed by the System. Those entities are accessible in `self.targets`.
+This function defines what kind of entities shall be managed by this System. The function has to be overridden in every System or it won't get any entities! The strings inside the returned table define the components a entity has to contain, to be managed by the System. Those entities are accessible in `self.targets`.
 
-If you want to manage different kinds of entities just return a table that looks like this:
+If you want to manage different groups of entities just return a table that looks like this:
 
-`return {name1 = {"Componentname1", "Componentname2"}, name2 = {"Componentname3", "Componentname4"}}`
+`return {group1 = {"Componentname1", "Componentname2"}, group2 = {"Componentname3", "Componentname4"}}`
 
-The different entities are now accessible under `system.targets.name1` and `system.targets.name2`.
-An entity can be contained by the same system multiple times in different target pools if it matches the varying component constellations.
+The different entities are now accessible under `system.targets.group1` and `system.targets.group2`.
+An entity can be contained by the same system multiple times in different groups if it matches the varying component constellations.
 
 #### System:update(dt)
 - **dt** (Number) - The time passed since the last update, in seconds.
@@ -223,6 +223,12 @@ This method is going to be called by the engine every draw.
 - **entity** (Entity) - The entity added
 
 Overwrite this method in your system if you want to react when new entities are added to it.
+
+#### System:onRemoveEntity(entity, group)
+- **entity** (Entity) - The entity that was removed
+- **group** (String) - The group the entity was removed from
+
+Override this method if you want to react to the removal of entities. This will get called once for each group the entity gets removed from. If you return no groups from `System:requires()`, `group` will be `nil` and the callback will only get called once.
 
 ### Engine
 The engine is the most important part of the lovetoys and the most frequently used interface. It manages all entities, systems and their requirements, for you.
