@@ -26,7 +26,7 @@ function Entity:add(component)
     else
         self.components[name] = component
         if self.eventManager then
-            self.eventManager:fireEvent(ComponentAdded(self, name))
+            self.eventManager:fireEvent(lovetoys.ComponentAdded(self, name))
         end
     end
 end
@@ -54,7 +54,7 @@ function Entity:remove(name)
         lovetoys.debug("Entity: Trying to remove non-existent component " .. name .. " from Entity. Please fix this")
     end
     if self.eventManager then
-        self.eventManager:fireEvent(ComponentRemoved(self, name))
+        self.eventManager:fireEvent(lovetoys.ComponentRemoved(self, name))
     end
 end
 
