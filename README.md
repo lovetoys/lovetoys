@@ -25,7 +25,7 @@ The third way is to use Luarocks. In your shell, use `luarocks install lovetoys`
 To require lovetoys and initialize it with the default options, use the following:
 
 ```lua
-local lovetoys = require('lovetoys.lovetoys')
+local lovetoys = require('lovetoys')
 lovetoys.initialize()
 ```
 
@@ -49,12 +49,12 @@ The following table lists all available options:
 | globals | boolean | false | If true, lovetoys will make all its classes available via the global namespace. (e.g. Entity instead of lovetoys.Entity) |
 | middleclassPath | string | nil | Path to user's copy of middleclass |
 
-> :warning: Once you've called `initialize`, the configuration will be the same every time you `require('lovetoys.lovetoys')`.
+> :warning: Once you've called `initialize`, the configuration will be the same every time you `require('lovetoys')`.
 
 ## Quickstart
 ```lua
 -- Include the library.
-local lovetoys = require('lovetoys.lovetoys')
+local lovetoys = require('lovetoys')
 
 -- Initialize:
 -- debug = true will enable library console logs

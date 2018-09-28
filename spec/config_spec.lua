@@ -13,7 +13,7 @@ local classes = {
 describe('Configuration', function()
     after_each(
     function()
-        local lovetoys = require('lovetoys')
+        local lovetoys = require('.')
         lovetoys.config = {}
         lovetoys.initialized = false
     end
@@ -29,7 +29,7 @@ describe('Configuration', function()
                 return env[key]
             end
         })
-        local lovetoys = require('lovetoys')
+        local lovetoys = require('.')
         lovetoys.initialize({ globals = true })
 
         for _, entry in ipairs(classes) do
@@ -40,11 +40,19 @@ describe('Configuration', function()
     end)
 
     it('doesnt modify the global table by default', function()
-        local lovetoys = require('lovetoys')
+        local lovetoys = require('.')
         lovetoys.initialize({})
 
         for _, entry in ipairs(classes) do
             assert.is_nil(_G[entry])
         end
+    end)
+
+    it('Allows to load via the old lovetoys module but prints a deprecation notice', function()
+         stub(_G, 'print')
+         local lovetoys = require('lovetoys')
+         assert.are_not.equals(lovetoys, nil)
+         assert.stub(print).was.called(1)
+         print:revert()
     end)
 end)

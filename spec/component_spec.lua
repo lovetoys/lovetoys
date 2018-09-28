@@ -1,5 +1,5 @@
-local lovetoys = require('lovetoys')
-lovetoys.initialize({ globals = false })
+local lovetoys = require('.')
+lovetoys.initialize()
 
 describe('Component', function()
     it(':create with defaults creates a Component with default values', function()
