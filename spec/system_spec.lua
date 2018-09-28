@@ -103,6 +103,7 @@ describe('System', function()
          multiSystem:removeEntity(entity)
 
          assert.spy(cb_spy).was.called_with(multiSystem, entity, 'ComponentType1')
+         assert.spy(cb_spy).was.called(1)
     end)
 
     it(':removeEntity calls onRemoveEntity for system with no requirement groups', function()
@@ -115,5 +116,6 @@ describe('System', function()
          requireSystem:removeEntity(entity)
 
          assert.spy(cb_spy).was.called_with(requireSystem, entity)
+         assert.spy(cb_spy).was.called(1)
     end)
 end)
