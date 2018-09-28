@@ -6,6 +6,7 @@ local Engine = lovetoys.class("Engine")
 
 function Engine:initialize()
     self.entities = {}
+    -- Root Entity of the entity tree
     self.rootEntity = lovetoys.Entity()
     self.singleRequirements = {}
     self.allRequirements = {}
@@ -168,7 +169,7 @@ function Engine:registerSystem(system)
     local name = system.class.name
     self.systemRegistry[name] = system
     -- case: system:requires() returns a table of strings
-    if system:requires()[1] and type(system:requires()[1]) == "string" then
+    if not system.hasGroups then
         for index, req in pairs(system:requires()) do
             -- Registering at singleRequirements
             if index == 1 then
@@ -182,8 +183,8 @@ function Engine:registerSystem(system)
     end
 
     -- case: system:requires() returns a table of tables which contain strings
-    if lovetoys.util.firstElement(system:requires()) and type(lovetoys.util.firstElement(system:requires())) == "table" then
-        for index, componentList in pairs(system:requires()) do
+    if system.hasGroups then
+        for group, componentList in pairs(system:requires()) do
             -- Registering at singleRequirements
             local component = componentList[1]
             self.singleRequirements[component] = self.singleRequirements[component] or {}
@@ -204,8 +205,6 @@ function Engine:registerSystem(system)
                     table.insert(self.allRequirements[req], system)
                 end
             end
-            -- Create tables for multiple requirements in the system's target directory
-            system.targets[index] = {}
         end
     end
 end
@@ -302,34 +301,34 @@ function Engine:getEntityCount(component)
         for _, system in pairs(self.entityLists[component]) do
             count = count + 1
         end
-    end      
-    return count    
+    end
+    return count
 end
 
 function Engine:checkRequirements(entity, system) -- luacheck: ignore self
-    local meetsrequirements = true
-    local category = nil
-    for index, req in pairs(system:requires()) do
-        if type(req) == "string" then
+    local meetsRequirements = true
+    local foundGroup = nil
+    for group, req in pairs(system:requires()) do
+        if not system.hasGroups then
             if not entity.components[req] then
-                meetsrequirements = false
+                meetsRequirements = false
                 break
             end
-        elseif type(req) == "table" then
-            meetsrequirements = true
+        else
+            meetsRequirements = true
             for _, req2 in pairs(req) do
                 if not entity.components[req2] then
-                    meetsrequirements = false
+                    meetsRequirements = false
                     break
                 end
             end
-            if meetsrequirements == true then
-                category = index
-                system:addEntity(entity, category)
+            if meetsRequirements == true then
+                foundGroup = true
+                system:addEntity(entity, group)
             end
         end
     end
-    if meetsrequirements == true and category == nil then
+    if meetsRequirements == true and foundGroup == nil then
         system:addEntity(entity)
     end
 end

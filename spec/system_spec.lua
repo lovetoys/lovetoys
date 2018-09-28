@@ -7,32 +7,32 @@ describe('System', function()
     local multiSystem, engine
 
     setup(
-    function()
-        MultiSystem = lovetoys.class('MultiSystem', System)
-        function MultiSystem:requires()
-            return {ComponentType1 = {'Component1'}, ComponentType2 = {'Component'}}
-        end
+      function()
+          MultiSystem = lovetoys.class('MultiSystem', System)
+          function MultiSystem:requires()
+              return {ComponentType1 = {'Component1'}, ComponentType2 = {'Component'}}
+          end
 
-        RequireSystem = lovetoys.class('RequireSystem', System)
-        function RequireSystem:requires()
-            return {'Component1', 'Component2'}
-        end
-    end
+          RequireSystem = lovetoys.class('RequireSystem', System)
+          function RequireSystem:requires()
+              return {'Component1', 'Component2'}
+          end
+      end
     )
 
     before_each(
-    function()
-        entity = Entity()
-        entity.id = 1
-        entity1 = Entity()
-        entity1.id = 1
-        entity2 = Entity()
-        entity2.id = 2
+      function()
+          entity = Entity()
+          entity.id = 1
+          entity1 = Entity()
+          entity1.id = 1
+          entity2 = Entity()
+          entity2.id = 2
 
-        multiSystem = MultiSystem()
-        requireSystem = RequireSystem()
-        engine = Engine()
-    end
+          multiSystem = MultiSystem()
+          requireSystem = RequireSystem()
+          engine = Engine()
+      end
     )
 
     it(':addEntity() adds single', function()
@@ -52,15 +52,14 @@ describe('System', function()
     end)
 
     it(':removeEntity() removes single', function()
-        multiSystem:addEntity(entity)
-        assert.are.equal(multiSystem.targets[1], entity)
+        multiSystem:addEntity(entity, 'ComponentType1')
+        assert.are.equal(multiSystem.targets['ComponentType1'][1], entity)
 
         multiSystem:removeEntity(entity)
-        assert.are_not.equal(multiSystem.targets[1], entity)
+        assert.is_equal(#multiSystem.targets['ComponentType1'], 0)
     end)
 
     it(':pickRequiredComponents() returns the requested components', function()
-
         local addedComponent1 = lovetoys.class('Component1')()
         entity:add(addedComponent1)
         requireSystem:addEntity(entity)
@@ -87,4 +86,34 @@ describe('System', function()
         lovetoys.debug:revert()
     end)
 
+    it(':initialize() shouldnt allow mixed requirements in requires()', function()
+         local IllDefinedSystem = lovetoys.class('IllDefinedSystem', System)
+         function IllDefinedSystem:requires()
+             return {'ComponentA', GroupA = {'ComponentB'}}
+         end
+         assert.has_error(IllDefinedSystem)
+    end)
+
+    it(':removeEntity calls onRemoveEntity for system with requirement groups', function()
+         local Component1 = lovetoys.class('Component1')
+         entity:add(Component1())
+
+         local cb_spy = spy.on(multiSystem, 'onRemoveEntity')
+         multiSystem:addEntity(entity, 'ComponentType1')
+         multiSystem:removeEntity(entity)
+
+         assert.spy(cb_spy).was.called_with(multiSystem, entity, 'ComponentType1')
+    end)
+
+    it(':removeEntity calls onRemoveEntity for system with no requirement groups', function()
+         local Component1 = lovetoys.class('Component1')
+         entity:add(Component1())
+
+         local cb_spy = spy.on(requireSystem, 'onRemoveEntity')
+
+         requireSystem:addEntity(entity)
+         requireSystem:removeEntity(entity)
+
+         assert.spy(cb_spy).was.called_with(requireSystem, entity)
+    end)
 end)
