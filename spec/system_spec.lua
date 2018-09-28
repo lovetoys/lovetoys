@@ -94,15 +94,26 @@ describe('System', function()
          assert.has_error(IllDefinedSystem)
     end)
 
-    it(':removeEntity calls onRemoveEntity for system with multiple requirements', function()
+    it(':removeEntity calls onRemoveEntity for system with requirement groups', function()
          local Component1 = lovetoys.class('Component1')
          entity:add(Component1())
 
          local cb_spy = spy.on(multiSystem, 'onRemoveEntity')
-
          multiSystem:addEntity(entity, 'ComponentType1')
          multiSystem:removeEntity(entity)
 
-         assert.spy(cb_spy).was.called_with(entity, 'ComponentType1')
+         assert.spy(cb_spy).was.called_with(multiSystem, entity, 'ComponentType1')
+    end)
+
+    it(':removeEntity calls onRemoveEntity for system with no requirement groups', function()
+         local Component1 = lovetoys.class('Component1')
+         entity:add(Component1())
+
+         local cb_spy = spy.on(requireSystem, 'onRemoveEntity')
+
+         requireSystem:addEntity(entity)
+         requireSystem:removeEntity(entity)
+
+         assert.spy(cb_spy).was.called_with(requireSystem, entity)
     end)
 end)
