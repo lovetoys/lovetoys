@@ -1,4 +1,4 @@
-local lovetoys = require('init')
+local lovetoys = require('')
 lovetoys.initialize({ debugging = true })
 
 describe('Entity', function()

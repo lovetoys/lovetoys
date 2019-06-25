@@ -1,8 +1,5 @@
 -- Getting folder that contains our src
-local folderOfThisFile = (...):match("(.-)[^%/%.]+$")
-if folderOfThisFile == nil then
-  folderOfThisFile = ""
-end
+local folderOfThisFile = (...) .. "."
 
 local lovetoys = require(folderOfThisFile .. 'src.namespace')
 
