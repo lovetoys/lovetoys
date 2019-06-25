@@ -384,7 +384,7 @@ For a more detailed and commented version with collisions and some other example
 
 ```lua
 -- Importing lovetoys
-require("lib.lovetoys.lovetoys")
+require("lib.lovetoys")
 
 function love.load()
     engine = Engine()

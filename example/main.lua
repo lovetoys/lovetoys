@@ -1,5 +1,5 @@
 -- Importing lovetoys
-lovetoys = require("lib/lovetoys/lovetoys")
+lovetoys = require("lib/lovetoys")
 lovetoys.initialize({
     globals = true,
     debug = true
@@ -134,4 +134,3 @@ end
 --Collision function
 function beginContact(a, b, coll)
 end
-
