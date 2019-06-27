@@ -9,6 +9,8 @@ env:
     LUA_VERSION="2.0.3"
   - LUA_RUNTIME="luajit"
     LUA_VERSION="2.1"
+  - LUA_RUNTIME="luajit"
+    LUA_VERSION="latest"
 
 before_install:
   - pip install hererocks
@@ -21,7 +23,7 @@ before_script:
   - busted --version
 
 script:
-  - busted --coverage --output=TAP
+  - busted --coverage --output=TAP --lpath='./?/init.lua'
 
 cache:
   directories:
