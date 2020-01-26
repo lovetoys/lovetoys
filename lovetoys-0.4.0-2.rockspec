@@ -1,5 +1,5 @@
 package = 'lovetoys'
-version = '0.4.0-1'
+version = '0.4.0-2'
 source = {
   url = "git://github.com/lovetoys/lovetoys",
   branch = "master"
@@ -19,6 +19,7 @@ build = {
   type = 'builtin',
   modules = {
     ['lovetoys.src.namespace']                           = 'src/namespace.lua',
+    ['lovetoys.init']                                    = 'init.lua',
     ['lovetoys.lovetoys']                                = 'lovetoys.lua',
     ['lovetoys.src.Component']                           = 'src/Component.lua',
     ['lovetoys.src.Engine']                              = 'src/Engine.lua',
