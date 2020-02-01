@@ -110,7 +110,7 @@ function Engine:addSystem(system, type)
     local name = system.class.name
 
     -- Check if the specified type is correct
-    if type ~= nil and type ~= "draw" and type ~= "update" then
+    if type == nil and type ~= "draw" and type ~= "update" then
         lovetoys.debug("Engine: Trying to add System " .. name .. "with invalid type " .. type .. ". Aborting")
         return
     end
