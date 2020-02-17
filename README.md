@@ -29,7 +29,7 @@ local lovetoys = require('lovetoys')
 lovetoys.initialize()
 ```
 
-For an example on how to integrate the lovetoys with love2d, have a look at our [example](https://github.com/lovetoys/lovetoys-examples) repository.
+For an example on how to integrate the lovetoys with love2d, have a look at our [example project](https://github.com/lovetoys/lovetoys/tree/master/example).
 
 ### Configuration
 After requiring, configure lovetoys by passing a configuration table to the `initialize` function.
@@ -380,7 +380,7 @@ Updates all logic systems.
 Updates all draw systems.
 
 #### Example for a löve2d main.lua file
-For a more detailed and commented version with collisions and some other examples check the [main.lua file of the lovetoys example game](https://github.com/lovetoys/example/blob/master/main.lua).
+For a more detailed and commented version with collisions and some other examples check the [main.lua file of the lovetoys example game](https://github.com/lovetoys/lovetoys/blob/master/example/main.lua).
 
 ```lua
 -- Importing lovetoys
