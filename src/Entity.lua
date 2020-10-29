@@ -91,6 +91,14 @@ function Entity:getPath(path)
     return result
 end
 
+function Entity:getMultiple(...)
+    local res = {}
+    for _, component in pairs{...} do
+        table.insert(res, self.components[component])
+    end
+    return unpack(res)
+end
+
 function Entity:has(name)
     return not not self.components[name]
 end
