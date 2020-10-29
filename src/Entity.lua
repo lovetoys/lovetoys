@@ -76,6 +76,21 @@ function Entity:get(name)
     return self.components[name]
 end
 
+-- Retrieve a value nested in a component,
+-- specified by a path separated by dots:
+-- <component name>.<property>.<property>...
+function Entity:getPath(path)
+    local result = self.components
+    for str in string.gmatch(path, "([^%.]+)") do
+        if result[str] then
+            result = result[str]
+        else
+            return nil
+        end
+    end
+    return result
+end
+
 function Entity:has(name)
     return not not self.components[name]
 end
