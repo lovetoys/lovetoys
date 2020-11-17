@@ -294,8 +294,8 @@ If you want to manage different groups of entities just return a table that look
 The different entities are now accessible under `system.targets.group1` and `system.targets.group2`.
 An entity can be contained by the same system multiple times in different groups if it matches the varying component constellations.
 
-#### System:update(dt)
-- **dt** (Number) - The time passed since the last update, in seconds.
+#### System:update(...)
+- **...** (Varargs) - Parameters passed to the Engine ```update``` method
 
 This function is going to be called by the engine every tick.
 
@@ -371,8 +371,8 @@ Returns a list with all entities that contain this particular component.
 #### Engine:getEntityCount(component)
 - **component** (Number) - Returns the count of entities that contain this particular component.
 
-#### Engine:update(dt)
-- **dt** (Number) - Time since the last update, in seconds
+#### Engine:update(...)
+- **...** (Varargs) - Any variables you want to pass to the ```update``` methods of systems
 
 Updates all logic systems.
 

@@ -233,10 +233,10 @@ function Engine:toggleSystem(name)
     end
 end
 
-function Engine:update(dt)
+function Engine:update(...)
     for _, system in ipairs(self.systems["update"]) do
         if system.active then
-            system:update(dt)
+            system:update(...)
         end
     end
 end
