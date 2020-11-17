@@ -295,7 +295,7 @@ The different entities are now accessible under `system.targets.group1` and `sys
 An entity can be contained by the same system multiple times in different groups if it matches the varying component constellations.
 
 #### System:update(...)
-- **...** (Varargs) - Parameters passed to the Engine ```update``` method
+- **...** (Varargs) - Parameters passed to the Engine ```update``` method, e.g. delta time
 
 This function is going to be called by the engine every tick.
 
@@ -375,6 +375,12 @@ Returns a list with all entities that contain this particular component.
 - **...** (Varargs) - Any variables you want to pass to the ```update``` methods of systems
 
 Updates all logic systems.
+A typical use case would be to pass in the delta time you get from love2d:
+```lua
+function love.update(dt)
+    engine:update(dt)
+end
+```
 
 #### Engine:draw()
 Updates all draw systems.
