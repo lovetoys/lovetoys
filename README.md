@@ -14,7 +14,9 @@ It is inspired by [Richard Lords Introduction](http://www.richardlord.net/blog/w
 
 lovetoys is a full-featured game development framework, not only providing the core parts like Entity, Component and System classes but also a Publish-Subscribe messaging system as well as a Scene Graph, enabling you to build even complex games easily and in a structured way.
 
-Though we have not reached version 1.0 yet, the software is well-tested, used in multiple games and considered stable. If you happen to find any bugs, please create an issue and report them. Or, if you're feeling adventurous, create a pull request :)
+### 🚦 Status of the project
+
+lovetoys is in maintenance mode. It works well and has no bugs known to us. We will not be adding new features, but will try to respond to issues and review any pull requests. If you open an issue, please have a little patience :)
 
 ## Installation
 
