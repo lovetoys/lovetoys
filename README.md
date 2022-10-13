@@ -218,8 +218,8 @@ end
 
 The `Component.create()` function can automatically generate simple component classes like these for you.
 
-#### Component.register(path)
-- **path** A path in a format accepted by require()
+#### Component.register(componentClass)
+- **class** The component class as returned by a call to the `class()` function
 
 Register the component for loading it conveniently with Component.load. Registered components are stored in a local table which stays the same across different `require()`s.
 
