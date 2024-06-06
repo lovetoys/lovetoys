@@ -8,7 +8,6 @@
 [![GitHub release](https://img.shields.io/github/release/lovetoys/lovetoys.svg?maxAge=2592000)](https://github.com/lovetoys/lovetoys/releases/latest)
 [![Build Status](https://travis-ci.org/lovetoys/lovetoys.svg?branch=master)](https://travis-ci.org/lovetoys/lovetoys) [![Coverage Status](https://coveralls.io/repos/github/lovetoys/lovetoys/badge.svg?branch=master)](https://coveralls.io/github/lovetoys/lovetoys?branch=master)
 
-
 lovetoys is an Entity Component System framework for game development with lua. Originally written for the LÖVE 2D game engine, it is actually compatible with pretty much any game that uses lua!
 It is inspired by [Richard Lords Introduction](http://www.richardlord.net/blog/what-is-an-entity-framework) to ECS. If you don't have any idea what this entity component stuff is all about, click that link and give it a read! It's totally worth it!
 
@@ -16,7 +15,12 @@ lovetoys is a full-featured game development framework, not only providing the c
 
 ### 🚦 Status of the project
 
-lovetoys is in maintenance mode. It works well and has no bugs known to us. We will not be adding new features, but will try to respond to issues and review any pull requests. If you open an issue, please have a little patience :)
+lovetoys is now officially archived. It still works well and has no known bugs.
+No new features will be added and we won't respond to issues or pull requests.
+
+As already said above, it should still work perfectly fine though.
+
+We're just not using love2d any more and have started to work on other projects.
 
 ## Installation
 
@@ -34,6 +38,7 @@ lovetoys.initialize()
 For an example on how to integrate the lovetoys with love2d, have a look at our [example project](https://github.com/lovetoys/lovetoys/tree/master/example).
 
 ### Configuration
+
 After requiring, configure lovetoys by passing a configuration table to the `initialize` function.
 For example, if you want debug output, pass the option `debug = true`:
 
@@ -45,15 +50,16 @@ lovetoys.initialize({
 
 The following table lists all available options:
 
-| Name | Type | Default | Meaning |
-| --- | --- | --- | --- |
-| debug | boolean | false | Makes lovetoys print warnings and notifications to stdout. |
-| globals | boolean | false | If true, lovetoys will make all its classes available via the global namespace. (e.g. Entity instead of lovetoys.Entity) |
-| middleclassPath | string | nil | Path to user's copy of middleclass |
+| Name            | Type    | Default | Meaning                                                                                                                 |
+| --------------- | ------- | ------- | ----------------------------------------------------------------------------------------------------------------------- |
+| debug           | boolean | false   | Makes lovetoys print warnings and notifications to stdout.                                                              |
+| globals         | boolean | false   | If true, lovetoys will make all its classes available via the global namespace.(e.g. Entity instead of lovetoys.Entity) |
+| middleclassPath | string  | nil     | Path to user's copy of middleclass                                                                                      |
 
 > :warning: Once you've called `initialize`, the configuration will be the same every time you `require('lovetoys')`.
 
 ## Quickstart
+
 ```lua
 -- Include the library.
 local lovetoys = require('lovetoys')
@@ -71,7 +77,7 @@ function love.load()
 
     -- Create and initialize a new Entity.
     -- Note we can access Entity() in the global
-    -- namespace since we used globals = true in 
+    -- namespace since we used globals = true in
     -- the lovetoys initialization.
     local player = Entity()
     player:initialize()
@@ -79,7 +85,7 @@ function love.load()
     -- Add position and velocity components. We are passing custom default values.
     player:add(Position(150, 25))
     player:add(Velocity(100, 100))
-    
+
     -- Create a System class as lovetoys.System subclass.
     local MoveSystem = class("MoveSystem", System)
 
@@ -115,10 +121,10 @@ function love.load()
     engine = Engine()
     engine:addEntity(player)
 
-    -- Let's add the MoveSystem to the Engine. Its update() 
+    -- Let's add the MoveSystem to the Engine. Its update()
     -- method will be invoked within any Engine:update() call.
     engine:addSystem(MoveSystem())
-    
+
     -- This will be a 'draw' System, so the
     -- Engine will call its draw method.
     engine:addSystem(DrawSystem(), "draw")
@@ -150,9 +156,11 @@ local class = lovetoys.class ()
 ```
 
 ### Entity
+
 The Entity is the basic building block of your game. You can loosely think of it as an object in your game, such as a player or a wall. From the technical side, it basically represents a collection of components.
 
 #### Entity(parent)
+
 - **parent** (Entity) - Parent entity
 
 This function returns a new instance of an entity. If you specify a parent entity, you can later access it via the `.parent` property. Also, the parent entity will get a reference to its newly created child, accessible by its `.children` table.
@@ -160,6 +168,7 @@ This function returns a new instance of an entity. If you specify a parent entit
 > :warning: If you add an entity without a parent to the engine, the engine will set the root entity as its parent.
 
 #### Entity:setParent(parent)
+
 - **parent** (Entity) - Parent entity
 
 Use this method to set a new parent on an entity. It will take care of removing itself from the children of its previous parent and registering as a child of the new parent.
@@ -169,32 +178,37 @@ Use this method to set a new parent on an entity. It will take care of removing 
 Returns the entities parent.
 
 #### Entity:add(component)
+
 - **component** - (Component) Instance of a component.
 
 Adds a component to this particular entity.
 
 #### Entity:addMultiple(components)
+
 - **components** - (List) A list containing instances of components.
 
 Adds multiple components to the entity at once.
 
 #### Entity:set(component)
+
 - **component** - (Component) Instance of a component.
 
 Adds the component to this particular entity. If there already exists a component of this type the previous component will be overwritten.
 
 #### Entity:remove(name)
+
 - **name** (String) - Name of the component class
 
 Removes a component from this particular entity.
 
 #### Entity:has(Name)
+
 - **name** (String) - Name of the component class
 
 Returns boolean depending on if the component is contained by the entity.
 
-
 #### Entity:get(Name)
+
 - **name** (String) - Name of the component class
 
 Returns the component or `nil` if the Entity has no component with the given `name`.
@@ -204,6 +218,7 @@ Returns the component or `nil` if the Entity has no component with the given `na
 Returns the list that contains all components.
 
 ### Component
+
 Collection of functions for creating and working with Component classes. There is no `Component` class; As components are only 'data bags', you can just use standard middleclass classes to implement your components.
 
 #### Creating a simple component
@@ -221,11 +236,13 @@ end
 The `Component.create()` function can automatically generate simple component classes like these for you.
 
 #### Component.register(componentClass)
+
 - **class** The component class as returned by a call to the `class()` function
 
 Register the component for loading it conveniently with Component.load. Registered components are stored in a local table which stays the same across different `require()`s.
 
 #### Component.load(components)
+
 - **components** A list containing component names
 
 Load the specified components, sparing you lots of calls to `require()`.
@@ -236,7 +253,8 @@ local Color, Transform, Drawable = Component.load({"Color", "Transform", "Drawab
 Color(0, 0, 0)
 ```
 
-#### Component.create(name, [fields, defaults])
+#### Component.create(name, \[fields, defaults\])
+
 - **fields** (Table) - A list of Strings specifying the property names of the new component. The constructor of the component class will accept each of these properties as arguments, in the order they appear in the `fields` list.
 - **defaults** (Table) - Key value pairs where each pair describes the default value for the property named like the pairs key.
 
@@ -252,6 +270,7 @@ Color(255)
 ```
 
 ### System
+
 Systems provide the functionality for your game. The engine manages all Systems and assigns all entities with the right components to them.
 
 All your systems have to be derived from the `System` class. An example how to do this can be found below.
@@ -260,6 +279,7 @@ There are two types of Systems: "update" and "draw" Systems. Update systems perf
 Draw systems are responsible for rendering your game world on screen. Their `draw` method is also called by the engine.
 
 #### An example for a custom system
+
 To implement functionality in your game, you create custom Systems. You inherit from the `System` class and override some methods to specify your System's behavior.
 
 To create your own system, you use the `class` function provided by MiddleClass. The first argument is the name of your new System, the second is the Class you want to inherit from. The specific methods you can override are specified below.
@@ -287,6 +307,7 @@ return CustomSystem
 ```
 
 #### System:requires() return {"Componentname1", "Componentname2", ...} end
+
 This function defines what kind of entities shall be managed by this System. The function has to be overridden in every System or it won't get any entities! The strings inside the returned table define the components a entity has to contain, to be managed by the System. Those entities are accessible in `self.targets`.
 
 If you want to manage different groups of entities just return a table that looks like this:
@@ -297,36 +318,44 @@ The different entities are now accessible under `system.targets.group1` and `sys
 An entity can be contained by the same system multiple times in different groups if it matches the varying component constellations.
 
 #### System:update(...)
-- **...** (Varargs) - Parameters passed to the Engine ```update``` method, e.g. delta time
+
+- **...** (Varargs) - Parameters passed to the Engine `update` method, e.g. delta time
 
 This function is going to be called by the engine every tick.
 
 #### System:draw()
+
 This method is going to be called by the engine every draw.
 
 #### System:onAddEntity(entity, group)
+
 - **entity** (Entity) - The entity added
 - **group** (String) - The group the entity was added to
 
-Overwrite this method in your system if you want to react when new entities are added to it. 
+Overwrite this method in your system if you want to react when new entities are added to it.
 Override this method if you want to react to the addition of entities. This will get called once for each group the entity gets added to. If you return no groups from `System:requires()`, `group` will be `nil` and the callback will only get called once.
 
 #### System:onRemoveEntity(entity, group)
+
 - **entity** (Entity) - The entity that was removed
 - **group** (String) - The group the entity was removed from
 
 Override this method if you want to react to the removal of entities. This will get called once for each group the entity gets removed from. If you return no groups from `System:requires()`, `group` will be `nil` and the callback will only get called once.
 
 ### Engine
+
 The engine is the most important part of the lovetoys and the most frequently used interface. It manages all entities, systems and their requirements, for you.
 
 #### Engine()
+
 Creates a new engine object. Every engine creates a rootEntity which becomes parent of all entities that don't have a parent yet.
 
 #### Engine:getRootEntity()
+
 Returns the root entity. Modify it to your needs!
 
 #### Engine:addSystem(system, type)
+
 - **system** (System) - Instance of the system to be added
 - **type** (String) - optional; Should be either "draw" or "update"
 
@@ -335,28 +364,33 @@ This function registers the system in the engine. The systems' functions will be
 > :warning: If a system implements both `draw` and `update` functions, you will need to specify the `type` and add the system twice, once to draw and once to update. Otherwise lovetoys couldn't know in what order to execute the `update` and `draw` methods.
 
 #### Engine:stopSystem(system)
+
 - **system** (String) - the name of the system
 
 If you want a system to stop, just call this function. It's draw/update function won't be called anymore until you start it again.
 
 #### Engine:startSystem(system)
+
 - **system** (String)
-    the name of the system
+  the name of the system
 
 Call this to start a stopped system.
 
 #### Engine:toggleSystem(system)
+
 - **system** (String)
-    the name of the system
+  the name of the system
 
 If the system is running, stop it. If it is stopped, start it.
 
 #### Engine:addEntity(entity)
+
 - **entity** (Entity) - Instance of the Entity to be added
 
 Adds an entity to the engine and registers it with all systems that are interested in its component constellation.
 
 #### Engine:removeEntity(entity, removeChildren, newParent)
+
 - **entity** - (Entity) - Instance of the Entity to be removed
 - **removeChildren** - (Boolean) Default is false
 - **newParent** - (Entity) - Instance of another entity, which should become the new Parent
@@ -366,18 +400,22 @@ Depending on `removeChildren` all Children are going to deleted recursively as w
 If there is a new Parent defined, this entity becomes the new Parent of all children, otherwise they become children of `engine.rootEntity`.
 
 #### Engine:getEntitiesWithComponent(component)
+
 - **component** (String) - Class name of the component
 
 Returns a list with all entities that contain this particular component.
 
 #### Engine:getEntityCount(component)
+
 - **component** (Number) - Returns the count of entities that contain this particular component.
 
 #### Engine:update(...)
-- **...** (Varargs) - Any variables you want to pass to the ```update``` methods of systems
+
+- **...** (Varargs) - Any variables you want to pass to the `update` methods of systems
 
 Updates all logic systems.
 A typical use case would be to pass in the delta time you get from love2d:
+
 ```lua
 function love.update(dt)
     engine:update(dt)
@@ -385,9 +423,11 @@ end
 ```
 
 #### Engine:draw()
+
 Updates all draw systems.
 
 #### Example for a löve2d main.lua file
+
 For a more detailed and commented version with collisions and some other examples check the [main.lua file of the lovetoys example game](https://github.com/lovetoys/lovetoys/blob/master/example/main.lua).
 
 ```lua
@@ -422,9 +462,11 @@ end
 ```
 
 ## Eventmanager
+
 This class is a simple eventmanager for sending events to their respective listeners.
 
 #### EventManager:addListener(eventName, listener, listenerFunction)
+
 - **eventName** (String) - Name of the event-class to be added
 - **listener** (Listener) - The first entry is the table/class that will is supposed to be passed as `self` to the called function.
 - **listenerFunction** (Function) - The function that should be called.
@@ -434,24 +476,27 @@ An example for adding a Listener: `EventManager:addListener("EventName", listene
 We need to do this so we can work with `self` as we are used to, as lua doesn't provide a native class implementation.
 
 #### EventManager:removeListener(eventName, listener)
+
 - **eventName** (String) - Name of the event-class
 - **listener** (String) - Name of the listener to be deleted
 
 Removes a listener from this particular Event.
 
 #### EventManager:fireEvent(event)
+
 - **event** (Event) - Instance of the event
 
 This function pipes the event through to every listener that is registered to the class-name of the event and triggers `listener:fireEvent(event)`.
 
 ## Testing
+
 You can find the tests in the `spec` folder. They are defined using the [busted](http://olivinelabs.com/busted) test framework.
 
 To run the suite, install busted and simply execute `busted` in the lovetoys directory.
 
-* * *
+______________________________________________________________________
 
-Copyright &copy; 2016 Arne Beer ([@Nukesor](https://github.com/Nukesor)) and Rafael Epplée ([@raffomania](https://github.com/raffomania))
+Copyright © 2016 Arne Beer ([@Nukesor](https://github.com/Nukesor)) and Rafael Epplée ([@raffomania](https://github.com/raffomania))
 
 This Software is published under the MIT License.
 
